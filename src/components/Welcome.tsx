@@ -1,24 +1,44 @@
 import React, { useState } from "react";
 import Input from "./common/Input";
 import Btn from "./common/Btn";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const Welcome = () => {
-  const [userId, setUserId] = useState<string>();
-  const [userPassword, setUserPassword] = useState<any>();
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: "",
+  });
+  const [newAccount, setNewAccount] = useState(true);
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert("completed!");
-  };
+  const { email, password } = inputs;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      target: { name, value },
-    } = e;
-    if (name == "email") {
-      setUserId(value);
-    } else if (name == "pw") {
-      setUserPassword(value);
+    const { name, value } = e.target;
+    console.log(inputs);
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
+  };
+
+  const onSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      let data;
+      const auth = getAuth();
+      if (newAccount) {
+        console.log(inputs);
+        data = await createUserWithEmailAndPassword(auth, email, password);
+      } else {
+        data = await signInWithEmailAndPassword(auth, email, password);
+      }
+      console.log(data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -27,14 +47,14 @@ const Welcome = () => {
       <form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
-          value={userId}
+          value={inputs.email}
           name="email"
           label="E-mail"
           types="email"
         />
         <Input
           onChange={onChange}
-          value={userPassword}
+          value={inputs.password}
           name="pw"
           label="Password"
           types="password"

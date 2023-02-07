@@ -45,8 +45,20 @@ const Welcome = () => {
   };
   const toggleAccount = () => setNewAccount((prev) => !prev);
 
-  const onSocialClick = async (e: React.MouseEvent) => {
-    alert("s");
+  const onSocialClick = async (event: React.MouseEvent) => {
+    const { name } = event.target as HTMLInputElement;
+    let provider;
+    const auth = getAuth();
+    if (name === "google") {
+      provider = new GoogleAuthProvider();
+    } else if (name === "github") {
+      provider = new GithubAuthProvider();
+    }
+    if (provider) {
+      const data = await signInWithPopup(auth, provider);
+      console.log(data);
+      console.log(name);
+    }
   };
 
   return (
@@ -80,7 +92,11 @@ const Welcome = () => {
           name="google"
           children="Continue with Google"
         />
-        <Btn name="github" children="Continue with Github" />
+        <Btn
+          onClick={onSocialClick}
+          name="github"
+          children="Continue with Github"
+        />
       </div>
     </>
   );

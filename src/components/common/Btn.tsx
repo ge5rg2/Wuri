@@ -20,7 +20,6 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
-  name?: string;
 }
 const Btn: React.FC<Props> = ({
   children,
@@ -29,13 +28,11 @@ const Btn: React.FC<Props> = ({
   size,
   startIcon,
   endIcon,
-  name,
 
   ...props
 }) => {
   return (
     <Base
-      name={name}
       variant={variant}
       disabled={disabled}
       size={size}

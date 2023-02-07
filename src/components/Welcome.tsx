@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Input from "./common/Input";
 import Btn from "./common/Btn";
 import {
   createUserWithEmailAndPassword,
@@ -45,21 +44,23 @@ const Welcome = () => {
   return (
     <>
       <form onSubmit={onSubmit}>
-        <Input
-          onChange={onChange}
-          value={inputs.email}
+        <input
           name="email"
-          label="E-mail"
-          types="email"
-        />
-        <Input
+          type="email"
+          placeholder="Email"
+          required
+          value={email}
           onChange={onChange}
-          value={inputs.password}
-          name="pw"
-          label="Password"
-          types="password"
         />
-        <Input value="Log In" types="submit" />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          required
+          value={password}
+          onChange={onChange}
+        />
+        <input type="submit" value={newAccount ? "Create Account" : "Log In"} />
       </form>
       <div>
         <Btn children="Continue with Google" />

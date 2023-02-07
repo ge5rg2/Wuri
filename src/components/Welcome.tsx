@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import Btn from "./common/Btn";
+import Input from "./common/Input";
 import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 
 const Welcome = () => {
@@ -12,7 +16,7 @@ const Welcome = () => {
     password: "",
   });
   const [newAccount, setNewAccount] = useState(true);
-
+  const [error, setError] = useState("");
   const { email, password } = inputs;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,21 +33,26 @@ const Welcome = () => {
       let data;
       const auth = getAuth();
       if (newAccount) {
-        console.log(inputs);
         data = await createUserWithEmailAndPassword(auth, email, password);
       } else {
         data = await signInWithEmailAndPassword(auth, email, password);
       }
       console.log(data);
-    } catch (error) {
+    } catch (error: any) {
+      setError(error.message);
       console.log(error);
     }
+  };
+  const toggleAccount = () => setNewAccount((prev) => !prev);
+
+  const onSocialClick = async (e: React.MouseEvent) => {
+    alert("s");
   };
 
   return (
     <>
       <form onSubmit={onSubmit}>
-        <input
+        <Input
           name="email"
           type="email"
           placeholder="Email"
@@ -51,7 +60,7 @@ const Welcome = () => {
           value={email}
           onChange={onChange}
         />
-        <input
+        <Input
           name="password"
           type="password"
           placeholder="Password"
@@ -60,10 +69,18 @@ const Welcome = () => {
           onChange={onChange}
         />
         <input type="submit" value={newAccount ? "Create Account" : "Log In"} />
+        {error}
       </form>
+      <span onClick={toggleAccount}>
+        {newAccount ? "Sign In" : "Create Account"}
+      </span>
       <div>
-        <Btn children="Continue with Google" />
-        <button>Continue with Github</button>
+        <Btn
+          onClick={onSocialClick}
+          name="google"
+          children="Continue with Google"
+        />
+        <Btn name="github" children="Continue with Github" />
       </div>
     </>
   );

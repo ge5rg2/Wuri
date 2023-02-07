@@ -47,14 +47,14 @@ const Welcome = () => {
       <form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
-          value={inputs.email}
+          value=""
           name="email"
           label="E-mail"
           types="email"
         />
         <Input
           onChange={onChange}
-          value={inputs.password}
+          value=""
           name="pw"
           label="Password"
           types="password"

@@ -1,23 +1,35 @@
-import { MainContainer, Wraper, SubContainer } from "..//styles/NavStyle";
-import Btn from "./common/Btn";
+import { useNavigate } from "react-router-dom";
+import { Wraper, SubContainer } from "..//styles/NavStyle";
+import { getAuth, signOut } from "firebase/auth";
+import React from "react";
 
-function Nav() {
+const Nav = () => {
+  const navigate = useNavigate();
+  const onSignOut = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        navigate("/");
+      })
+      .catch((error) => {
+        // An error happened.
+        alert(error.message);
+      });
+  };
+
   return (
     <Wraper>
-      <MainContainer>
-        <div>
-          <Btn children="Login" />
-          <Btn children="Register" />
-        </div>
-      </MainContainer>
       <SubContainer>
         <div className="subNav">
-          <div className="subNavDiv">Homne</div>
-          <div className="subNavDiv">Tech Resources</div>
+          <div onClick={onSignOut} className="subNavDiv">
+            Sign out
+          </div>
+          <div className="subNavDiv">Profile</div>
         </div>
       </SubContainer>
     </Wraper>
   );
-}
+};
 
 export default Nav;

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import Input from "./common/Input";
 import Btn from "./common/Btn";
+import Input from "./common/Input";
 import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 
 const Welcome = () => {
@@ -13,12 +16,11 @@ const Welcome = () => {
     password: "",
   });
   const [newAccount, setNewAccount] = useState(true);
-
+  const [error, setError] = useState("");
   const { email, password } = inputs;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(inputs);
     setInputs({
       ...inputs,
       [name]: value,
@@ -31,14 +33,31 @@ const Welcome = () => {
       let data;
       const auth = getAuth();
       if (newAccount) {
-        console.log(inputs);
         data = await createUserWithEmailAndPassword(auth, email, password);
       } else {
         data = await signInWithEmailAndPassword(auth, email, password);
       }
       console.log(data);
-    } catch (error) {
+    } catch (error: any) {
+      setError(error.message);
       console.log(error);
+    }
+  };
+  const toggleAccount = () => setNewAccount((prev) => !prev);
+
+  const onSocialClick = async (event: React.MouseEvent) => {
+    const { name } = event.target as HTMLInputElement;
+    let provider;
+    const auth = getAuth();
+    if (name === "google") {
+      provider = new GoogleAuthProvider();
+    } else if (name === "github") {
+      provider = new GithubAuthProvider();
+    }
+    if (provider) {
+      const data = await signInWithPopup(auth, provider);
+      console.log(data);
+      console.log(name);
     }
   };
 
@@ -46,24 +65,38 @@ const Welcome = () => {
     <>
       <form onSubmit={onSubmit}>
         <Input
-          onChange={onChange}
-          value=""
           name="email"
-          label="E-mail"
-          types="email"
+          type="email"
+          placeholder="Email"
+          required
+          value={email}
+          onChange={onChange}
         />
         <Input
+          name="password"
+          type="password"
+          placeholder="Password"
+          required
+          value={password}
           onChange={onChange}
-          value=""
-          name="pw"
-          label="Password"
-          types="password"
         />
-        <Input value="Log In" types="submit" />
+        <input type="submit" value={newAccount ? "Create Account" : "Log In"} />
+        {error}
       </form>
+      <span onClick={toggleAccount}>
+        {newAccount ? "Sign In" : "Create Account"}
+      </span>
       <div>
-        <Btn children="Continue with Google" />
-        <button>Continue with Github</button>
+        <Btn
+          onClick={onSocialClick}
+          name="google"
+          children="Continue with Google"
+        />
+        <Btn
+          onClick={onSocialClick}
+          name="github"
+          children="Continue with Github"
+        />
       </div>
     </>
   );

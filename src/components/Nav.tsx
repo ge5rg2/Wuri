@@ -6,13 +6,6 @@ function Nav() {
     <Wraper>
       <MainContainer>
         <div>
-          <img
-            src="https://partnerhub.samsung.com/resource/1524249349000/samsungLogo"
-            alt="Samsung"
-            data-aura-rendered-by="242:789;a"
-          />
-        </div>
-        <div>
           <Btn children="Login" />
           <Btn children="Register" />
         </div>

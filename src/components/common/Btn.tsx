@@ -21,7 +21,6 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
 }
-
 const Btn: React.FC<Props> = ({
   children,
   variant,
@@ -29,6 +28,8 @@ const Btn: React.FC<Props> = ({
   size,
   startIcon,
   endIcon,
+
+  ...props
 }) => {
   return (
     <Base
@@ -37,6 +38,7 @@ const Btn: React.FC<Props> = ({
       size={size}
       startIcon={startIcon}
       endIcon={endIcon}
+      {...props}
     >
       {children}
     </Base>
@@ -44,3 +46,4 @@ const Btn: React.FC<Props> = ({
 };
 
 export default Btn;
+//  {...props} 지정을 해야 function 기능 작동

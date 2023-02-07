@@ -17,7 +17,6 @@ const Welcome = () => {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(inputs);
     setInputs({
       ...inputs,
       [name]: value,

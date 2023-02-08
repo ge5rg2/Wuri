@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Router from "./Router";
 import { GlobalStyle } from "./styles/GlobalStyle";
-import Nav from "./components/Nav";
 import { app } from "./myBase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Welcome from "./components/Welcome";
@@ -24,20 +23,7 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      {init ? (
-        <>
-          {isLoggedIn ? (
-            <>
-              <Nav />
-              <Router />
-            </>
-          ) : (
-            <Welcome />
-          )}
-        </>
-      ) : (
-        "Initializing..."
-      )}
+      {init ? <>{isLoggedIn ? <Router /> : <Welcome />}</> : "Initializing..."}
     </>
   );
 }

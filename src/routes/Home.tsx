@@ -1,17 +1,23 @@
 import Nav from "../components/Nav";
 import Input from "../components/common/Input";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { dbService } from "../myBase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+
+interface Diary {
+  id: string;
+  diary: any;
+}
 
 const Home = () => {
   const [diary, setDiary] = useState("");
+  const [diarys, setDiarys] = useState<Diary[]>([]);
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const date = new Date();
     try {
-      const docRef = await addDoc(collection(dbService, "nweets"), {
+      const docRef = await addDoc(collection(dbService, "diary"), {
         diary,
         createdAt: date,
       });
@@ -19,7 +25,6 @@ const Home = () => {
     } catch (error) {
       console.error("Error adding document: ", error);
     }
-
     setDiary("");
   };
 
@@ -27,6 +32,33 @@ const Home = () => {
     const { value } = e.target;
     setDiary(value);
   };
+
+  const diaryData: JSX.Element[] = diarys.map((el) => {
+    return (
+      <div key={el.id}>
+        <h4>{el.diary}</h4>
+      </div>
+    );
+  });
+
+  const getDiarys = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(dbService, "diary"));
+      querySnapshot.forEach((doc) => {
+        const diaryObject: any = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        console.log(diaryObject);
+        setDiarys((prev: Diary[]) => [diaryObject, ...prev]);
+      });
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+  useEffect(() => {
+    getDiarys();
+  }, []);
 
   return (
     <>
@@ -41,6 +73,7 @@ const Home = () => {
         />
         <Input type="submit" value="diary" />
       </form>
+      {diaryData}
     </>
   );
 };

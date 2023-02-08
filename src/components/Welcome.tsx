@@ -57,7 +57,6 @@ const Welcome = () => {
     if (provider) {
       const data = await signInWithPopup(auth, provider);
       console.log(data);
-      console.log(name);
     }
   };
 

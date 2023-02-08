@@ -30,7 +30,6 @@ function App() {
             <>
               <Nav />
               <Router />
-              <Welcome />
             </>
           ) : (
             <Welcome />

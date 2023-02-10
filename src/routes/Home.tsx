@@ -2,14 +2,19 @@ import Nav from "../components/Nav";
 import Input from "../components/common/Input";
 import React, { useState, useEffect } from "react";
 import { dbService } from "../myBase";
-import { collection, addDoc, getDocs } from "firebase/firestore";
-
-interface Diary {
-  id: string;
-  diary: any;
-}
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
+} from "firebase/firestore";
+import { Diary } from "../interface/tpyes";
+import { useSelector } from "../store";
 
 const Home = () => {
+  const userStore = useSelector((state) => state.user);
+
   const [diary, setDiary] = useState("");
   const [diarys, setDiarys] = useState<Diary[]>([]);
 
@@ -18,8 +23,9 @@ const Home = () => {
     const date = new Date();
     try {
       const docRef = await addDoc(collection(dbService, "diary"), {
-        diary,
+        text: diary,
         createdAt: date,
+        creatorId: userStore.userUid,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (error) {
@@ -36,34 +42,29 @@ const Home = () => {
   const diaryData: JSX.Element[] = diarys.map((el) => {
     return (
       <div key={el.id}>
-        <h4>{el.diary}</h4>
+        <h4>{el.text}</h4>
       </div>
     );
   });
 
-  const getDiarys = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(dbService, "diary"));
-      querySnapshot.forEach((doc) => {
-        const diaryObject: any = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        console.log(diaryObject);
-        setDiarys((prev: Diary[]) => [diaryObject, ...prev]);
-      });
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
-  };
   useEffect(() => {
-    getDiarys();
+    const q = query(
+      collection(dbService, "diary"),
+      orderBy("createdAt", "desc")
+    );
+    onSnapshot(q, (snapshot) => {
+      const diaryObject: any = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setDiarys(diaryObject);
+    });
   }, []);
 
   return (
     <>
       <Nav />
-      <h1>Home</h1>
+      <h1>Diary</h1>
       <form onSubmit={onSubmit}>
         <Input
           value={diary}

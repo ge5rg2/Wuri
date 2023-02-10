@@ -5,14 +5,14 @@ import {
   useSelector as useTypedSelector,
 } from "react-redux";
 import dummySlice from "./dummySlice";
-import loadSlice from "./loadSlice";
+import userSlice from "./userSlice";
 
 //useSelector, useDispatch 등을 react-redux에서 가져온 후 state에 저장해서 사용할 수 있게 index.ts로 저장
 export const store = configureStore({
   reducer: {
     //quiz: quizSlice.reducer,
     dummy: dummySlice.reducer,
-    load: loadSlice.reducer,
+    user: userSlice.reducer,
   },
 });
 

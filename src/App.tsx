@@ -3,19 +3,23 @@ import Router from "./Router";
 import { GlobalStyle } from "./styles/GlobalStyle";
 import { app } from "./myBase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import Welcome from "./components/Welcome";
+import { useDispatch } from "./store";
+import { userActions } from "./store/userSlice";
 
-function App() {
+const App = () => {
   const [init, setInit] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const auth = getAuth(app);
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setIsLoggedIn(true);
         const uid = user.uid;
+        dispatch(userActions.setLoggedIn({ isLoggedIn: true, userUid: uid }));
+        console.log(uid);
       } else {
-        setIsLoggedIn(false);
+        dispatch(userActions.setLoggedIn({ isLoggedIn: false, userUid: "" }));
       }
       setInit(true);
     });
@@ -23,9 +27,9 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      {init ? <>{isLoggedIn ? <Router /> : <Welcome />}</> : "Initializing..."}
+      {init ? <Router /> : "Initializing..."}
     </>
   );
-}
+};
 
 export default App;

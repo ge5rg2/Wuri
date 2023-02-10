@@ -25,7 +25,7 @@ const Home = () => {
 
     const date = new Date();
     try {
-      const docRef = await addDoc(collection(dbService, "diary"), {
+      const docRef = await addDoc(collection(dbService, "diarys"), {
         text: diary,
         createdAt: date,
         creatorId: uid,
@@ -44,13 +44,18 @@ const Home = () => {
 
   const diaryData: JSX.Element[] = diarys.map((el) => {
     return (
-      <Diarys key={el.id} diary={el.text} isOwner={el.creatorId === uid} />
+      <Diarys
+        key={el.id}
+        diary={el.text}
+        isOwner={el.creatorId === uid}
+        obj={el}
+      />
     );
   });
 
   useEffect(() => {
     const q = query(
-      collection(dbService, "diary"),
+      collection(dbService, "diarys"),
       orderBy("createdAt", "desc")
     );
     onSnapshot(q, (snapshot) => {

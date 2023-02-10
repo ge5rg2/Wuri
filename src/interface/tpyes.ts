@@ -13,4 +13,5 @@ export interface userState {
 export interface diaryProps {
   diary: string;
   isOwner: boolean;
+  obj: any;
 }

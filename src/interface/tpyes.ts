@@ -9,3 +9,8 @@ export interface userState {
   isLoggedIn?: true | false;
   userUid?: string;
 }
+
+export interface diaryProps {
+  diary: string;
+  isOwner: boolean;
+}

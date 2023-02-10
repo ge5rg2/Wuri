@@ -10,22 +10,25 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { Diary } from "../interface/tpyes";
+import Diarys from "../components/Diarys";
 import { useSelector } from "../store";
 
 const Home = () => {
   const userStore = useSelector((state) => state.user);
+  const uid = userStore.userUid;
 
   const [diary, setDiary] = useState("");
   const [diarys, setDiarys] = useState<Diary[]>([]);
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+
     const date = new Date();
     try {
       const docRef = await addDoc(collection(dbService, "diary"), {
         text: diary,
         createdAt: date,
-        creatorId: userStore.userUid,
+        creatorId: uid,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (error) {
@@ -41,9 +44,7 @@ const Home = () => {
 
   const diaryData: JSX.Element[] = diarys.map((el) => {
     return (
-      <div key={el.id}>
-        <h4>{el.text}</h4>
-      </div>
+      <Diarys key={el.id} diary={el.text} isOwner={el.creatorId === uid} />
     );
   });
 

@@ -1,9 +1,9 @@
 import { diaryProps } from "../interface/tpyes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Btn from "./common/Btn";
 import Input from "./common/Input";
 import { dbService } from "../myBase";
-import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, onSnapshot } from "firebase/firestore";
 
 const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
   const [editing, setEditing] = useState<boolean>(false);
@@ -29,11 +29,25 @@ const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
     setNewDiary(value);
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     await updateDoc(DiaryTextRef, {
       text: newDiary,
     });
+    setEditing(false);
   };
+
+  // firestore already give us data that edited diary
+  /*   useEffect(() => {
+    const unsubscribe = onSnapshot(DiaryTextRef, (doc) => {
+      const diaryObject = doc.data();
+      if (diaryObject) {
+        setNewDiary(diaryObject.text);
+      }
+    });
+    return () => unsubscribe();
+  }, [DiaryTextRef]);
+ */
 
   return (
     <>

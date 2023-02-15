@@ -8,7 +8,6 @@ import { doc, deleteDoc, updateDoc, onSnapshot } from "firebase/firestore";
 const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
   const [editing, setEditing] = useState<boolean>(false);
   const [newDiary, setNewDiary] = useState<string>(obj.text);
-
   const DiaryTextRef = doc(dbService, "diarys", `${obj.id}`);
 
   const onDeleteClick = async () => {
@@ -74,6 +73,9 @@ const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
           ) : (
             <>
               <h4>{diary}</h4>
+              {obj.attachmentUrl && (
+                <img src={obj.attachmentUrl} height="50px" width="50px" />
+              )}
               <Btn children="Edit Diary" onClick={toggleEditing} />
               <Btn children="Delete Diary" onClick={onDeleteClick} />
             </>

@@ -1,7 +1,7 @@
 import Nav from "../components/Nav";
 import Input from "../components/common/Input";
-import React, { useState, useEffect, useRef, forwardRef } from "react";
-import { dbService } from "../myBase";
+import React, { useState, useEffect, useRef } from "react";
+import { dbService, storageService } from "../myBase";
 import {
   collection,
   addDoc,
@@ -9,31 +9,42 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
+import { ref, uploadString, getDownloadURL } from "@firebase/storage";
 import { Diary } from "../interface/tpyes";
 import Diarys from "../components/Diarys";
 import { useSelector } from "../store";
 import Btn from "../components/common/Btn";
+import { v4 as uuidv4 } from "uuid";
 
 const Home = () => {
   const fileInput = useRef<HTMLInputElement>(null);
   const userStore = useSelector((state) => state.user);
   const uid = userStore.userUid;
-
   const [diary, setDiary] = useState("");
   const [diarys, setDiarys] = useState<Diary[]>([]);
-  const [attachment, setAttachment] = useState<string | ArrayBuffer | null>();
+  const [attachment, setAttachment] = useState<any>("");
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-
+    let attachmentUrl = "";
     const date = new Date();
     try {
+      if (attachment !== "") {
+        const fileRef = ref(storageService, `${uid}/${uuidv4()}`);
+        const response = await uploadString(
+          fileRef,
+          attachment,
+          "data_url"
+        ).then(async (snapshot) => {
+          attachmentUrl = await getDownloadURL(snapshot.ref);
+        });
+      }
       const docRef = await addDoc(collection(dbService, "diarys"), {
         text: diary,
         createdAt: date,
         creatorId: uid,
+        attachmentUrl,
       });
-      console.log("Document written with ID: ", docRef.id);
     } catch (error) {
       console.error("Error adding document: ", error);
     }
@@ -47,7 +58,6 @@ const Home = () => {
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target?.files;
-    console.log(fileInput);
     if (files?.length) {
       const theFile = files[0];
       const reader = new FileReader();
@@ -60,7 +70,7 @@ const Home = () => {
   };
 
   const onClearAttachment = () => {
-    setAttachment(null);
+    setAttachment("");
     if (fileInput.current) {
       fileInput.current.value = "";
     }

@@ -8,6 +8,7 @@ const Base = styled.input`
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   disabled?: boolean;
   types?: React.HTMLInputTypeAttribute;
+  ref?: React.RefObject<HTMLInputElement>;
 }
 
 const Input: React.FC<Props> = ({ disabled, types, ...props }) => {

@@ -49,6 +49,7 @@ const Home = () => {
       console.error("Error adding document: ", error);
     }
     setDiary("");
+    onClearAttachment();
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

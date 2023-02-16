@@ -2,18 +2,21 @@ import { diaryProps } from "../interface/tpyes";
 import { useState, useEffect } from "react";
 import Btn from "./common/Btn";
 import Input from "./common/Input";
-import { dbService } from "../myBase";
-import { doc, deleteDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import { dbService, storageService } from "../myBase";
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { deleteObject, ref } from "@firebase/storage";
 
 const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
   const [editing, setEditing] = useState<boolean>(false);
   const [newDiary, setNewDiary] = useState<string>(obj.text);
   const DiaryTextRef = doc(dbService, "diarys", `${obj.id}`);
+  const urlRef = ref(storageService, obj.attachmentUrl);
 
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this diary?");
     if (ok) {
       await deleteDoc(DiaryTextRef);
+      await deleteObject(urlRef);
     } else {
       return;
     }

@@ -18,6 +18,10 @@ const Nav = () => {
       });
   };
 
+  const onAccountClcik = () => {
+    navigate("/account");
+  };
+
   return (
     <Wraper>
       <SubContainer>
@@ -25,7 +29,9 @@ const Nav = () => {
           <div onClick={onSignOut} className="subNavDiv">
             Sign out
           </div>
-          <div className="subNavDiv">Profile</div>
+          <div className="subNavDiv" onClick={onAccountClcik}>
+            Account
+          </div>
         </div>
       </SubContainer>
     </Wraper>

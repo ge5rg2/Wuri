@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom";
+import { useSelector } from "./store";
 import Home from "./routes/Home";
 import Welcome from "./components/Welcome";
-import { useSelector } from "./store";
+import Account from "./routes/Account";
 
 const Router: React.FC = () => {
   const userStore = useSelector((state) => state.user);
@@ -9,9 +10,14 @@ const Router: React.FC = () => {
   return (
     <>
       {userStore.isLoggedIn ? (
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-        </Routes>
+        <>
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+          </Routes>
+          <Routes>
+            <Route path="/account" element={<Account />}></Route>
+          </Routes>
+        </>
       ) : (
         <Welcome />
       )}

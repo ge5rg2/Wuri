@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { theme } from "./styles/theme";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import Nav from "./components/Nav";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

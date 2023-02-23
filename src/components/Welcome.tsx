@@ -62,6 +62,7 @@ const Welcome = () => {
 
   return (
     <>
+      <img src="/img/WuriNone.png" />
       <form onSubmit={onSubmit}>
         <Input
           name="email"

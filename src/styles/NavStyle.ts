@@ -1,20 +1,17 @@
 import styled from "styled-components";
 import palette from "./palette";
 
-export const Wraper = styled.div``;
-export const MainContainer = styled.div`
-  padding: 1.5rem 16rem;
-  background-color: #ffff;
-  img {
-    max-width: 108px;
-    cursor: pointer;
-  }
+export const Wraper = styled.div`
+  position: absolute;
+  left: 0;
 `;
 
 export const SubContainer = styled.div`
-  background-color: #1e2443;
+  img {
+    height: 50px;
+    cursor: pointer;
+  }
   .subNav {
-    margin: 0 15rem;
     display: flex;
     .subNavDiv {
       font-size: 1rem;

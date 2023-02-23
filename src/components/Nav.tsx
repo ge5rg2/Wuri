@@ -32,6 +32,7 @@ const Nav = () => {
           <div className="subNavDiv" onClick={onAccountClcik}>
             Account
           </div>
+          <img src="/img/WuriNone.png" />
         </div>
       </SubContainer>
     </Wraper>

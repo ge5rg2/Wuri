@@ -15,6 +15,7 @@ import Diarys from "../components/Diarys";
 import { useSelector } from "../store";
 import Btn from "../components/common/Btn";
 import { v4 as uuidv4 } from "uuid";
+import { MainContainer } from "../styles/HomeStyle";
 
 const Home = () => {
   const fileInput = useRef<HTMLInputElement>(null);
@@ -105,29 +106,30 @@ const Home = () => {
   return (
     <>
       <Nav />
-      <h1>Diary</h1>
-      <form onSubmit={onSubmit}>
-        <Input
-          value={diary}
-          onChange={onChange}
-          type="text"
-          placeholder="What's on your mind?"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={onFileChange}
-          ref={fileInput}
-        />
-        <Input type="submit" value="diary" />
-        {attachment && typeof attachment === "string" && (
-          <div>
-            <img src={attachment} width="50px" height="50px" />
-            <Btn onClick={onClearAttachment} children="Clear" />
-          </div>
-        )}
-      </form>
-      {diaryData}
+      <MainContainer>
+        <form onSubmit={onSubmit}>
+          <Input
+            value={diary}
+            onChange={onChange}
+            type="text"
+            placeholder="What's on your mind?"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onFileChange}
+            ref={fileInput}
+          />
+          <Input type="submit" value="diary" />
+          {attachment && typeof attachment === "string" && (
+            <div>
+              <img src={attachment} width="50px" height="50px" />
+              <Btn onClick={onClearAttachment} children="Clear" />
+            </div>
+          )}
+        </form>
+        {diaryData}
+      </MainContainer>
     </>
   );
 };

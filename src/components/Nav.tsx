@@ -10,7 +10,6 @@ import { menuActions } from "../store/menuSlice";
 const Nav = () => {
   const dispatch = useDispatch();
   const menuState = useSelector((state) => state.menu);
-  const [menu, setMenu] = useState(false);
   const navigate = useNavigate();
   const onSignOut = () => {
     const auth = getAuth();
@@ -30,22 +29,18 @@ const Nav = () => {
   };
 
   const onMenuMouseOver = () => {
-    dispatch(menuActions.openMenu);
-    console.log(menuState.isMenu);
-    setMenu(true);
+    dispatch(menuActions.openMenu());
   };
 
   const onMenuMouseLeave = () => {
-    dispatch(menuActions.closeMenu);
-    console.log(menuState.isMenu);
-    setMenu(false);
+    dispatch(menuActions.closeMenu());
   };
 
   return (
     <Wraper>
       <SubContainer>
         <div onMouseOver={onMenuMouseOver} onMouseLeave={onMenuMouseLeave}>
-          {menu ? (
+          {menuState.isMenu ? (
             <KeyboardDoubleArrowRightIcon
               style={{ color: "#ffff", cursor: "pointer" }}
               fontSize="large"

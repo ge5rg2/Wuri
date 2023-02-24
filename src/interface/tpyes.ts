@@ -17,5 +17,5 @@ export interface diaryProps {
 }
 
 export interface menuState {
-  isMenu?: true | false;
+  isMenu: boolean;
 }

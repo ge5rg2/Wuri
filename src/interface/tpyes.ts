@@ -15,3 +15,7 @@ export interface diaryProps {
   isOwner: boolean;
   obj: any;
 }
+
+export interface menuState {
+  isMenu?: true | false;
+}

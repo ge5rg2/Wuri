@@ -8,7 +8,8 @@ export const Wraper = styled.div`
 
 export const SubContainer = styled.div`
   img {
-    height: 50px;
+    height: 25%;
+    width: 25%;
     cursor: pointer;
   }
   .subNav {

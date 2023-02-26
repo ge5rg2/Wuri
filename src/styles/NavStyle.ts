@@ -6,26 +6,12 @@ export const Wraper = styled.div`
   left: 0;
 `;
 
-export const SubContainer = styled.div`
+export const SubContainer = styled.div``;
+
+export const MainContainer = styled.div`
   img {
     height: 25%;
     width: 25%;
     cursor: pointer;
-  }
-  .subNav {
-    display: flex;
-    .subNavDiv {
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      height: 50px;
-      padding: 1.2rem;
-      cursor: pointer;
-      :hover {
-        background-color: ${palette.gray[600]};
-      }
-    }
   }
 `;

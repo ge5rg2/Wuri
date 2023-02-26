@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Wraper, SubContainer } from "..//styles/NavStyle";
+import { Wraper, SubContainer, MainContainer } from "..//styles/NavStyle";
 import { getAuth, signOut } from "firebase/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
@@ -38,30 +38,34 @@ const Nav = () => {
 
   return (
     <Wraper>
-      <SubContainer>
+      <MainContainer>
         <div onMouseOver={onMenuMouseOver} onMouseLeave={onMenuMouseLeave}>
           {menuState.isMenu ? (
-            <KeyboardDoubleArrowRightIcon
-              style={{ color: "#ffff", cursor: "pointer" }}
-              fontSize="large"
-            />
+            <>
+              <KeyboardDoubleArrowRightIcon
+                style={{ color: "#ffff", cursor: "pointer" }}
+                fontSize="large"
+              />
+              <SubContainer>
+                <div className="subNav">
+                  <div onClick={onSignOut} className="subNavDiv">
+                    Sign out
+                  </div>
+                  <div className="subNavDiv" onClick={onAccountClcik}>
+                    Account
+                  </div>
+                </div>
+              </SubContainer>
+            </>
           ) : (
             <MenuIcon
               style={{ color: "#ffff", cursor: "pointer" }}
               fontSize="large"
             />
           )}
-        </div>
-        <div className="subNav">
-          <div onClick={onSignOut} className="subNavDiv">
-            Sign out
-          </div>
-          <div className="subNavDiv" onClick={onAccountClcik}>
-            Account
-          </div>
           <img src="/img/WuriNone.png" />
         </div>
-      </SubContainer>
+      </MainContainer>
     </Wraper>
   );
 };

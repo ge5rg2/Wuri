@@ -6,7 +6,14 @@ export const Wraper = styled.div`
   left: 0;
 `;
 
-export const SubContainer = styled.div``;
+export const SubContainer = styled.div`
+  position: absolute;
+  border: 1px solid #fff;
+  padding: 20px;
+  .subNavDiv {
+    padding: 30px;
+  }
+`;
 
 export const MainContainer = styled.div`
   img {

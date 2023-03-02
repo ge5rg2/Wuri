@@ -17,10 +17,13 @@ const Nav = () => {
   const menuState = useSelector((state) => state.menu);
   const navigate = useNavigate();
   const onSignOut = () => {
+    dispatch(menuActions.closeAccount());
     const auth = getAuth();
     signOut(auth)
       .then(() => {
         // Sign-out successful.
+
+        dispatch(menuActions.closeMenu());
         navigate("/");
       })
       .catch((error) => {

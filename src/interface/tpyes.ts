@@ -17,5 +17,6 @@ export interface diaryProps {
 }
 
 export interface menuState {
+  isProfile: boolean;
   isMenu: boolean;
 }

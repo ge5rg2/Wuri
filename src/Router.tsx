@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { useSelector } from "./store";
 import Home from "./routes/Home";
 import Welcome from "./components/Welcome";
-import Account from "./routes/Account";
+import Profile from "./routes/Profile";
 
 const Router: React.FC = () => {
   const userStore = useSelector((state) => state.user);
@@ -15,7 +15,7 @@ const Router: React.FC = () => {
             <Route path="/" element={<Home />}></Route>
           </Routes>
           <Routes>
-            <Route path="/account" element={<Account />}></Route>
+            <Route path="/profile" element={<Profile />}></Route>
           </Routes>
         </>
       ) : (

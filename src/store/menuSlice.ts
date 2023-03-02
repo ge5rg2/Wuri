@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { menuState } from "../interface/tpyes";
 
 const initialState: menuState = {
+  isProfile: false,
   isMenu: false,
 };
 
@@ -14,6 +15,12 @@ export const menuSlice = createSlice({
     },
     closeMenu(state) {
       state.isMenu = false;
+    },
+    openAccount(state) {
+      state.isProfile = true;
+    },
+    closeAccount(state) {
+      state.isProfile = false;
     },
   },
 });

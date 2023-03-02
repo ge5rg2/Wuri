@@ -29,8 +29,14 @@ const Nav = () => {
       });
   };
 
-  const onAccountClcik = () => {
-    navigate("/account");
+  const onDiaryClcik = () => {
+    dispatch(menuActions.closeAccount());
+    navigate("/");
+  };
+
+  const onProfileClcik = () => {
+    dispatch(menuActions.openAccount());
+    navigate("/profile");
   };
 
   const onMenuMouseOver = () => {
@@ -59,9 +65,15 @@ const Nav = () => {
                   <div onClick={onSignOut} className="subNavDiv">
                     Sign out
                   </div>
-                  <div className="subNavDiv" onClick={onAccountClcik}>
-                    Account
-                  </div>
+                  {menuState.isProfile ? (
+                    <div className="subNavDiv" onClick={onDiaryClcik}>
+                      Diary
+                    </div>
+                  ) : (
+                    <div className="subNavDiv" onClick={onProfileClcik}>
+                      Profile
+                    </div>
+                  )}
                 </div>
               </SubContainer>
             </>
@@ -72,7 +84,7 @@ const Nav = () => {
             />
           )}
         </IconContainer>
-        <img src="/img/WuriNone.png" />
+        <img onClick={onDiaryClcik} src="/img/WuriNone.png" />
       </MainContainer>
     </Wraper>
   );

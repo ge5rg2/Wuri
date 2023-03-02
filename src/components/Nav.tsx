@@ -1,5 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { Wraper, SubContainer, MainContainer } from "..//styles/NavStyle";
+import {
+  Wraper,
+  SubContainer,
+  MainContainer,
+  IconContainer,
+} from "..//styles/NavStyle";
 import { getAuth, signOut } from "firebase/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
@@ -39,7 +44,10 @@ const Nav = () => {
   return (
     <Wraper>
       <MainContainer>
-        <div onMouseOver={onMenuMouseOver} onMouseLeave={onMenuMouseLeave}>
+        <IconContainer
+          onMouseOver={onMenuMouseOver}
+          onMouseLeave={onMenuMouseLeave}
+        >
           {menuState.isMenu ? (
             <>
               <KeyboardDoubleArrowRightIcon
@@ -63,8 +71,8 @@ const Nav = () => {
               fontSize="large"
             />
           )}
-          <img src="/img/WuriNone.png" />
-        </div>
+        </IconContainer>
+        <img src="/img/WuriNone.png" />
       </MainContainer>
     </Wraper>
   );

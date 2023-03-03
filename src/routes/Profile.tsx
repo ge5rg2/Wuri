@@ -1,39 +1,41 @@
 import Nav from "../components/Nav";
 import { MainContainer } from "../styles/HomeStyle";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "@firebase/firestore";
 import { dbService } from "../myBase";
-import { useSelector } from "../store";
+import { useSelector, useDispatch } from "../store";
 import { getAuth } from "firebase/auth";
+import { menuActions } from "../store/menuSlice";
 
 const Profile = () => {
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.user);
   const auth = getAuth();
   const user = auth.currentUser;
-  const userName = user?.displayName;
-  const url: any = user?.photoURL;
   const provider = user?.providerData[0].providerId;
-  const uid = useSelector((state) => state.user.userUid);
-
   const getMyAccount = async () => {
     const q = query(
       collection(dbService, "diarys"),
-      where("creatorId", "==", uid)
+      where("creatorId", "==", userInfo.userUid)
     );
     const querySnapshot = await getDocs(q);
     /*     console.log(
       querySnapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()))
     ); */
+    if (user !== null) {
+    }
   };
 
   useEffect(() => {
+    dispatch(menuActions.openAccount());
     getMyAccount();
   }, []);
 
   return (
     <MainContainer>
       <Nav />
-      <img src={url + "-mo"} />
-      <div>{userName}</div>
+      <img src={userInfo.userUrl + "-mo"} />
+      <div>{userInfo.userName}</div>
       <div>{provider}</div>
     </MainContainer>
   );

@@ -16,10 +16,23 @@ const App = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
-        dispatch(userActions.setLoggedIn({ isLoggedIn: true, userUid: uid }));
-        console.log(uid);
+        dispatch(
+          userActions.setLoggedIn({
+            isLoggedIn: true,
+            userUid: uid,
+            userName: user.displayName,
+            userUrl: user.photoURL,
+          })
+        );
       } else {
-        dispatch(userActions.setLoggedIn({ isLoggedIn: false, userUid: "" }));
+        dispatch(
+          userActions.setLoggedIn({
+            isLoggedIn: false,
+            userUid: "",
+            userName: "",
+            userUrl: "",
+          })
+        );
       }
       setInit(true);
     });

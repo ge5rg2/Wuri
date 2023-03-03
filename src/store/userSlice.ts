@@ -5,6 +5,8 @@ const initialState: userState = {
   isLoading: false,
   isLoggedIn: false,
   userUid: "",
+  userName: "",
+  userUrl: "",
 };
 
 export const userSlice = createSlice({
@@ -16,10 +18,14 @@ export const userSlice = createSlice({
       action: PayloadAction<{
         isLoggedIn: boolean;
         userUid: string;
+        userName: string | null;
+        userUrl: string | null;
       }>
     ) {
       state.isLoggedIn = action.payload.isLoggedIn;
       state.userUid = action.payload.userUid;
+      state.userName = action.payload.userName;
+      state.userUrl = action.payload.userUrl;
     },
     /*     setOpptLoad(
       state,

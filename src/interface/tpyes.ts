@@ -8,6 +8,8 @@ export interface userState {
   isLoading?: true | false;
   isLoggedIn?: true | false;
   userUid?: string;
+  userName?: string | null;
+  userUrl?: string | null;
 }
 
 export interface diaryProps {

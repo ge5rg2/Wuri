@@ -1,4 +1,3 @@
-import Nav from "../components/Nav";
 import Input from "../components/common/Input";
 import React, { useState, useEffect, useRef } from "react";
 import { dbService, storageService } from "../myBase";
@@ -10,14 +9,12 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "@firebase/storage";
-import { Diary } from "../interface/tpyes";
-import Diarys from "../components/Diarys";
 import { useSelector } from "../store";
-import Btn from "../components/common/Btn";
 import { v4 as uuidv4 } from "uuid";
-import { MainContainer, SubContainer } from "../styles/HomeStyle";
+import Btn from "../components/common/Btn";
+import { Diary } from "../interface/tpyes";
 
-const Home = () => {
+const Edit = () => {
   const fileInput = useRef<HTMLInputElement>(null);
   const userStore = useSelector((state) => state.user);
   const uid = userStore.userUid;
@@ -53,9 +50,11 @@ const Home = () => {
     onClearAttachment();
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setDiary(value);
+  const onClearAttachment = () => {
+    setAttachment("");
+    if (fileInput.current) {
+      fileInput.current.value = "";
+    }
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,69 +70,39 @@ const Home = () => {
     }
   };
 
-  const onClearAttachment = () => {
-    setAttachment("");
-    if (fileInput.current) {
-      fileInput.current.value = "";
-    }
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setDiary(value);
   };
-
-  const diaryData: JSX.Element[] = diarys.map((el) => {
-    return (
-      <Diarys
-        key={el.id}
-        diary={el.text}
-        isOwner={el.creatorId === uid}
-        obj={el}
-      />
-    );
-  });
-
-  useEffect(() => {
-    const q = query(
-      collection(dbService, "diarys"),
-      orderBy("createdAt", "desc")
-    );
-    onSnapshot(q, (snapshot) => {
-      const diaryObject: any = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setDiarys(diaryObject);
-    });
-  }, []);
 
   return (
     <>
-      <Nav />
-      <MainContainer>
-        <SubContainer>
-          <img src={userStore.userUrl + "-mo"} />
-          <form onSubmit={onSubmit}>
-            <Input
-              value={diary}
-              onChange={onChange}
-              type="text"
-              placeholder="What's on your mind?"
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={onFileChange}
-              ref={fileInput}
-            />
-            <Input type="submit" value="diary" />
-            {attachment && typeof attachment === "string" && (
-              <div>
-                <img src={attachment} width="50px" height="50px" />
-                <Btn onClick={onClearAttachment} children="Clear" />
-              </div>
-            )}
-          </form>
-        </SubContainer>
-        {diaryData}
-      </MainContainer>
+      <div>Edit</div>
+      <div>
+        <form onSubmit={onSubmit}>
+          <Input
+            value={diary}
+            onChange={onChange}
+            type="text"
+            placeholder="What's on your mind?"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onFileChange}
+            ref={fileInput}
+          />
+          <Input type="submit" value="diary" />
+          {attachment && typeof attachment === "string" && (
+            <div>
+              <img src={attachment} width="50px" height="50px" />
+              <Btn onClick={onClearAttachment} children="Clear" />
+            </div>
+          )}
+        </form>
+      </div>
     </>
   );
 };
-export default Home;
+
+export default Edit;

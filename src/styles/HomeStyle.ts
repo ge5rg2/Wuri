@@ -7,3 +7,12 @@ export const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+export const SubContainer = styled.div`
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  img {
+    border-radius: 50%;
+  }
+`;

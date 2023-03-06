@@ -4,6 +4,7 @@ import Home from "./routes/Home";
 import Welcome from "./components/Welcome";
 import Profile from "./routes/Profile";
 import Edit from "./routes/Edit";
+import Nav from "./components/Nav";
 
 const Router: React.FC = () => {
   const userStore = useSelector((state) => state.user);
@@ -12,6 +13,7 @@ const Router: React.FC = () => {
     <>
       {userStore.isLoggedIn ? (
         <>
+          <Nav />
           <Routes>
             <Route path="/" element={<Home />}></Route>
           </Routes>

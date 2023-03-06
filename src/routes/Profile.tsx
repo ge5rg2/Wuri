@@ -1,4 +1,3 @@
-import Nav from "../components/Nav";
 import { MainContainer } from "../styles/HomeStyle";
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "@firebase/firestore";
@@ -33,7 +32,6 @@ const Profile = () => {
 
   return (
     <MainContainer>
-      <Nav />
       <img src={userInfo.userUrl + "-mo"} />
       <div>{userInfo.userName}</div>
       <div>{provider}</div>

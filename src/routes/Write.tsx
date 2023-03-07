@@ -13,14 +13,14 @@ import { useSelector } from "../store";
 import { v4 as uuidv4 } from "uuid";
 import Btn from "../components/common/Btn";
 import { Diary } from "../interface/tpyes";
-import { MainContainer } from "../styles/HomeStyle";
+import { MainContainer, SubContainer } from "../styles/WriteStyle";
 
 const Write = () => {
   const fileInput = useRef<HTMLInputElement>(null);
   const userStore = useSelector((state) => state.user);
   const uid = userStore.userUid;
+  const [title, setTitle] = useState("");
   const [diary, setDiary] = useState("");
-  const [diarys, setDiarys] = useState<Diary[]>([]);
   const [attachment, setAttachment] = useState<any>("");
 
   const onSubmit = async (e: React.SyntheticEvent) => {
@@ -39,6 +39,7 @@ const Write = () => {
         });
       }
       const docRef = await addDoc(collection(dbService, "diarys"), {
+        title: title,
         text: diary,
         createdAt: date,
         creatorId: uid,
@@ -48,6 +49,7 @@ const Write = () => {
       console.error("Error adding document: ", error);
     }
     setDiary("");
+    setTitle("");
     onClearAttachment();
   };
 
@@ -71,38 +73,49 @@ const Write = () => {
     }
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
+  const onContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let { value } = e.target;
     setDiary(value);
+  };
+
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let { value } = e.target;
+    setTitle(value);
   };
 
   return (
     <>
       <MainContainer>
         <div>Write</div>
-        <div>
+        <SubContainer>
           <form onSubmit={onSubmit}>
             <Input
-              value={diary}
-              onChange={onChange}
+              value={title}
+              onChange={onTitleChange}
               type="text"
-              placeholder="What's on your mind?"
+              placeholder="Summarize your day in one word"
             />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={onFileChange}
-              ref={fileInput}
-            />
-            <Input type="submit" value="diary" />
             {attachment && typeof attachment === "string" && (
               <div>
                 <img src={attachment} width="50px" height="50px" />
                 <Btn onClick={onClearAttachment} children="Clear" />
               </div>
             )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={onFileChange}
+              ref={fileInput}
+            />
+            <Input
+              value={diary}
+              onChange={onContentChange}
+              type="text"
+              placeholder="What's on your mind?"
+            />
+            <Input type="submit" value="diary" />
           </form>
-        </div>
+        </SubContainer>
       </MainContainer>
     </>
   );

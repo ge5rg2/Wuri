@@ -50,13 +50,7 @@ const Home = () => {
       <MainContainer>
         <SubContainer>
           <img src={userStore.userUrl + "-mo"} />
-          <form>
-            <Input
-              onClick={onEditPageClick}
-              type="text"
-              placeholder="What's on your mind?"
-            />
-          </form>
+          <Btn onClick={onEditPageClick} children="What's on your mind?" />
         </SubContainer>
         {diaryData}
       </MainContainer>

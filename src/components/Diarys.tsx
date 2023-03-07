@@ -11,7 +11,7 @@ const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
   const [newDiary, setNewDiary] = useState<string>(obj.text);
   const DiaryTextRef = doc(dbService, "diarys", `${obj.id}`);
   const urlRef = ref(storageService, obj.attachmentUrl);
-
+  console.log(obj);
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this diary?");
     if (ok) {

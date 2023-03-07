@@ -3,8 +3,9 @@ import { useSelector } from "./store";
 import Home from "./routes/Home";
 import Welcome from "./components/Welcome";
 import Profile from "./routes/Profile";
-import Edit from "./routes/Edit";
+import Write from "./routes/Write";
 import Nav from "./components/Nav";
+import Edit from "./routes/Edit";
 
 const Router: React.FC = () => {
   const userStore = useSelector((state) => state.user);
@@ -19,6 +20,9 @@ const Router: React.FC = () => {
           </Routes>
           <Routes>
             <Route path="/profile" element={<Profile />}></Route>
+          </Routes>
+          <Routes>
+            <Route path="/write" element={<Write />}></Route>
           </Routes>
           <Routes>
             <Route path="/edit/:id" element={<Edit />}></Route>

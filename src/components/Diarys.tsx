@@ -75,10 +75,10 @@ const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
             </>
           ) : (
             <>
-              <h4>{diary}</h4>
               {obj.attachmentUrl && (
                 <img src={obj.attachmentUrl} height="50px" width="50px" />
               )}
+              <h4>{diary}</h4>
               <Btn children="Edit Diary" onClick={toggleEditing} />
               <Btn children="Delete Diary" onClick={onDeleteClick} />
             </>

@@ -28,7 +28,7 @@ const Home = () => {
   });
 
   const onEditPageClick = () => {
-    navigate("/edit/1");
+    navigate("/write");
   };
 
   useEffect(() => {

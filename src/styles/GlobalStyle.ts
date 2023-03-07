@@ -31,7 +31,8 @@ footer, header, hgroup, main, menu, nav, section {
 *[hidden] {
     display: none;
 }
-body {
+body {  
+  padding-top: 75px;
   line-height: 1;
 }
 menu, ol, ul {

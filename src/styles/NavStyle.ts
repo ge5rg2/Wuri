@@ -2,15 +2,17 @@ import styled from "styled-components";
 import palette from "./palette";
 
 export const Wraper = styled.div`
-  position: absolute;
-  left: 10px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 0;
 `;
 
 export const SubContainer = styled.div`
-  position: absolute;
   top: 50px;
   border: 1px solid #fff;
   padding: 20px;
+  position: absolute;
   .subNavDiv {
     border: 1px solid #fff;
     cursor: pointer;
@@ -20,10 +22,12 @@ export const SubContainer = styled.div`
 `;
 
 export const MainContainer = styled.div`
+  position: relative;
+  left: 10px;
   display: flex;
   img {
-    height: 25%;
-    width: 25%;
+    height: 10%;
+    width: 10%;
     cursor: pointer;
   }
 `;

@@ -5,13 +5,14 @@ import Input from "./common/Input";
 import { dbService, storageService } from "../myBase";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "@firebase/storage";
+import { useNavigate } from "react-router-dom";
 
 const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
+  const navigate = useNavigate();
   const [editing, setEditing] = useState<boolean>(false);
   const [newDiary, setNewDiary] = useState<string>(obj.text);
   const DiaryTextRef = doc(dbService, "diarys", `${obj.id}`);
   const urlRef = ref(storageService, obj.attachmentUrl);
-  console.log(obj);
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this diary?");
     if (ok) {
@@ -20,6 +21,11 @@ const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
     } else {
       return;
     }
+  };
+
+  const onToggleEditing = () => {
+    console.log(obj);
+    navigate(`/edit/${obj.id}`);
   };
 
   const toggleEditing = () => setEditing((prev) => !prev);
@@ -79,6 +85,10 @@ const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
                 <img src={obj.attachmentUrl} height="50px" width="50px" />
               )}
               <h4>{diary}</h4>
+              <Btn
+                children="test to move edit page"
+                onClick={onToggleEditing}
+              />
               <Btn children="Edit Diary" onClick={toggleEditing} />
               <Btn children="Delete Diary" onClick={onDeleteClick} />
             </>

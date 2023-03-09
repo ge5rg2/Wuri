@@ -6,9 +6,9 @@ import { useEffect } from "react";
 
 const Edit = () => {
   const param = useParams();
-
   const getDiaryInfo = async () => {
-    const snap = await getDoc(doc(dbService, "diarys", "X71qs2yf1RcXcsPurPND"));
+    const { id } = param;
+    const snap = await getDoc(doc(dbService, "diarys", `${id}`));
 
     if (snap.exists()) {
       console.log(snap.data());

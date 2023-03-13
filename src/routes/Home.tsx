@@ -27,7 +27,7 @@ const Home = () => {
     );
   });
 
-  const onEditPageClick = () => {
+  const onWritePageClick = () => {
     navigate("/write");
   };
 
@@ -50,7 +50,7 @@ const Home = () => {
       <MainContainer>
         <SubContainer>
           <img src={userStore.userUrl + "-mo"} />
-          <Btn onClick={onEditPageClick} children="What's on your mind?" />
+          <Btn onClick={onWritePageClick} children="What's on your mind?" />
         </SubContainer>
         {diaryData}
       </MainContainer>

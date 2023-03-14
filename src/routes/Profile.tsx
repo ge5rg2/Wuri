@@ -18,9 +18,11 @@ const Profile = () => {
       where("creatorId", "==", userInfo.userUid)
     );
     const querySnapshot = await getDocs(q);
-    /*     console.log(
+    /*     
+    console.log(
       querySnapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()))
-    ); */
+    ); 
+    */
     if (user !== null) {
     }
   };

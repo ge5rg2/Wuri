@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 const Edit = () => {
   const param = useParams();
+
   const getDiaryInfo = async () => {
     const { id } = param;
     const snap = await getDoc(doc(dbService, "diarys", `${id}`));

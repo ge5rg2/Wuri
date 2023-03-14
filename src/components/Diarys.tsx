@@ -23,7 +23,7 @@ const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
     }
   };
 
-  const onToggleEditing = () => {
+  const onToggleDetail = () => {
     console.log(obj);
     navigate(`/edit/${obj.id}`);
   };
@@ -85,10 +85,7 @@ const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
                 <img src={obj.attachmentUrl} height="50px" width="50px" />
               )}
               <h4>{diary}</h4>
-              <Btn
-                children="test to move edit page"
-                onClick={onToggleEditing}
-              />
+              <Btn children="Detail" onClick={onToggleDetail} />
               <Btn children="Edit Diary" onClick={toggleEditing} />
               <Btn children="Delete Diary" onClick={onDeleteClick} />
             </>

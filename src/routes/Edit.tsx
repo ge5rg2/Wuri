@@ -13,6 +13,7 @@ const Edit = () => {
   const [diaryInfo, setDiaryInfo] = useState<any>([]);
   const [editing, setEditing] = useState<boolean>(true);
   const [newDiary, setNewDiary] = useState<string>("");
+  const [date, setDate] = useState<any>();
 
   const DiaryTextRef = doc(dbService, "diarys", `${id}`);
 
@@ -23,6 +24,15 @@ const Edit = () => {
       console.log(snap.data());
       setDiaryInfo(data);
       setNewDiary(data.text);
+      console.log(data.createdAt.toDate().getFullYear());
+      console.log(data.createdAt.toDate().getMonth() + 1);
+      console.log(data.createdAt.toDate().getDate());
+      console.log(data.createdAt.toDate().getDay());
+      console.log(
+        new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
+          data.createdAt.toDate()
+        )
+      );
     } else {
       console.log("No such document");
     }
@@ -52,6 +62,7 @@ const Edit = () => {
   return (
     <>
       <MainContainer>
+        <img src={diaryInfo.attachmentUrl} height="100px" width="100px" />
         <form onSubmit={onSubmit}>
           <Input
             type="text"
@@ -68,6 +79,8 @@ const Edit = () => {
           children="
               Cancel"
         />
+        <div>{diaryInfo.title}</div>
+        <div>{diaryInfo.text}</div>
       </MainContainer>
     </>
   );

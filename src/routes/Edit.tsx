@@ -1,4 +1,8 @@
-import { MainContainer, DiaryContainer } from "../styles/HomeStyle";
+import {
+  MainContainer,
+  DiaryContainer,
+  FormContainer,
+} from "../styles/HomeStyle";
 import { useParams } from "react-router-dom";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { deleteObject, ref } from "@firebase/storage";
@@ -12,8 +16,9 @@ const Edit = () => {
   const { id } = param;
 
   const [diaryInfo, setDiaryInfo] = useState<any>([]);
-  const [editing, setEditing] = useState<boolean>(true);
+  const [editing, setEditing] = useState<boolean>(false);
   const [newDiary, setNewDiary] = useState<string>("");
+  const [newTitle, setNewTitle] = useState<string>("");
   const [date, setDate] = useState<string>("");
 
   const DiaryTextRef = doc(dbService, "diarys", `${id}`);
@@ -36,6 +41,7 @@ const Edit = () => {
       const dataDate = data.createdAt.toDate();
       //console.log(snap.data());
       setDiaryInfo(data);
+      setNewTitle(data.title);
       setNewDiary(data.text);
       // get date information
       setDate(
@@ -53,16 +59,21 @@ const Edit = () => {
   const toggleEditing = () => setEditing((prev) => !prev);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const type = e.target.classList[2];
     const {
       target: { value },
     } = e;
-    setNewDiary(value);
+    if (type == "title") {
+      setNewTitle(value);
+    } else if (type == "text") {
+      setNewDiary(value);
+    }
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async () => {
     await updateDoc(DiaryTextRef, {
       text: newDiary,
+      title: newTitle,
     });
     getDiaryInfo();
     setEditing((prev) => !prev);
@@ -78,33 +89,43 @@ const Edit = () => {
         <DiaryContainer>
           <img src={diaryInfo.attachmentUrl} height="100px" width="100px" />
           <div>{date}</div>
-          <div>{diaryInfo.title}</div>
-          <div>{diaryInfo.text}</div>
+          {editing ? (
+            ""
+          ) : (
+            <>
+              <div>{diaryInfo.title}</div>
+              <div>{diaryInfo.text}</div>
+            </>
+          )}
         </DiaryContainer>
 
         {editing ? (
           <>
-            <Btn children="Edit Diary" onClick={toggleEditing} />
-          </>
-        ) : (
-          <>
-            <form onSubmit={onSubmit}>
+            <FormContainer>
               <Input
+                className="title"
+                type="text"
+                placeholder="Edit your diary title"
+                value={newTitle}
+                required
+                onChange={onChange}
+              />
+              <Input
+                className="text"
                 type="text"
                 placeholder="Edit your diary"
                 value={newDiary}
                 required
                 onChange={onChange}
-                readOnly={editing}
               />
-              <Input type="submit" value="Update Diary" />
-            </form>
+            </FormContainer>
+            <Btn children="Update Diary" onClick={onSubmit} />
             <Btn children="Delete Diary" onClick={onDeleteClick} />
-            <Btn
-              onClick={toggleEditing}
-              children="
-              Cancel"
-            />
+            <Btn onClick={toggleEditing} children="Cancel" />
+          </>
+        ) : (
+          <>
+            <Btn children="Edit Diary" onClick={toggleEditing} />
           </>
         )}
       </MainContainer>

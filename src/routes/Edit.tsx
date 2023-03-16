@@ -1,7 +1,8 @@
 import { MainContainer, DiaryContainer } from "../styles/HomeStyle";
 import { useParams } from "react-router-dom";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { dbService } from "../myBase";
+import { deleteObject, ref } from "@firebase/storage";
+import { dbService, storageService } from "../myBase";
 import { useEffect, useState } from "react";
 import Input from "../components/common/Input";
 import Btn from "../components/common/Btn";
@@ -16,6 +17,17 @@ const Edit = () => {
   const [date, setDate] = useState<string>("");
 
   const DiaryTextRef = doc(dbService, "diarys", `${id}`);
+  const urlRef = ref(storageService, diaryInfo.attachmentUrl);
+
+  const onDeleteClick = async () => {
+    const ok = window.confirm("Are you sure you want to delete this diary?");
+    if (ok) {
+      await deleteDoc(DiaryTextRef);
+      await deleteObject(urlRef);
+    } else {
+      return;
+    }
+  };
 
   const getDiaryInfo = async () => {
     const snap = await getDoc(doc(dbService, "diarys", `${id}`));
@@ -52,7 +64,8 @@ const Edit = () => {
     await updateDoc(DiaryTextRef, {
       text: newDiary,
     });
-    setEditing(false);
+    getDiaryInfo();
+    setEditing((prev) => !prev);
   };
 
   useEffect(() => {
@@ -68,22 +81,32 @@ const Edit = () => {
           <div>{diaryInfo.title}</div>
           <div>{diaryInfo.text}</div>
         </DiaryContainer>
-        <form onSubmit={onSubmit}>
-          <Input
-            type="text"
-            placeholder="Edit your diary"
-            value={newDiary}
-            required
-            onChange={onChange}
-            readOnly={editing}
-          />
-          <Input type="submit" value="Update Diary" />
-        </form>
-        <Btn
-          onClick={toggleEditing}
-          children="
+
+        {editing ? (
+          <>
+            <Btn children="Edit Diary" onClick={toggleEditing} />
+          </>
+        ) : (
+          <>
+            <form onSubmit={onSubmit}>
+              <Input
+                type="text"
+                placeholder="Edit your diary"
+                value={newDiary}
+                required
+                onChange={onChange}
+                readOnly={editing}
+              />
+              <Input type="submit" value="Update Diary" />
+            </form>
+            <Btn children="Delete Diary" onClick={onDeleteClick} />
+            <Btn
+              onClick={toggleEditing}
+              children="
               Cancel"
-        />
+            />
+          </>
+        )}
       </MainContainer>
     </>
   );

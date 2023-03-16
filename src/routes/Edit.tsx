@@ -3,7 +3,7 @@ import {
   DiaryContainer,
   FormContainer,
 } from "../styles/HomeStyle";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { deleteObject, ref } from "@firebase/storage";
 import { dbService, storageService } from "../myBase";
@@ -12,6 +12,7 @@ import Input from "../components/common/Input";
 import Btn from "../components/common/Btn";
 
 const Edit = () => {
+  const navigate = useNavigate();
   const param = useParams();
   const { id } = param;
 
@@ -28,7 +29,10 @@ const Edit = () => {
     const ok = window.confirm("Are you sure you want to delete this diary?");
     if (ok) {
       await deleteDoc(DiaryTextRef);
-      await deleteObject(urlRef);
+      if (diaryInfo.attachmentUrl) {
+        await deleteObject(urlRef);
+      }
+      return navigate("/");
     } else {
       return;
     }

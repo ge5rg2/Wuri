@@ -12,10 +12,11 @@ import { ref, uploadString, getDownloadURL } from "@firebase/storage";
 import { useSelector } from "../store";
 import { v4 as uuidv4 } from "uuid";
 import Btn from "../components/common/Btn";
-import { Diary } from "../interface/tpyes";
 import { MainContainer, SubContainer } from "../styles/WriteStyle";
+import { useNavigate } from "react-router-dom";
 
 const Write = () => {
+  const navigate = useNavigate();
   const fileInput = useRef<HTMLInputElement>(null);
   const userStore = useSelector((state) => state.user);
   const uid = userStore.userUid;
@@ -51,6 +52,7 @@ const Write = () => {
     setDiary("");
     setTitle("");
     onClearAttachment();
+    return navigate("/");
   };
 
   const onClearAttachment = () => {

@@ -5,22 +5,33 @@ import {
 } from "../styles/HomeStyle";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { deleteObject, ref } from "@firebase/storage";
+import {
+  deleteObject,
+  ref,
+  uploadString,
+  getDownloadURL,
+} from "@firebase/storage";
 import { dbService, storageService } from "../myBase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Input from "../components/common/Input";
 import Btn from "../components/common/Btn";
+import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "../store";
 
 const Edit = () => {
   const navigate = useNavigate();
   const param = useParams();
   const { id } = param;
 
+  const userStore = useSelector((state) => state.user);
+  const uid = userStore.userUid;
   const [diaryInfo, setDiaryInfo] = useState<any>([]);
   const [editing, setEditing] = useState<boolean>(false);
   const [newDiary, setNewDiary] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
   const [date, setDate] = useState<string>("");
+  const [attachment, setAttachment] = useState<any>("");
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const DiaryTextRef = doc(dbService, "diarys", `${id}`);
   const urlRef = ref(storageService, diaryInfo.attachmentUrl);
@@ -60,6 +71,26 @@ const Edit = () => {
     }
   };
 
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target?.files;
+    if (files?.length) {
+      const theFile = files[0];
+      const reader = new FileReader();
+      reader.onloadend = (finishedEvent) => {
+        const result = (finishedEvent.currentTarget as FileReader).result;
+        setAttachment(result);
+      };
+      reader.readAsDataURL(theFile);
+    }
+  };
+
+  const onClearAttachment = () => {
+    setAttachment("");
+    if (fileInput.current) {
+      fileInput.current.value = "";
+    }
+  };
+
   const toggleEditing = () => setEditing((prev) => !prev);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,12 +105,30 @@ const Edit = () => {
     }
   };
 
-  const onSubmit = async () => {
-    await updateDoc(DiaryTextRef, {
-      text: newDiary,
-      title: newTitle,
-    });
+  const onSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    let attachmentUrl = "";
+    try {
+      if (attachment !== "") {
+        const fileRef = ref(storageService, `${uid}/${uuidv4()}`);
+        const response = await uploadString(
+          fileRef,
+          attachment,
+          "data_url"
+        ).then(async (snapshot) => {
+          attachmentUrl = await getDownloadURL(snapshot.ref);
+        });
+      }
+      await updateDoc(DiaryTextRef, {
+        text: newDiary,
+        title: newTitle,
+        attachmentUrl,
+      });
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
     getDiaryInfo();
+    onClearAttachment();
     setEditing((prev) => !prev);
   };
 
@@ -91,7 +140,11 @@ const Edit = () => {
     <>
       <MainContainer>
         <DiaryContainer>
-          <img src={diaryInfo.attachmentUrl} height="100px" width="100px" />
+          {attachment ? (
+            <></>
+          ) : (
+            <img src={diaryInfo.attachmentUrl} height="100px" width="100px" />
+          )}
           <div>{date}</div>
           {editing ? (
             ""
@@ -105,7 +158,19 @@ const Edit = () => {
 
         {editing ? (
           <>
+            {attachment && typeof attachment === "string" && (
+              <div>
+                <img src={attachment} width="50px" height="50px" />
+                <Btn onClick={onClearAttachment} children="Clear" />
+              </div>
+            )}
             <FormContainer>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={onFileChange}
+                ref={fileInput}
+              />
               <Input
                 className="title"
                 type="text"

@@ -16,3 +16,5 @@ export const SubContainer = styled.div`
     border-radius: 50%;
   }
 `;
+
+export const DiaryContainer = styled.div``;

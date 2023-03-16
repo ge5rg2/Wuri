@@ -1,4 +1,4 @@
-import { MainContainer } from "../styles/HomeStyle";
+import { MainContainer, DiaryContainer } from "../styles/HomeStyle";
 import { useParams } from "react-router-dom";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { dbService } from "../myBase";
@@ -13,7 +13,7 @@ const Edit = () => {
   const [diaryInfo, setDiaryInfo] = useState<any>([]);
   const [editing, setEditing] = useState<boolean>(true);
   const [newDiary, setNewDiary] = useState<string>("");
-  const [date, setDate] = useState<any>();
+  const [date, setDate] = useState<string>("");
 
   const DiaryTextRef = doc(dbService, "diarys", `${id}`);
 
@@ -21,17 +21,17 @@ const Edit = () => {
     const snap = await getDoc(doc(dbService, "diarys", `${id}`));
     if (snap.exists()) {
       const data = snap.data();
-      console.log(snap.data());
+      const dataDate = data.createdAt.toDate();
+      //console.log(snap.data());
       setDiaryInfo(data);
       setNewDiary(data.text);
-      console.log(data.createdAt.toDate().getFullYear());
-      console.log(data.createdAt.toDate().getMonth() + 1);
-      console.log(data.createdAt.toDate().getDate());
-      console.log(data.createdAt.toDate().getDay());
-      console.log(
-        new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
-          data.createdAt.toDate()
-        )
+      // get date information
+      setDate(
+        `${dataDate.getFullYear()}년 ${
+          dataDate.getMonth() + 1
+        }월 ${dataDate.getDate()}일 ${new Intl.DateTimeFormat("ko-KR", {
+          weekday: "long",
+        }).format(data.createdAt.toDate())}`
       );
     } else {
       console.log("No such document");
@@ -62,7 +62,12 @@ const Edit = () => {
   return (
     <>
       <MainContainer>
-        <img src={diaryInfo.attachmentUrl} height="100px" width="100px" />
+        <DiaryContainer>
+          <img src={diaryInfo.attachmentUrl} height="100px" width="100px" />
+          <div>{date}</div>
+          <div>{diaryInfo.title}</div>
+          <div>{diaryInfo.text}</div>
+        </DiaryContainer>
         <form onSubmit={onSubmit}>
           <Input
             type="text"
@@ -79,8 +84,6 @@ const Edit = () => {
           children="
               Cancel"
         />
-        <div>{diaryInfo.title}</div>
-        <div>{diaryInfo.text}</div>
       </MainContainer>
     </>
   );

@@ -7,23 +7,13 @@ import {
   getDocs,
   query,
   where,
-  deleteDoc,
   getDoc,
-  setDoc,
-  getCountFromServer,
+  updateDoc,
 } from "@firebase/firestore";
 import { dbService, storageService } from "../myBase";
 import { useSelector, useDispatch } from "../store";
 import { getAuth } from "firebase/auth";
 import Btn from "../components/common/Btn";
-
-/**
- * todo
- * 1. check input code
- * 2. compare with connect code data and check expiration period
- * 3. if both of condition passed, addDoc "couple"
- * 4. couple content {couple [userId1, userId2]}
- */
 
 const Couple = () => {
   const auth = getAuth();
@@ -69,6 +59,26 @@ const Couple = () => {
         `Are you sure connected to ${userData.userName}?`
       );
       if (ok) {
+        const q = query(
+          collection(dbService, "userInfo"),
+          where("userId", "==", data?.creatorId)
+        );
+        const querySnapshot = await getDocs(q);
+        const { id } = querySnapshot.docs[0];
+        await updateDoc(doc(dbService, "userInfo", `${id}`), {
+          coupleId: userUid,
+        });
+        const q2 = query(
+          collection(dbService, "userInfo"),
+          where("userId", "==", userUid)
+        );
+        const querySnapshot2 = await getDocs(q2);
+        await updateDoc(
+          doc(dbService, "userInfo", `${querySnapshot2.docs[0].id}`),
+          {
+            coupleId: data?.creatorId,
+          }
+        );
         return alert(`Connected with ${userData.userName}`);
       } else {
         return alert("cancel");

@@ -49,7 +49,10 @@ const Home = () => {
     <>
       <MainContainer>
         <SubContainer>
-          <img src={userStore.userUrl + "-mo"} />
+          <img
+            style={{ height: "10%", width: "10%", borderRadius: "50%" }}
+            src={userStore.userUrl + "-mo"}
+          />
           <Btn onClick={onWritePageClick} children="What's on your mind?" />
         </SubContainer>
         {diaryData}

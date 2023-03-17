@@ -8,11 +8,14 @@ import { menuActions } from "../store/menuSlice";
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const [loginMethod, setLoginMethod] = useState<string>("");
   const userInfo = useSelector((state) => state.user);
   const auth = getAuth();
   const user = auth.currentUser;
   const provider = user?.providerData[0].providerId;
+
   const getMyAccount = async () => {
+    console.log(provider);
     const q = query(
       collection(dbService, "diarys"),
       where("creatorId", "==", userInfo.userUid)
@@ -24,6 +27,19 @@ const Profile = () => {
     ); 
     */
     if (user !== null) {
+      getLoginMethod();
+    }
+  };
+
+  const getLoginMethod = () => {
+    if (user !== null) {
+      if (provider == "password") {
+        setLoginMethod("Log in via Email account");
+      } else if (provider == "google.com") {
+        setLoginMethod("Log in via Google account");
+      } else if (provider == "github.com") {
+        setLoginMethod("Log in via Github account");
+      }
     }
   };
 
@@ -34,9 +50,12 @@ const Profile = () => {
 
   return (
     <MainContainer>
-      <img src={userInfo.userUrl + "-mo"} />
+      <img
+        src={userInfo.userUrl + "-mo"}
+        style={{ height: "10%", width: "10%", borderRadius: "50%" }}
+      />
       <div>{userInfo.userName}</div>
-      <div>{provider}</div>
+      <div>{loginMethod}</div>
     </MainContainer>
   );
 };

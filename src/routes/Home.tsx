@@ -2,15 +2,27 @@ import Input from "../components/common/Input";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { dbService } from "../myBase";
-import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  query,
+  orderBy,
+  addDoc,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { Diary } from "../interface/tpyes";
 import Diarys from "../components/Diarys";
 import { useSelector } from "../store";
 import Btn from "../components/common/Btn";
 import { v4 as uuidv4 } from "uuid";
+import { getAuth } from "firebase/auth";
 import { MainContainer, SubContainer } from "../styles/HomeStyle";
 
 const Home = () => {
+  const auth = getAuth();
   const navigate = useNavigate();
   const userStore = useSelector((state) => state.user);
   const uid = userStore.userUid;
@@ -31,6 +43,28 @@ const Home = () => {
     navigate("/write");
   };
 
+  const createSimpeUserInfo = async () => {
+    const q = query(
+      collection(dbService, "userInfo"),
+      where("userId", "==", userStore.userUid)
+    );
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.size > 0) {
+      const { id } = querySnapshot.docs[0];
+      await updateDoc(doc(dbService, "userInfo", `${id}`), {
+        userName: userStore.userName,
+        userUrl: userStore.userUrl,
+        userId: uid,
+      });
+    } else {
+      await addDoc(collection(dbService, "userInfo"), {
+        userName: userStore.userName,
+        userUrl: userStore.userUrl,
+        userId: uid,
+      });
+    }
+  };
+
   useEffect(() => {
     const q = query(
       collection(dbService, "diarys"),
@@ -41,6 +75,7 @@ const Home = () => {
         id: doc.id,
         ...doc.data(),
       }));
+      createSimpeUserInfo();
       setDiarys(diaryObject);
     });
   }, []);

@@ -14,7 +14,6 @@ import {
 import { dbService, storageService } from "../myBase";
 import { useSelector, useDispatch } from "../store";
 import { getAuth } from "firebase/auth";
-import { menuActions } from "../store/menuSlice";
 import Btn from "../components/common/Btn";
 
 const Profile = () => {

@@ -47,10 +47,32 @@ const Couple = () => {
     } else if (snap.data()?.creatorId == userUid) {
       alert("That is your own code! try again by use another code.");
       return setCoupleCode("");
+    } else if (
+      Math.floor(date.getTime() - snap.data()?.createdAt.toDate().getTime()) /
+        1000 /
+        60 >
+      10
+    ) {
+      alert("The validity period of the existing code has expired.");
+      return setCoupleCode("");
     } else {
-      // check expirate
       const data = snap.data();
       console.log(data?.creatorId);
+      const userQuery = query(
+        collection(dbService, "userInfo"),
+        where("userId", "==", data?.creatorId)
+      );
+      const userQuerySnapshot = await getDocs(userQuery);
+      const userData = userQuerySnapshot.docs[0].data();
+      console.log(userData);
+      const ok = window.confirm(
+        `Are you sure connected to ${userData.userName}?`
+      );
+      if (ok) {
+        return alert(`Connected with ${userData.userName}`);
+      } else {
+        return alert("cancel");
+      }
     }
   };
 

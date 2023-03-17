@@ -54,7 +54,7 @@ const Edit = () => {
     if (snap.exists()) {
       const data = snap.data();
       const dataDate = data.createdAt.toDate();
-      //console.log(snap.data());
+      console.log(data.isEdit);
       setDiaryInfo(data);
       setNewTitle(data.title);
       setNewDiary(data.text);
@@ -123,6 +123,7 @@ const Edit = () => {
         text: newDiary,
         title: newTitle,
         attachmentUrl,
+        isEdit: true,
       });
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -145,7 +146,11 @@ const Edit = () => {
           ) : (
             <img src={diaryInfo.attachmentUrl} height="100px" width="100px" />
           )}
-          <div>{date}</div>
+          <div>
+            {diaryInfo.isEdit
+              ? date + " " + (diaryInfo.isEdit ? "(편집됨)" : "")
+              : date}
+          </div>
           {editing ? (
             ""
           ) : (

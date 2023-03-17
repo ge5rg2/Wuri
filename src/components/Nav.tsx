@@ -42,20 +42,29 @@ const Nav = () => {
     navigate("/profile");
   };
 
-  const onMenuMouseOver = () => {
+  const onMenuClick = () => {
+    if (menuState.isMenu) {
+      dispatch(menuActions.closeMenu());
+    } else {
+      dispatch(menuActions.openMenu());
+    }
+  };
+
+  /*   const onMenuMouseOver = () => {
     dispatch(menuActions.openMenu());
   };
 
   const onMenuMouseLeave = () => {
     dispatch(menuActions.closeMenu());
-  };
+  }; */
 
   return (
     <Wraper>
       <MainContainer>
         <IconContainer
-          onMouseOver={onMenuMouseOver}
-          onMouseLeave={onMenuMouseLeave}
+          /*           onMouseOver={onMenuMouseOver}
+          onMouseLeave={onMenuMouseLeave} */
+          onClick={onMenuClick}
         >
           {menuState.isMenu ? (
             <>

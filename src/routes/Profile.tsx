@@ -6,7 +6,7 @@ import {
   getDocs,
   query,
   where,
-  addDoc,
+  deleteDoc,
   getDoc,
   setDoc,
   getCountFromServer,
@@ -25,6 +25,7 @@ const Profile = () => {
   const auth = getAuth();
   const user = auth.currentUser;
   const provider = user?.providerData[0].providerId;
+  let date = new Date();
 
   const generateRandomCode = async () => {
     const codeRef = collection(dbService, "connect");
@@ -47,16 +48,30 @@ const Profile = () => {
   };
 
   const getMyAccount = async () => {
-    const q = query(
+    /*     const q = query(
       collection(dbService, "diarys"),
       where("creatorId", "==", userInfo.userUid)
     );
     const querySnapshot = await getDocs(q);
-    /*     
+       
     console.log(
       querySnapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()))
     ); 
-    */
+     */
+    const codeRef = collection(dbService, "connect");
+    const q = query(codeRef, where("creatorId", "==", userInfo.userUid));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.size > 0) {
+      const currentCodeData = querySnapshot.docs[0].data();
+      const connectCode = querySnapshot.docs[0].id;
+      let codeTime = currentCodeData.createdAt.toDate().getTime();
+      let expiration = Math.floor(date.getTime() - codeTime) / 1000 / 60;
+      if (expiration > 10) {
+        await deleteDoc(doc(dbService, "connect", `${connectCode}`));
+      } else {
+        setRandomCode(connectCode);
+      }
+    }
     if (user !== null) {
       getLoginMethod();
     }
@@ -77,7 +92,14 @@ const Profile = () => {
   const createCoupleCode = async () => {
     const random = await generateRandomCode();
     const codeRef = collection(dbService, "connect");
-    let date = new Date();
+    const q = query(codeRef, where("creatorId", "==", userInfo.userUid));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.size > 0) {
+      /*    get current user before code num   */
+      const connectCode = querySnapshot.docs[0].id;
+      console.log(connectCode);
+      await deleteDoc(doc(dbService, "connect", `${connectCode}`));
+    }
     await setDoc(doc(codeRef, `${random}`), {
       createdAt: date,
       creatorId: userInfo.userUid,

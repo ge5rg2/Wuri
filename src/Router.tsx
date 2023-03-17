@@ -6,6 +6,7 @@ import Profile from "./routes/Profile";
 import Write from "./routes/Write";
 import Nav from "./components/Nav";
 import Edit from "./routes/Edit";
+import Couple from "./routes/Couple";
 
 const Router: React.FC = () => {
   const userStore = useSelector((state) => state.user);
@@ -26,6 +27,9 @@ const Router: React.FC = () => {
           </Routes>
           <Routes>
             <Route path="/edit/:id" element={<Edit />}></Route>
+          </Routes>
+          <Routes>
+            <Route path="/couple" element={<Couple />}></Route>
           </Routes>
         </>
       ) : (

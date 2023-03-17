@@ -4,6 +4,8 @@ import { menuState } from "../interface/tpyes";
 const initialState: menuState = {
   isProfile: false,
   isMenu: false,
+  isCouple: false,
+  isDiary: false,
 };
 
 export const menuSlice = createSlice({
@@ -16,10 +18,22 @@ export const menuSlice = createSlice({
     closeMenu(state) {
       state.isMenu = false;
     },
-    openAccount(state) {
+    openDiary(state) {
+      state.isDiary = true;
+    },
+    closeDiary(state) {
+      state.isDiary = false;
+    },
+    openCouple(state) {
+      state.isCouple = true;
+    },
+    closeCouple(state) {
+      state.isCouple = false;
+    },
+    openProfile(state) {
       state.isProfile = true;
     },
-    closeAccount(state) {
+    closeProfile(state) {
       state.isProfile = false;
     },
   },

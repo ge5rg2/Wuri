@@ -17,12 +17,10 @@ const Nav = () => {
   const menuState = useSelector((state) => state.menu);
   const navigate = useNavigate();
   const onSignOut = () => {
-    dispatch(menuActions.closeAccount());
     const auth = getAuth();
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-
         dispatch(menuActions.closeMenu());
         navigate("/");
       })
@@ -33,13 +31,24 @@ const Nav = () => {
   };
 
   const onDiaryClcik = () => {
-    dispatch(menuActions.closeAccount());
+    dispatch(menuActions.openDiary());
+    dispatch(menuActions.closeCouple());
+    dispatch(menuActions.closeProfile());
     navigate("/");
   };
 
   const onProfileClcik = () => {
-    dispatch(menuActions.openAccount());
+    dispatch(menuActions.openProfile());
+    dispatch(menuActions.closeCouple());
+    dispatch(menuActions.closeDiary());
     navigate("/profile");
+  };
+
+  const onCoupleClcik = () => {
+    dispatch(menuActions.openCouple());
+    dispatch(menuActions.closeDiary());
+    dispatch(menuActions.closeProfile());
+    navigate("/couple");
   };
 
   const onMenuClick = () => {
@@ -77,15 +86,15 @@ const Nav = () => {
                   <div onClick={onSignOut} className="subNavDiv">
                     Sign out
                   </div>
-                  {menuState.isProfile ? (
-                    <div className="subNavDiv" onClick={onDiaryClcik}>
-                      Diary
-                    </div>
-                  ) : (
-                    <div className="subNavDiv" onClick={onProfileClcik}>
-                      Profile
-                    </div>
-                  )}
+                  <div className="subNavDiv" onClick={onDiaryClcik}>
+                    Diary
+                  </div>
+                  <div className="subNavDiv" onClick={onProfileClcik}>
+                    Profile
+                  </div>
+                  <div className="subNavDiv" onClick={onCoupleClcik}>
+                    Couple
+                  </div>
                 </div>
               </SubContainer>
             </>

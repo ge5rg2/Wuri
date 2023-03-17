@@ -21,4 +21,6 @@ export interface diaryProps {
 export interface menuState {
   isProfile: boolean;
   isMenu: boolean;
+  isCouple: boolean;
+  isDiary: boolean;
 }

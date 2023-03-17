@@ -67,6 +67,7 @@ const Profile = () => {
       let codeTime = currentCodeData.createdAt.toDate().getTime();
       let expiration = Math.floor(date.getTime() - codeTime) / 1000 / 60;
       if (expiration > 10) {
+        alert("The validity period of the existing code has expired.");
         await deleteDoc(doc(dbService, "connect", `${connectCode}`));
       } else {
         setRandomCode(connectCode);
@@ -97,7 +98,6 @@ const Profile = () => {
     if (querySnapshot.size > 0) {
       /*    get current user before code num   */
       const connectCode = querySnapshot.docs[0].id;
-      console.log(connectCode);
       await deleteDoc(doc(dbService, "connect", `${connectCode}`));
     }
     await setDoc(doc(codeRef, `${random}`), {
@@ -107,7 +107,6 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    dispatch(menuActions.openAccount());
     getMyAccount();
   }, []);
 
@@ -122,6 +121,7 @@ const Profile = () => {
       {randomCode ? (
         <>
           <div>{randomCode}</div>
+          <Btn onClick={createCoupleCode} children="Code reissue." />
         </>
       ) : (
         <>
@@ -135,8 +135,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-/**
- * todo
- * 1. Code expiration period 10m check
- */

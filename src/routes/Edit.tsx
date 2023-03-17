@@ -54,10 +54,10 @@ const Edit = () => {
     if (snap.exists()) {
       const data = snap.data();
       const dataDate = data.createdAt.toDate();
-      console.log(data.isEdit);
       setDiaryInfo(data);
       setNewTitle(data.title);
       setNewDiary(data.text);
+      setAttachment(data.attachmentUrl);
       // get date information
       setDate(
         `${dataDate.getFullYear()}년 ${
@@ -141,11 +141,7 @@ const Edit = () => {
     <>
       <MainContainer>
         <DiaryContainer>
-          {attachment ? (
-            <></>
-          ) : (
-            <img src={diaryInfo.attachmentUrl} height="100px" width="100px" />
-          )}
+          <img src={diaryInfo.attachmentUrl} height="100px" width="100px" />
           <div>
             {diaryInfo.isEdit
               ? date + " " + (diaryInfo.isEdit ? "(편집됨)" : "")

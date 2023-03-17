@@ -1,21 +1,52 @@
 import { MainContainer } from "../styles/HomeStyle";
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "@firebase/firestore";
-import { dbService } from "../myBase";
+import {
+  doc,
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  getDoc,
+  setDoc,
+  getCountFromServer,
+} from "@firebase/firestore";
+import { dbService, storageService } from "../myBase";
 import { useSelector, useDispatch } from "../store";
 import { getAuth } from "firebase/auth";
 import { menuActions } from "../store/menuSlice";
+import Btn from "../components/common/Btn";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const [loginMethod, setLoginMethod] = useState<string>("");
+  const [randomCode, setRandomCode] = useState<string>("");
   const userInfo = useSelector((state) => state.user);
   const auth = getAuth();
   const user = auth.currentUser;
   const provider = user?.providerData[0].providerId;
 
+  const generateRandomCode = async () => {
+    const codeRef = collection(dbService, "connect");
+    const snapshot = await getCountFromServer(codeRef);
+    let len = snapshot.data().count;
+    for (let j = 0; j < len + 1; j++) {
+      let str = "";
+      for (let i = 0; i < 6; i++) {
+        str += Math.floor(Math.random() * 10);
+      }
+      const snap = await getDoc(doc(dbService, "connect", `${str}`));
+      if (typeof snap.data() == "undefined") {
+        setRandomCode(str);
+        return str;
+      } else {
+        str = "";
+        continue;
+      }
+    }
+  };
+
   const getMyAccount = async () => {
-    console.log(provider);
     const q = query(
       collection(dbService, "diarys"),
       where("creatorId", "==", userInfo.userUid)
@@ -43,6 +74,16 @@ const Profile = () => {
     }
   };
 
+  const createCoupleCode = async () => {
+    const random = await generateRandomCode();
+    const codeRef = collection(dbService, "connect");
+    let date = new Date();
+    await setDoc(doc(codeRef, `${random}`), {
+      createdAt: date,
+      creatorId: userInfo.userUid,
+    });
+  };
+
   useEffect(() => {
     dispatch(menuActions.openAccount());
     getMyAccount();
@@ -56,8 +97,24 @@ const Profile = () => {
       />
       <div>{userInfo.userName}</div>
       <div>{loginMethod}</div>
+      {randomCode ? (
+        <>
+          <div>{randomCode}</div>
+        </>
+      ) : (
+        <>
+          <div>
+            <Btn onClick={createCoupleCode} children="Create couple code!" />
+          </div>
+        </>
+      )}
     </MainContainer>
   );
 };
 
 export default Profile;
+
+/**
+ * todo
+ * 1. Code expiration period 10m check
+ */

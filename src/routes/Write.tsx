@@ -1,13 +1,7 @@
 import Input from "../components/common/Input";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { dbService, storageService } from "../myBase";
-import {
-  collection,
-  addDoc,
-  onSnapshot,
-  query,
-  orderBy,
-} from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "@firebase/storage";
 import { useSelector } from "../store";
 import { v4 as uuidv4 } from "uuid";

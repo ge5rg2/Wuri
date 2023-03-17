@@ -50,7 +50,7 @@ const Home = () => {
       <MainContainer>
         <SubContainer>
           <img
-            style={{ height: "10%", width: "10%", borderRadius: "50%" }}
+            style={{ height: "20%", width: "20%", borderRadius: "50%" }}
             src={userStore.userUrl + "-mo"}
           />
           <Btn onClick={onWritePageClick} children="What's on your mind?" />

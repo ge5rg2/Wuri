@@ -10,16 +10,22 @@ import {
   getDoc,
   setDoc,
   getCountFromServer,
+  deleteField,
+  updateDoc,
 } from "@firebase/firestore";
-import { dbService, storageService } from "../myBase";
+import { dbService } from "../myBase";
 import { useSelector, useDispatch } from "../store";
 import { getAuth } from "firebase/auth";
 import Btn from "../components/common/Btn";
+import { userActions } from "../store/userSlice";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const [loginMethod, setLoginMethod] = useState<string>("");
   const [randomCode, setRandomCode] = useState<string>("");
+  const [coupleUserName, setCoupleUserName] = useState<string>("");
+  const [coupleUserUrl, setCoupleUserUrl] = useState<string>("");
+  const [isCouple, setIsCouple] = useState<boolean>(false);
   const userInfo = useSelector((state) => state.user);
   const auth = getAuth();
   const user = auth.currentUser;
@@ -57,9 +63,16 @@ const Profile = () => {
       querySnapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()))
     ); 
      */
-    console.log(userInfo.coupleId);
     if (userInfo.coupleId) {
-      console.log("COuple");
+      setIsCouple(true);
+      const CoupleUserQuery = query(
+        collection(dbService, "userInfo"),
+        where("userId", "==", userInfo.coupleId)
+      );
+      const CoupleUserQuerySnapshot = await getDocs(CoupleUserQuery);
+      const CoupleUserData = CoupleUserQuerySnapshot.docs[0].data();
+      setCoupleUserName(CoupleUserData.userName);
+      setCoupleUserUrl(CoupleUserData.userUrl);
     } else {
       const codeRef = collection(dbService, "connect");
       const q = query(codeRef, where("creatorId", "==", userInfo.userUid));
@@ -110,6 +123,45 @@ const Profile = () => {
     });
   };
 
+  const disconnectCouple = async () => {
+    const CoupleUserQuery = query(
+      collection(dbService, "userInfo"),
+      where("userId", "==", userInfo.coupleId)
+    );
+    const UserQuery = query(
+      collection(dbService, "userInfo"),
+      where("userId", "==", userInfo.userUid)
+    );
+    const CoupleUserQuerySnapshot = await getDocs(CoupleUserQuery);
+    const UserQuerySnapshot = await getDocs(UserQuery);
+    const ok = window.confirm("Are you sure you want to disconnect Couple?");
+    if (ok) {
+      await updateDoc(
+        doc(dbService, "userInfo", `${CoupleUserQuerySnapshot.docs[0].id}`),
+        {
+          coupleId: deleteField(),
+        }
+      );
+      await updateDoc(
+        doc(dbService, "userInfo", `${UserQuerySnapshot.docs[0].id}`),
+        {
+          coupleId: deleteField(),
+        }
+      );
+      dispatch(
+        userActions.setConnectCouple({
+          coupleId: "",
+        })
+      );
+      setCoupleUserName("");
+      setCoupleUserUrl("");
+      setIsCouple(false);
+      alert("Disconnect complete!!");
+    } else {
+      return;
+    }
+  };
+
   useEffect(() => {
     getMyAccount();
   }, []);
@@ -122,7 +174,16 @@ const Profile = () => {
       />
       <div>{userInfo.userName}</div>
       <div>{loginMethod}</div>
-      {randomCode ? (
+      {isCouple ? (
+        <>
+          <img
+            src={coupleUserUrl + "-mo"}
+            style={{ height: "10%", width: "10%", borderRadius: "50%" }}
+          />
+          <div>{coupleUserName}</div>
+          <Btn onClick={disconnectCouple} children="Disconnect" />
+        </>
+      ) : randomCode ? (
         <>
           <div>{randomCode}</div>
           <Btn onClick={createCoupleCode} children="Code reissue." />

@@ -9,13 +9,16 @@ import {
   where,
   getDoc,
   updateDoc,
+  deleteDoc,
 } from "@firebase/firestore";
 import { dbService, storageService } from "../myBase";
 import { useSelector, useDispatch } from "../store";
+import { userActions } from "../store/userSlice";
 import { getAuth } from "firebase/auth";
 import Btn from "../components/common/Btn";
 
 const Couple = () => {
+  const dispatch = useDispatch();
   const auth = getAuth();
   const userUid = useSelector((state) => state.user.userUid);
   const user = auth.currentUser;
@@ -79,6 +82,28 @@ const Couple = () => {
             coupleId: data?.creatorId,
           }
         );
+        dispatch(
+          userActions.setConnectCouple({
+            coupleId: data?.creatorId,
+          })
+        );
+        //delete connect document
+        await deleteDoc(doc(dbService, "connect", `${coupleCode}`));
+        // also need to delete couple code(if coupleuser also create code, that code need to delete)
+        const CoupleUserCodeQuery = query(
+          collection(dbService, "connect"),
+          where("creatorId", "==", userUid)
+        );
+        const CoupleUserCodeQuerySnapshot = await getDocs(CoupleUserCodeQuery);
+        if (CoupleUserCodeQuerySnapshot.size > 0) {
+          await deleteDoc(
+            doc(
+              dbService,
+              "connect",
+              `${CoupleUserCodeQuerySnapshot.docs[0].id}`
+            )
+          );
+        }
         return alert(`Connected with ${userData.userName}`);
       } else {
         return alert("cancel");

@@ -30,14 +30,14 @@ export const userSlice = createSlice({
       state.userUrl = action.payload.userUrl;
       state.coupleId = action.payload.coupleId;
     },
-    /*     setOpptLoad(
+    setConnectCouple(
       state,
       action: PayloadAction<{
-        isOpptLoading: boolean;
+        coupleId: string | null;
       }>
     ) {
-      state.isOpptLoading = action.payload.isOpptLoading;
-    }, */
+      state.coupleId = action.payload.coupleId;
+    },
   },
 });
 

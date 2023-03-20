@@ -57,19 +57,24 @@ const Profile = () => {
       querySnapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()))
     ); 
      */
-    const codeRef = collection(dbService, "connect");
-    const q = query(codeRef, where("creatorId", "==", userInfo.userUid));
-    const querySnapshot = await getDocs(q);
-    if (querySnapshot.size > 0) {
-      const currentCodeData = querySnapshot.docs[0].data();
-      const connectCode = querySnapshot.docs[0].id;
-      let codeTime = currentCodeData.createdAt.toDate().getTime();
-      let expiration = Math.floor(date.getTime() - codeTime) / 1000 / 60;
-      if (expiration > 10) {
-        alert("The validity period of the existing code has expired.");
-        await deleteDoc(doc(dbService, "connect", `${connectCode}`));
-      } else {
-        setRandomCode(connectCode);
+    console.log(userInfo.coupleId);
+    if (userInfo.coupleId) {
+      console.log("COuple");
+    } else {
+      const codeRef = collection(dbService, "connect");
+      const q = query(codeRef, where("creatorId", "==", userInfo.userUid));
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.size > 0) {
+        const currentCodeData = querySnapshot.docs[0].data();
+        const connectCode = querySnapshot.docs[0].id;
+        let codeTime = currentCodeData.createdAt.toDate().getTime();
+        let expiration = Math.floor(date.getTime() - codeTime) / 1000 / 60;
+        if (expiration > 10) {
+          alert("The validity period of the existing code has expired.");
+          await deleteDoc(doc(dbService, "connect", `${connectCode}`));
+        } else {
+          setRandomCode(connectCode);
+        }
       }
     }
     if (user !== null) {

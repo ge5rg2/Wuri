@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Btn from "./common/Btn";
 import { useNavigate } from "react-router-dom";
 
-const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
+const Diarys: React.FC<diaryProps> = ({ diary, obj }) => {
   const navigate = useNavigate();
 
   const onToggleDetail = () => {
@@ -25,17 +25,13 @@ const Diarys: React.FC<diaryProps> = ({ diary, isOwner, obj }) => {
 
   return (
     <>
-      {isOwner ? (
-        <div>
-          {obj.attachmentUrl && (
-            <img src={obj.attachmentUrl} height="50px" width="50px" />
-          )}
-          <h4>{diary}</h4>
-          <Btn children="Detail" onClick={onToggleDetail} />
-        </div>
-      ) : (
-        <></>
-      )}
+      <div>
+        {obj.attachmentUrl && (
+          <img src={obj.attachmentUrl} height="50px" width="50px" />
+        )}
+        <h4>{diary}</h4>
+        <Btn children="Detail" onClick={onToggleDetail} />
+      </div>
     </>
   );
 };

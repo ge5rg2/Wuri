@@ -31,21 +31,25 @@ const App = () => {
             coupleUrl: "",
           })
         );
-        if (typeof userQuerySnapshot.docs[0].data().coupleId !== "undefined") {
-          const coupleId = userQuerySnapshot.docs[0].data().coupleId;
-          const CoupleUserQuery = query(
-            collection(dbService, "userInfo"),
-            where("userId", "==", coupleId)
-          );
-          const CoupleUserQuerySnapshot = await getDocs(CoupleUserQuery);
-          const CoupleUserData = CoupleUserQuerySnapshot.docs[0].data();
-          dispatch(
-            userActions.setConnectCouple({
-              coupleId,
-              coupleName: CoupleUserData.userName,
-              coupleUrl: CoupleUserData.userUrl,
-            })
-          );
+        if (userQuerySnapshot.size > 0) {
+          if (
+            typeof userQuerySnapshot.docs[0].data().coupleId !== "undefined"
+          ) {
+            const coupleId = userQuerySnapshot.docs[0].data().coupleId;
+            const CoupleUserQuery = query(
+              collection(dbService, "userInfo"),
+              where("userId", "==", coupleId)
+            );
+            const CoupleUserQuerySnapshot = await getDocs(CoupleUserQuery);
+            const CoupleUserData = CoupleUserQuerySnapshot.docs[0].data();
+            dispatch(
+              userActions.setConnectCouple({
+                coupleId,
+                coupleName: CoupleUserData.userName,
+                coupleUrl: CoupleUserData.userUrl,
+              })
+            );
+          }
         }
       } else {
         dispatch(

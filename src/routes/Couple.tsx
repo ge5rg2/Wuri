@@ -10,6 +10,8 @@ import {
   getDoc,
   updateDoc,
   deleteDoc,
+  onSnapshot,
+  orderBy,
 } from "@firebase/firestore";
 import { dbService } from "../myBase";
 import { useSelector, useDispatch } from "../store";
@@ -127,6 +129,17 @@ const Couple = () => {
     // call user Couple diary,
     if (coupleId) {
       setIsCouple(true);
+      const q = query(
+        collection(dbService, "couple_diarys"),
+        where("creatorId", "==", userUid),
+        orderBy("createdAt", "desc")
+      );
+      await onSnapshot(q, (snapshot) => {
+        const diaryObject: any = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+      });
     } else {
     }
   };

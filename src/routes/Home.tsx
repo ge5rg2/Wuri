@@ -29,14 +29,7 @@ const Home = () => {
   const [diarys, setDiarys] = useState<Diary[]>([]);
 
   const diaryData: JSX.Element[] = diarys.map((el) => {
-    return (
-      <Diarys
-        key={el.id}
-        diary={el.text}
-        isOwner={el.creatorId === uid}
-        obj={el}
-      />
-    );
+    return <Diarys key={el.id} diary={el.text} obj={el} />;
   });
 
   const onWritePageClick = () => {
@@ -68,6 +61,7 @@ const Home = () => {
   useEffect(() => {
     const q = query(
       collection(dbService, "diarys"),
+      where("creatorId", "==", uid),
       orderBy("createdAt", "desc")
     );
     onSnapshot(q, (snapshot) => {
@@ -85,7 +79,7 @@ const Home = () => {
       <MainContainer>
         <SubContainer>
           <img
-            style={{ height: "20%", width: "20%", borderRadius: "50%" }}
+            style={{ height: "50px", width: "50px", borderRadius: "50%" }}
             src={userStore.userUrl + "-mo"}
           />
           <Btn onClick={onWritePageClick} children="What's on your mind?" />

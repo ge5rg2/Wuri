@@ -23,10 +23,11 @@ const Profile = () => {
   const dispatch = useDispatch();
   const [loginMethod, setLoginMethod] = useState<string>("");
   const [randomCode, setRandomCode] = useState<string>("");
-  const [coupleUserName, setCoupleUserName] = useState<string>("");
-  const [coupleUserUrl, setCoupleUserUrl] = useState<string>("");
   const [isCouple, setIsCouple] = useState<boolean>(false);
   const userInfo = useSelector((state) => state.user);
+  const { coupleId, coupleName, coupleUrl } = useSelector(
+    (state) => state.user
+  );
   const auth = getAuth();
   const user = auth.currentUser;
   const provider = user?.providerData[0].providerId;
@@ -63,16 +64,8 @@ const Profile = () => {
       querySnapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()))
     ); 
      */
-    if (userInfo.coupleId) {
+    if (coupleId) {
       setIsCouple(true);
-      const CoupleUserQuery = query(
-        collection(dbService, "userInfo"),
-        where("userId", "==", userInfo.coupleId)
-      );
-      const CoupleUserQuerySnapshot = await getDocs(CoupleUserQuery);
-      const CoupleUserData = CoupleUserQuerySnapshot.docs[0].data();
-      setCoupleUserName(CoupleUserData.userName);
-      setCoupleUserUrl(CoupleUserData.userUrl);
     } else {
       const codeRef = collection(dbService, "connect");
       const q = query(codeRef, where("creatorId", "==", userInfo.userUid));
@@ -151,10 +144,10 @@ const Profile = () => {
       dispatch(
         userActions.setConnectCouple({
           coupleId: "",
+          coupleName: "",
+          coupleUrl: "",
         })
       );
-      setCoupleUserName("");
-      setCoupleUserUrl("");
       setIsCouple(false);
       alert("Disconnect complete!!");
     } else {
@@ -177,10 +170,10 @@ const Profile = () => {
       {isCouple ? (
         <>
           <img
-            src={coupleUserUrl + "-mo"}
+            src={coupleUrl + "-mo"}
             style={{ height: "10%", width: "10%", borderRadius: "50%" }}
           />
-          <div>{coupleUserName}</div>
+          <div>{coupleName}</div>
           <Btn onClick={disconnectCouple} children="Disconnect" />
         </>
       ) : randomCode ? (

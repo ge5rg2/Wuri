@@ -20,16 +20,33 @@ const App = () => {
         const userInfoRef = collection(dbService, "userInfo");
         const userQuery = query(userInfoRef, where("userId", "==", uid));
         const userQuerySnapshot = await getDocs(userQuery);
-        const coupleUserId = userQuerySnapshot.docs[0].data().coupleId;
         dispatch(
           userActions.setLoggedIn({
             isLoggedIn: true,
             userUid: uid,
             userName: user.displayName,
             userUrl: user.photoURL,
-            coupleId: coupleUserId ? coupleUserId : "",
+            coupleId: "",
+            coupleName: "",
+            coupleUrl: "",
           })
         );
+        if (typeof userQuerySnapshot.docs[0].data().coupleId !== "undefined") {
+          const coupleId = userQuerySnapshot.docs[0].data().coupleId;
+          const CoupleUserQuery = query(
+            collection(dbService, "userInfo"),
+            where("userId", "==", coupleId)
+          );
+          const CoupleUserQuerySnapshot = await getDocs(CoupleUserQuery);
+          const CoupleUserData = CoupleUserQuerySnapshot.docs[0].data();
+          dispatch(
+            userActions.setConnectCouple({
+              coupleId,
+              coupleName: CoupleUserData.userName,
+              coupleUrl: CoupleUserData.userUrl,
+            })
+          );
+        }
       } else {
         dispatch(
           userActions.setLoggedIn({
@@ -38,6 +55,8 @@ const App = () => {
             userName: "",
             userUrl: "",
             coupleId: "",
+            coupleName: "",
+            coupleUrl: "",
           })
         );
       }

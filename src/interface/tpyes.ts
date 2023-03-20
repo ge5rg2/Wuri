@@ -11,6 +11,8 @@ export interface userState {
   userName?: string | null;
   userUrl?: string | null;
   coupleId?: string | null;
+  coupleName?: string | null;
+  coupleUrl?: string | null;
 }
 
 export interface diaryProps {

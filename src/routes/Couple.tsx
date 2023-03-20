@@ -11,18 +11,23 @@ import {
   updateDoc,
   deleteDoc,
 } from "@firebase/firestore";
-import { dbService, storageService } from "../myBase";
+import { dbService } from "../myBase";
 import { useSelector, useDispatch } from "../store";
 import { userActions } from "../store/userSlice";
 import { getAuth } from "firebase/auth";
+import { SubContainer } from "../styles/HomeStyle";
+import Diarys from "../components/Diarys";
 import Btn from "../components/common/Btn";
 
 const Couple = () => {
   const dispatch = useDispatch();
   const auth = getAuth();
-  const userUid = useSelector((state) => state.user.userUid);
+  const { userUid, coupleId, userUrl, userName, coupleName, coupleUrl } =
+    useSelector((state) => state.user);
   const user = auth.currentUser;
+
   const [coupleCode, setCoupleCode] = useState<string>("");
+  const [isCouple, setIsCouple] = useState<boolean>(false);
   let date = new Date();
 
   const onCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,14 +55,12 @@ const Couple = () => {
       return setCoupleCode("");
     } else {
       const data = snap.data();
-      console.log(data?.creatorId);
       const userQuery = query(
         collection(dbService, "userInfo"),
         where("userId", "==", data?.creatorId)
       );
       const userQuerySnapshot = await getDocs(userQuery);
       const userData = userQuerySnapshot.docs[0].data();
-      console.log(userData);
       const ok = window.confirm(
         `Are you sure connected to ${userData.userName}?`
       );
@@ -82,9 +85,18 @@ const Couple = () => {
             coupleId: data?.creatorId,
           }
         );
+        const CoupleUserQuery = query(
+          collection(dbService, "userInfo"),
+          where("userId", "==", data?.creatorId)
+        );
+        const CoupleUserQuerySnapshot = await getDocs(CoupleUserQuery);
+        const CoupleUserData = CoupleUserQuerySnapshot.docs[0].data();
+
         dispatch(
           userActions.setConnectCouple({
             coupleId: data?.creatorId,
+            coupleName: CoupleUserData.userName,
+            coupleUrl: CoupleUserData.userUrl,
           })
         );
         //delete connect document
@@ -111,24 +123,47 @@ const Couple = () => {
     }
   };
 
+  const callCoupleData = async () => {
+    // call user Couple diary,
+    if (coupleId) {
+      setIsCouple(true);
+    } else {
+    }
+  };
+
   useEffect(() => {
-    console.log(userUid);
+    callCoupleData();
   }, []);
 
   return (
     <>
       <MainContainer>
         <div>Couple</div>
-        <form onSubmit={onSubmit}>
-          <Input
-            type="text"
-            placeholder="Type couple code!"
-            value={coupleCode}
-            onChange={onCodeChange}
-            maxLength={6}
-          />
-          <Btn type="submit" children="Check" />
-        </form>
+        {!isCouple && (
+          <form onSubmit={onSubmit}>
+            <Input
+              type="text"
+              placeholder="Type couple code!"
+              value={coupleCode}
+              onChange={onCodeChange}
+              maxLength={6}
+            />
+            <Btn type="submit" children="Check" />
+          </form>
+        )}
+        {isCouple && (
+          <SubContainer>
+            <img
+              style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+              src={userUrl + "-mo"}
+            />
+            <img
+              style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+              src={coupleUrl + "-mo"}
+            />
+            <Btn children="What's on your mind?" />
+          </SubContainer>
+        )}
       </MainContainer>
     </>
   );

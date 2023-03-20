@@ -8,6 +8,8 @@ const initialState: userState = {
   userName: "",
   userUrl: "",
   coupleId: "",
+  coupleName: "",
+  coupleUrl: "",
 };
 
 export const userSlice = createSlice({
@@ -22,6 +24,8 @@ export const userSlice = createSlice({
         userName: string | null;
         userUrl: string | null;
         coupleId: string | null;
+        coupleName: string | null;
+        coupleUrl: string | null;
       }>
     ) {
       state.isLoggedIn = action.payload.isLoggedIn;
@@ -29,14 +33,20 @@ export const userSlice = createSlice({
       state.userName = action.payload.userName;
       state.userUrl = action.payload.userUrl;
       state.coupleId = action.payload.coupleId;
+      state.coupleName = action.payload.coupleName;
+      state.coupleUrl = action.payload.coupleUrl;
     },
     setConnectCouple(
       state,
       action: PayloadAction<{
         coupleId: string | null;
+        coupleName: string | null;
+        coupleUrl: string | null;
       }>
     ) {
       state.coupleId = action.payload.coupleId;
+      state.coupleName = action.payload.coupleName;
+      state.coupleUrl = action.payload.coupleUrl;
     },
   },
 });

@@ -1,5 +1,6 @@
 import { MainContainer } from "../styles/HomeStyle";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Input from "../components/common/Input";
 import {
   doc,
@@ -22,6 +23,7 @@ import Diarys from "../components/Diarys";
 import Btn from "../components/common/Btn";
 
 const Couple = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const auth = getAuth();
   const { userUid, coupleId, userUrl, userName, coupleName, coupleUrl } =
@@ -144,6 +146,10 @@ const Couple = () => {
     }
   };
 
+  const onWritePageClick = () => {
+    navigate("/write");
+  };
+
   useEffect(() => {
     callCoupleData();
   }, []);
@@ -174,7 +180,7 @@ const Couple = () => {
               style={{ height: "50px", width: "50px", borderRadius: "50%" }}
               src={coupleUrl + "-mo"}
             />
-            <Btn children="What's on your mind?" />
+            <Btn onClick={onWritePageClick} children="What's on your mind?" />
           </SubContainer>
         )}
       </MainContainer>

@@ -33,7 +33,7 @@ const Write = () => {
           attachmentUrl = await getDownloadURL(snapshot.ref);
         });
       }
-      const docRef = await addDoc(collection(dbService, "diarys"), {
+      await addDoc(collection(dbService, "diarys"), {
         title: title,
         text: diary,
         createdAt: date,

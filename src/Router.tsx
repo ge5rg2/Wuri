@@ -26,7 +26,7 @@ const Router: React.FC = () => {
             <Route path="/write" element={<Write />}></Route>
           </Routes>
           <Routes>
-            <Route path="/edit/:id" element={<Edit />}></Route>
+            <Route path="/edit/:docName/:id" element={<Edit />}></Route>
           </Routes>
           <Routes>
             <Route path="/couple" element={<Couple />}></Route>

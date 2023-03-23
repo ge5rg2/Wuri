@@ -16,6 +16,7 @@ export interface userState {
 }
 
 export interface diaryProps {
+  doc: string;
   diary: string;
   obj: any;
 }

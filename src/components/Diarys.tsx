@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import Btn from "./common/Btn";
 import { useNavigate } from "react-router-dom";
 
-const Diarys: React.FC<diaryProps> = ({ diary, obj }) => {
+const Diarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {
   const navigate = useNavigate();
 
   const onToggleDetail = () => {
     console.log(obj);
-    navigate(`/edit/${obj.id}`);
+    navigate(`/edit/${doc}/${obj.id}`);
   };
 
   // firestore already give us data that edited diary

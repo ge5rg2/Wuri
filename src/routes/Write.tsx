@@ -56,7 +56,7 @@ const Write = () => {
     setDiary("");
     setTitle("");
     onClearAttachment();
-    return navigate("/");
+    return coupleId ? navigate("/couple") : navigate("/");
   };
 
   const onClearAttachment = () => {
@@ -88,10 +88,6 @@ const Write = () => {
     let { value } = e.target;
     setTitle(value);
   };
-
-  useEffect(() => {
-    console.log(coupleId ? "o" : "x");
-  }, []);
 
   return (
     <>

@@ -21,10 +21,9 @@ import { useSelector } from "../store";
 const Edit = () => {
   const navigate = useNavigate();
   const param = useParams();
-  const { id } = param;
+  const { id, docName } = param;
 
-  const userStore = useSelector((state) => state.user);
-  const uid = userStore.userUid;
+  const { userUid, coupleId } = useSelector((state) => state.user);
   const [diaryInfo, setDiaryInfo] = useState<any>([]);
   const [editing, setEditing] = useState<boolean>(false);
   const [newDiary, setNewDiary] = useState<string>("");
@@ -50,7 +49,7 @@ const Edit = () => {
   };
 
   const getDiaryInfo = async () => {
-    const snap = await getDoc(doc(dbService, "diarys", `${id}`));
+    const snap = await getDoc(doc(dbService, `${docName}`, `${id}`));
     if (snap.exists()) {
       const data = snap.data();
       const dataDate = data.createdAt.toDate();
@@ -110,7 +109,7 @@ const Edit = () => {
     let attachmentUrl = "";
     try {
       if (attachment !== "") {
-        const fileRef = ref(storageService, `${uid}/${uuidv4()}`);
+        const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
         const response = await uploadString(
           fileRef,
           attachment,
@@ -134,6 +133,7 @@ const Edit = () => {
   };
 
   useEffect(() => {
+    console.log(param);
     getDiaryInfo();
   }, []);
 

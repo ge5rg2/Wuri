@@ -130,7 +130,7 @@ const Couple = () => {
   };
 
   const diaryData: JSX.Element[] = diarys.map((el) => {
-    return <Diarys key={el.id} diary={el.text} obj={el} />;
+    return <Diarys key={el.id} diary={el.text} obj={el} doc="couple_diarys" />;
   });
 
   const callCoupleData = async () => {

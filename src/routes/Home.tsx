@@ -29,7 +29,7 @@ const Home = () => {
   const [diarys, setDiarys] = useState<Diary[]>([]);
 
   const diaryData: JSX.Element[] = diarys.map((el) => {
-    return <Diarys key={el.id} diary={el.text} obj={el} />;
+    return <Diarys key={el.id} diary={el.text} obj={el} doc="diarys" />;
   });
 
   const onWritePageClick = () => {

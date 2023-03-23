@@ -30,9 +30,10 @@ const Edit = () => {
   const [newTitle, setNewTitle] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [attachment, setAttachment] = useState<any>("");
+  const [editAble, setEditAble] = useState<boolean>(true);
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const DiaryTextRef = doc(dbService, "diarys", `${id}`);
+  const DiaryTextRef = doc(dbService, `${docName}`, `${id}`);
   const urlRef = ref(storageService, diaryInfo.attachmentUrl);
 
   const onDeleteClick = async () => {
@@ -42,7 +43,7 @@ const Edit = () => {
       if (diaryInfo.attachmentUrl) {
         await deleteObject(urlRef);
       }
-      return navigate("/");
+      return docName == "diary" ? navigate("/") : navigate("/couple");
     } else {
       return;
     }
@@ -53,6 +54,11 @@ const Edit = () => {
     if (snap.exists()) {
       const data = snap.data();
       const dataDate = data.createdAt.toDate();
+      if (data.coupleId) {
+        if (data.coupleId == userUid) {
+          setEditAble(false);
+        }
+      }
       setDiaryInfo(data);
       setNewTitle(data.title);
       setNewDiary(data.text);
@@ -110,13 +116,11 @@ const Edit = () => {
     try {
       if (attachment !== "") {
         const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
-        const response = await uploadString(
-          fileRef,
-          attachment,
-          "data_url"
-        ).then(async (snapshot) => {
-          attachmentUrl = await getDownloadURL(snapshot.ref);
-        });
+        await uploadString(fileRef, attachment, "data_url").then(
+          async (snapshot) => {
+            attachmentUrl = await getDownloadURL(snapshot.ref);
+          }
+        );
       }
       await updateDoc(DiaryTextRef, {
         text: newDiary,
@@ -133,7 +137,6 @@ const Edit = () => {
   };
 
   useEffect(() => {
-    console.log(param);
     getDiaryInfo();
   }, []);
 
@@ -157,46 +160,50 @@ const Edit = () => {
           )}
         </DiaryContainer>
 
-        {editing ? (
-          <>
-            {attachment && typeof attachment === "string" && (
-              <div>
-                <img src={attachment} width="50px" height="50px" />
-                <Btn onClick={onClearAttachment} children="Clear" />
-              </div>
-            )}
-            <FormContainer>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={onFileChange}
-                ref={fileInput}
-              />
-              <Input
-                className="title"
-                type="text"
-                placeholder="Edit your diary title"
-                value={newTitle}
-                required
-                onChange={onChange}
-              />
-              <Input
-                className="text"
-                type="text"
-                placeholder="Edit your diary"
-                value={newDiary}
-                required
-                onChange={onChange}
-              />
-            </FormContainer>
-            <Btn children="Update Diary" onClick={onSubmit} />
-            <Btn children="Delete Diary" onClick={onDeleteClick} />
-            <Btn onClick={toggleEditing} children="Cancel" />
-          </>
+        {editAble ? (
+          editing ? (
+            <>
+              {attachment && typeof attachment === "string" && (
+                <div>
+                  <img src={attachment} width="50px" height="50px" />
+                  <Btn onClick={onClearAttachment} children="Clear" />
+                </div>
+              )}
+              <FormContainer>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={onFileChange}
+                  ref={fileInput}
+                />
+                <Input
+                  className="title"
+                  type="text"
+                  placeholder="Edit your diary title"
+                  value={newTitle}
+                  required
+                  onChange={onChange}
+                />
+                <Input
+                  className="text"
+                  type="text"
+                  placeholder="Edit your diary"
+                  value={newDiary}
+                  required
+                  onChange={onChange}
+                />
+              </FormContainer>
+              <Btn children="Update Diary" onClick={onSubmit} />
+              <Btn children="Delete Diary" onClick={onDeleteClick} />
+              <Btn onClick={toggleEditing} children="Cancel" />
+            </>
+          ) : (
+            <>
+              <Btn children="Edit Diary" onClick={toggleEditing} />
+            </>
+          )
         ) : (
-          <>
-            <Btn children="Edit Diary" onClick={toggleEditing} />
-          </>
+          ""
         )}
       </MainContainer>
     </>

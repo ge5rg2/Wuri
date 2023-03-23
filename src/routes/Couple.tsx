@@ -182,11 +182,11 @@ const Couple = () => {
             <SubContainer>
               <img
                 style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-                src={userUrl + "-mo"}
+                src={userUrl + ""}
               />
               <img
                 style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-                src={coupleUrl + "-mo"}
+                src={coupleUrl + ""}
               />
               <Btn onClick={onWritePageClick} children="What's on your mind?" />
             </SubContainer>

@@ -80,7 +80,7 @@ const Home = () => {
         <SubContainer>
           <img
             style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-            src={userStore.userUrl + "-mo"}
+            src={userStore.userUrl + ""}
           />
           <Btn onClick={onWritePageClick} children="What's on your mind?" />
         </SubContainer>

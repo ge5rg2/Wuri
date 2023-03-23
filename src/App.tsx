@@ -20,17 +20,46 @@ const App = () => {
         const userInfoRef = collection(dbService, "userInfo");
         const userQuery = query(userInfoRef, where("userId", "==", uid));
         const userQuerySnapshot = await getDocs(userQuery);
-        dispatch(
-          userActions.setLoggedIn({
-            isLoggedIn: true,
-            userUid: uid,
-            userName: user.displayName,
-            userUrl: user.photoURL,
-            coupleId: "",
-            coupleName: "",
-            coupleUrl: "",
-          })
-        );
+        if (user.email && !user.displayName) {
+          dispatch(
+            userActions.setLoggedIn({
+              isLoggedIn: true,
+              userUid: uid,
+              userName: user.email.split("@")[0],
+              userUrl:
+                "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg",
+              coupleId: "",
+              coupleName: "",
+              coupleUrl: "",
+            })
+          );
+        } else {
+          if (user.providerData[0].providerId == "google.com") {
+            dispatch(
+              userActions.setLoggedIn({
+                isLoggedIn: true,
+                userUid: uid,
+                userName: user.displayName,
+                userUrl: user.photoURL + "-mo",
+                coupleId: "",
+                coupleName: "",
+                coupleUrl: "",
+              })
+            );
+          } else {
+            dispatch(
+              userActions.setLoggedIn({
+                isLoggedIn: true,
+                userUid: uid,
+                userName: user.displayName,
+                userUrl: user.photoURL,
+                coupleId: "",
+                coupleName: "",
+                coupleUrl: "",
+              })
+            );
+          }
+        }
         if (userQuerySnapshot.size > 0) {
           if (
             typeof userQuerySnapshot.docs[0].data().coupleId !== "undefined"

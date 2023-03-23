@@ -24,10 +24,8 @@ const Profile = () => {
   const [loginMethod, setLoginMethod] = useState<string>("");
   const [randomCode, setRandomCode] = useState<string>("");
   const [isCouple, setIsCouple] = useState<boolean>(false);
-  const userInfo = useSelector((state) => state.user);
-  const { coupleId, coupleName, coupleUrl } = useSelector(
-    (state) => state.user
-  );
+  const { userUid, userUrl, userName, coupleId, coupleName, coupleUrl } =
+    useSelector((state) => state.user);
   const auth = getAuth();
   const user = auth.currentUser;
   const provider = user?.providerData[0].providerId;
@@ -68,7 +66,7 @@ const Profile = () => {
       setIsCouple(true);
     } else {
       const codeRef = collection(dbService, "connect");
-      const q = query(codeRef, where("creatorId", "==", userInfo.userUid));
+      const q = query(codeRef, where("creatorId", "==", userUid));
       const querySnapshot = await getDocs(q);
       if (querySnapshot.size > 0) {
         const currentCodeData = querySnapshot.docs[0].data();
@@ -103,7 +101,7 @@ const Profile = () => {
   const createCoupleCode = async () => {
     const random = await generateRandomCode();
     const codeRef = collection(dbService, "connect");
-    const q = query(codeRef, where("creatorId", "==", userInfo.userUid));
+    const q = query(codeRef, where("creatorId", "==", userUid));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.size > 0) {
       /*    get current user before code num   */
@@ -112,18 +110,18 @@ const Profile = () => {
     }
     await setDoc(doc(codeRef, `${random}`), {
       createdAt: date,
-      creatorId: userInfo.userUid,
+      creatorId: userUid,
     });
   };
 
   const disconnectCouple = async () => {
     const CoupleUserQuery = query(
       collection(dbService, "userInfo"),
-      where("userId", "==", userInfo.coupleId)
+      where("userId", "==", coupleId)
     );
     const UserQuery = query(
       collection(dbService, "userInfo"),
-      where("userId", "==", userInfo.userUid)
+      where("userId", "==", userUid)
     );
     const CoupleUserQuerySnapshot = await getDocs(CoupleUserQuery);
     const UserQuerySnapshot = await getDocs(UserQuery);
@@ -162,10 +160,10 @@ const Profile = () => {
   return (
     <MainContainer>
       <img
-        src={userInfo.userUrl + "-mo"}
+        src={userUrl + ""}
         style={{ height: "10%", width: "10%", borderRadius: "50%" }}
       />
-      <div>{userInfo.userName}</div>
+      <div>{userName}</div>
       <div>{loginMethod}</div>
       {isCouple ? (
         <>

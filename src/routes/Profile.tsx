@@ -1,5 +1,5 @@
 import { MainContainer } from "../styles/HomeStyle";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   doc,
   collection,
@@ -13,19 +13,27 @@ import {
   deleteField,
   updateDoc,
 } from "@firebase/firestore";
-import { dbService } from "../myBase";
+import { dbService, storageService } from "../myBase";
 import { useSelector, useDispatch } from "../store";
 import { getAuth } from "firebase/auth";
 import Btn from "../components/common/Btn";
+import Input from "../components/common/Input";
 import { userActions } from "../store/userSlice";
+import { ref, uploadString, getDownloadURL } from "@firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const [loginMethod, setLoginMethod] = useState<string>("");
   const [randomCode, setRandomCode] = useState<string>("");
   const [isCouple, setIsCouple] = useState<boolean>(false);
+  const [editProfile, setEditProfile] = useState<boolean>(false);
+  const [editUserName, setEditUserName] = useState<string>("");
+  const [attachment, setAttachment] = useState<any>("");
   const { userUid, userUrl, userName, coupleId, coupleName, coupleUrl } =
     useSelector((state) => state.user);
+
+  const fileInput = useRef<HTMLInputElement>(null);
   const auth = getAuth();
   const user = auth.currentUser;
   const provider = user?.providerData[0].providerId;
@@ -83,6 +91,12 @@ const Profile = () => {
     }
     if (user !== null) {
       getLoginMethod();
+      if (userUrl) {
+        setAttachment(userUrl);
+      }
+      if (userName) {
+        setEditUserName(userName);
+      }
     }
   };
 
@@ -153,22 +167,107 @@ const Profile = () => {
     }
   };
 
+  const onEditProfile = () => {
+    if (editProfile) {
+      const ok = window.confirm(
+        "Changes made will be undone. Would you like to proceed?"
+      );
+      if (ok) {
+        if (userUrl) {
+          setAttachment(userUrl);
+        }
+        if (userName) {
+          setEditUserName(userName);
+        }
+        return setEditProfile((props) => !props);
+      } else {
+        return;
+      }
+    } else {
+      setEditProfile((props) => !props);
+    }
+  };
+
+  const onClearAttachment = () => {
+    setAttachment("");
+    if (fileInput.current) {
+      fileInput.current.value = "";
+    }
+  };
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target?.files;
+    if (files?.length) {
+      const theFile = files[0];
+      const reader = new FileReader();
+      reader.onloadend = (finishedEvent) => {
+        const result = (finishedEvent.currentTarget as FileReader).result;
+        setAttachment(result);
+      };
+      reader.readAsDataURL(theFile);
+    }
+  };
+
+  const onSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    let attachmentUrl = "";
+    try {
+      if (attachment !== "") {
+        const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
+        await uploadString(fileRef, attachment, "data_url").then(
+          async (snapshot) => {
+            attachmentUrl = await getDownloadURL(snapshot.ref);
+          }
+        );
+      }
+      await {};
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+    onClearAttachment();
+    setEditProfile((props) => !props);
+  };
   useEffect(() => {
     getMyAccount();
   }, []);
 
   return (
     <MainContainer>
-      <img
-        src={userUrl + ""}
-        style={{ height: "10%", width: "10%", borderRadius: "50%" }}
-      />
-      <div>{userName}</div>
-      <div>{loginMethod}</div>
+      {editProfile ? (
+        <>
+          <form>
+            <Input type="text" placeholder="User Name" value={editUserName} />
+            {attachment && typeof attachment === "string" && (
+              <div>
+                <img src={attachment} width="50px" height="50px" />
+                <Btn onClick={onClearAttachment} children="Clear" />
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={onFileChange}
+              ref={fileInput}
+            />
+          </form>
+          <Btn children="Update Diary" onClick={onSubmit} />
+          <Btn onClick={onEditProfile} children="Cancel" />
+        </>
+      ) : (
+        <>
+          <img
+            src={userUrl + ""}
+            style={{ height: "10%", width: "10%", borderRadius: "50%" }}
+          />
+          <div>{userName}</div>
+          <div>{loginMethod}</div>
+          <Btn children="Edit profile" onClick={onEditProfile} />
+        </>
+      )}
       {isCouple ? (
         <>
           <img
-            src={coupleUrl + "-mo"}
+            src={coupleUrl + "-"}
             style={{ height: "10%", width: "10%", borderRadius: "50%" }}
           />
           <div>{coupleName}</div>

@@ -15,7 +15,7 @@ import {
 } from "@firebase/firestore";
 import { dbService, storageService } from "../myBase";
 import { useSelector, useDispatch } from "../store";
-import { getAuth } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
 import Btn from "../components/common/Btn";
 import Input from "../components/common/Input";
 import { userActions } from "../store/userSlice";
@@ -208,6 +208,13 @@ const Profile = () => {
     }
   };
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { value },
+    } = e;
+    setEditUserName(value);
+  };
+
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     let attachmentUrl = "";
@@ -220,13 +227,30 @@ const Profile = () => {
           }
         );
       }
-      await {};
+      if (user) {
+        await updateProfile(user, {
+          displayName: editUserName,
+          photoURL: attachmentUrl,
+        })
+          .then(() => {
+            // Profile updated!
+            // ...
+            console.log("Profile updated!");
+          })
+          .catch((error) => {
+            // An error occurred
+            // ...
+            console.log(error);
+          });
+      }
     } catch (error) {
       console.error("Error adding document: ", error);
     }
     onClearAttachment();
     setEditProfile((props) => !props);
+    // need to change userInfo document, dispatch
   };
+
   useEffect(() => {
     getMyAccount();
   }, []);
@@ -236,7 +260,12 @@ const Profile = () => {
       {editProfile ? (
         <>
           <form>
-            <Input type="text" placeholder="User Name" value={editUserName} />
+            <Input
+              type="text"
+              placeholder="User Name"
+              value={editUserName}
+              onChange={onChange}
+            />
             {attachment && typeof attachment === "string" && (
               <div>
                 <img src={attachment} width="50px" height="50px" />

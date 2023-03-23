@@ -21,6 +21,7 @@ import { getAuth } from "firebase/auth";
 import { SubContainer } from "../styles/HomeStyle";
 import Diarys from "../components/Diarys";
 import Btn from "../components/common/Btn";
+import { Diary } from "../interface/tpyes";
 
 const Couple = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const Couple = () => {
   const { userUid, coupleId, userUrl, userName, coupleName, coupleUrl } =
     useSelector((state) => state.user);
   const user = auth.currentUser;
+  const [diarys, setDiarys] = useState<Diary[]>([]);
 
   const [coupleCode, setCoupleCode] = useState<string>("");
   const [isCouple, setIsCouple] = useState<boolean>(false);
@@ -127,13 +129,16 @@ const Couple = () => {
     }
   };
 
+  const diaryData: JSX.Element[] = diarys.map((el) => {
+    return <Diarys key={el.id} diary={el.text} obj={el} />;
+  });
+
   const callCoupleData = async () => {
-    // call user Couple diary,
     if (coupleId) {
       setIsCouple(true);
       const q = query(
         collection(dbService, "couple_diarys"),
-        where("creatorId", "==", userUid),
+        where("creatorId", "in", [userUid, coupleId]),
         orderBy("createdAt", "desc")
       );
       await onSnapshot(q, (snapshot) => {
@@ -141,8 +146,10 @@ const Couple = () => {
           id: doc.id,
           ...doc.data(),
         }));
+        setDiarys(diaryObject);
       });
     } else {
+      return;
     }
   };
 
@@ -171,17 +178,20 @@ const Couple = () => {
           </form>
         )}
         {isCouple && (
-          <SubContainer>
-            <img
-              style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-              src={userUrl + "-mo"}
-            />
-            <img
-              style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-              src={coupleUrl + "-mo"}
-            />
-            <Btn onClick={onWritePageClick} children="What's on your mind?" />
-          </SubContainer>
+          <>
+            <SubContainer>
+              <img
+                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+                src={userUrl + "-mo"}
+              />
+              <img
+                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+                src={coupleUrl + "-mo"}
+              />
+              <Btn onClick={onWritePageClick} children="What's on your mind?" />
+            </SubContainer>
+            {diaryData}
+          </>
         )}
       </MainContainer>
     </>

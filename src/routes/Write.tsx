@@ -1,5 +1,5 @@
 import Input from "../components/common/Input";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { dbService, storageService } from "../myBase";
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "@firebase/storage";
@@ -12,8 +12,7 @@ import { useNavigate } from "react-router-dom";
 const Write = () => {
   const navigate = useNavigate();
   const fileInput = useRef<HTMLInputElement>(null);
-  const userStore = useSelector((state) => state.user);
-  const uid = userStore.userUid;
+  const { userUid, coupleId } = useSelector((state) => state.user);
   const [title, setTitle] = useState("");
   const [diary, setDiary] = useState("");
   const [attachment, setAttachment] = useState<any>("");
@@ -24,7 +23,7 @@ const Write = () => {
     const date = new Date();
     try {
       if (attachment !== "") {
-        const fileRef = ref(storageService, `${uid}/${uuidv4()}`);
+        const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
         const response = await uploadString(
           fileRef,
           attachment,
@@ -33,13 +32,24 @@ const Write = () => {
           attachmentUrl = await getDownloadURL(snapshot.ref);
         });
       }
-      await addDoc(collection(dbService, "diarys"), {
-        title: title,
-        text: diary,
-        createdAt: date,
-        creatorId: uid,
-        attachmentUrl,
-      });
+      if (!coupleId) {
+        await addDoc(collection(dbService, "diarys"), {
+          title: title,
+          text: diary,
+          createdAt: date,
+          creatorId: userUid,
+          attachmentUrl,
+        });
+      } else {
+        await addDoc(collection(dbService, "couple_diarys"), {
+          title: title,
+          text: diary,
+          createdAt: date,
+          creatorId: userUid,
+          coupleId: coupleId,
+          attachmentUrl,
+        });
+      }
     } catch (error) {
       console.error("Error adding document: ", error);
     }
@@ -78,6 +88,10 @@ const Write = () => {
     let { value } = e.target;
     setTitle(value);
   };
+
+  useEffect(() => {
+    console.log(coupleId ? "o" : "x");
+  }, []);
 
   return (
     <>

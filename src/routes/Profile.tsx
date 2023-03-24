@@ -21,8 +21,10 @@ import Input from "../components/common/Input";
 import { userActions } from "../store/userSlice";
 import { ref, uploadString, getDownloadURL } from "@firebase/storage";
 import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loginMethod, setLoginMethod] = useState<string>("");
   const [randomCode, setRandomCode] = useState<string>("");
@@ -38,6 +40,8 @@ const Profile = () => {
   const user = auth.currentUser;
   const provider = user?.providerData[0].providerId;
   let date = new Date();
+  const defaultURL =
+    "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg";
 
   const generateRandomCode = async () => {
     const codeRef = collection(dbService, "connect");
@@ -169,6 +173,9 @@ const Profile = () => {
 
   const onEditProfile = () => {
     if (editProfile) {
+      if (attachment == userUrl && editUserName == userName) {
+        return setEditProfile((props) => !props);
+      }
       const ok = window.confirm(
         "Changes made will be undone. Would you like to proceed?"
       );
@@ -220,35 +227,48 @@ const Profile = () => {
     let attachmentUrl = "";
     try {
       if (attachment !== "") {
-        const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
-        await uploadString(fileRef, attachment, "data_url").then(
-          async (snapshot) => {
-            attachmentUrl = await getDownloadURL(snapshot.ref);
-          }
-        );
+        if (attachment !== userUrl) {
+          const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
+          await uploadString(fileRef, attachment, "data_url").then(
+            async (snapshot) => {
+              attachmentUrl = await getDownloadURL(snapshot.ref);
+            }
+          );
+        }
+      } else {
+        attachmentUrl = defaultURL;
       }
       if (user) {
         await updateProfile(user, {
           displayName: editUserName,
-          photoURL: attachmentUrl,
+          photoURL: attachmentUrl == "" ? attachment : attachmentUrl,
         })
           .then(() => {
             // Profile updated!
             // ...
-            console.log("Profile updated!");
+            dispatch(
+              userActions.setEditUser({
+                userName: editUserName,
+                userUrl: attachmentUrl == "" ? attachment : attachmentUrl,
+              })
+            );
+            alert("Profile updated!");
           })
           .catch((error) => {
             // An error occurred
             // ...
+            alert("Error!!!");
             console.log(error);
           });
       }
     } catch (error) {
       console.error("Error adding document: ", error);
     }
-    onClearAttachment();
     setEditProfile((props) => !props);
-    // need to change userInfo document, dispatch
+    if (attachmentUrl == defaultURL) {
+      setAttachment(defaultURL);
+    }
+    // need to change userInfo document
   };
 
   useEffect(() => {

@@ -21,8 +21,8 @@ export const userSlice = createSlice({
       action: PayloadAction<{
         isLoggedIn: boolean;
         userUid: string;
-        userName: string | null;
-        userUrl: string | null;
+        userName: string | null | undefined;
+        userUrl: string | null | undefined;
         coupleId: string | null;
         coupleName: string | null;
         coupleUrl: string | null;
@@ -35,6 +35,16 @@ export const userSlice = createSlice({
       state.coupleId = action.payload.coupleId;
       state.coupleName = action.payload.coupleName;
       state.coupleUrl = action.payload.coupleUrl;
+    },
+    setEditUser(
+      state,
+      action: PayloadAction<{
+        userName: string;
+        userUrl: string | null | undefined;
+      }>
+    ) {
+      state.userName = action.payload.userName;
+      state.userUrl = action.payload.userUrl;
     },
     setConnectCouple(
       state,

@@ -243,7 +243,7 @@ const Profile = () => {
           displayName: editUserName,
           photoURL: attachmentUrl == "" ? attachment : attachmentUrl,
         })
-          .then(() => {
+          .then(async () => {
             // Profile updated!
             // ...
             dispatch(
@@ -252,6 +252,16 @@ const Profile = () => {
                 userUrl: attachmentUrl == "" ? attachment : attachmentUrl,
               })
             );
+            const userInfoQuery = query(
+              collection(dbService, "userInfo"),
+              where("userId", "==", userUid)
+            );
+            const userInfoSnapshot = await getDocs(userInfoQuery);
+            const { id } = userInfoSnapshot.docs[0];
+            await updateDoc(doc(dbService, "userInfo", `${id}`), {
+              userName: editUserName,
+              userUrl: attachmentUrl == "" ? attachment : attachmentUrl,
+            });
             alert("Profile updated!");
           })
           .catch((error) => {

@@ -34,31 +34,17 @@ const App = () => {
             })
           );
         } else {
-          if (user.providerData[0].providerId == "google.com") {
-            dispatch(
-              userActions.setLoggedIn({
-                isLoggedIn: true,
-                userUid: uid,
-                userName: user.displayName,
-                userUrl: user.photoURL + "-mo",
-                coupleId: "",
-                coupleName: "",
-                coupleUrl: "",
-              })
-            );
-          } else {
-            dispatch(
-              userActions.setLoggedIn({
-                isLoggedIn: true,
-                userUid: uid,
-                userName: user.displayName,
-                userUrl: user.photoURL,
-                coupleId: "",
-                coupleName: "",
-                coupleUrl: "",
-              })
-            );
-          }
+          dispatch(
+            userActions.setLoggedIn({
+              isLoggedIn: true,
+              userUid: uid,
+              userName: user.displayName,
+              userUrl: user.photoURL,
+              coupleId: "",
+              coupleName: "",
+              coupleUrl: "",
+            })
+          );
         }
         if (userQuerySnapshot.size > 0) {
           if (

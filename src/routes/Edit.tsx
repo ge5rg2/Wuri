@@ -4,7 +4,14 @@ import {
   FormContainer,
 } from "../styles/HomeStyle";
 import { useParams, useNavigate } from "react-router-dom";
-import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  addDoc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  collection,
+} from "firebase/firestore";
 import {
   deleteObject,
   ref,
@@ -23,11 +30,14 @@ const Edit = () => {
   const param = useParams();
   const { id, docName } = param;
 
-  const { userUid, coupleId } = useSelector((state) => state.user);
+  const { userUid, coupleId, userUrl, userName } = useSelector(
+    (state) => state.user
+  );
   const [diaryInfo, setDiaryInfo] = useState<any>([]);
   const [editing, setEditing] = useState<boolean>(false);
   const [newDiary, setNewDiary] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
+  const [commentValue, setCommentValue] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [attachment, setAttachment] = useState<any>("");
   const [editAble, setEditAble] = useState<boolean>(true);
@@ -63,7 +73,6 @@ const Edit = () => {
       setNewTitle(data.title);
       setNewDiary(data.text);
       setAttachment(data.attachmentUrl);
-      // get date information
       setDate(
         `${dataDate.getFullYear()}년 ${
           dataDate.getMonth() + 1
@@ -136,6 +145,23 @@ const Edit = () => {
     setEditing((prev) => !prev);
   };
 
+  const onCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let { value } = e.target;
+    setCommentValue(value);
+  };
+
+  const onCommentSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    const date = new Date();
+    await addDoc(collection(dbService, "Comments"), {
+      text: commentValue,
+      createdAt: date,
+      creatorId: userUid,
+      diaryid: id,
+    });
+    setCommentValue("");
+  };
+
   useEffect(() => {
     getDiaryInfo();
   }, []);
@@ -205,6 +231,21 @@ const Edit = () => {
         ) : (
           ""
         )}
+        <div>
+          <img
+            src={userUrl + ""}
+            style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+          />
+          <form onSubmit={onCommentSubmit}>
+            <Input
+              placeholder="Commment!"
+              type="text"
+              value={commentValue}
+              onChange={onCommentChange}
+            />
+            <Input type="submit" value="Submit" />
+          </form>
+        </div>
       </MainContainer>
     </>
   );

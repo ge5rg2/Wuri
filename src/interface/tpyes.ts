@@ -4,6 +4,18 @@ export interface Diary {
   creatorId: string;
 }
 
+export interface Comment {
+  id: string;
+  text: string;
+  creatorId: string;
+  diaryid: string;
+}
+
+export interface commentUser {
+  userName: string;
+  userUrl: string;
+}
+
 export interface userState {
   isLoading?: true | false;
   isLoggedIn?: true | false;
@@ -26,4 +38,8 @@ export interface menuState {
   isMenu: boolean;
   isCouple: boolean;
   isDiary: boolean;
+}
+
+export interface commentProps {
+  info: any;
 }

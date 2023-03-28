@@ -11,6 +11,10 @@ import {
   updateDoc,
   deleteDoc,
   collection,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
 } from "firebase/firestore";
 import {
   deleteObject,
@@ -24,6 +28,8 @@ import Input from "../components/common/Input";
 import Btn from "../components/common/Btn";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "../store";
+import Comments from "../components/Comments";
+import { Comment } from "../interface/tpyes";
 
 const Edit = () => {
   const navigate = useNavigate();
@@ -41,6 +47,7 @@ const Edit = () => {
   const [date, setDate] = useState<string>("");
   const [attachment, setAttachment] = useState<any>("");
   const [editAble, setEditAble] = useState<boolean>(true);
+  const [commentInfo, setCommentInfo] = useState<Comment[]>([]);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const DiaryTextRef = doc(dbService, `${docName}`, `${id}`);
@@ -153,7 +160,7 @@ const Edit = () => {
   const onCommentSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const date = new Date();
-    await addDoc(collection(dbService, "Comments"), {
+    await addDoc(collection(dbService, "comments"), {
       text: commentValue,
       createdAt: date,
       creatorId: userUid,
@@ -162,8 +169,28 @@ const Edit = () => {
     setCommentValue("");
   };
 
+  const getCommentInfo = async () => {
+    const commentQuery = query(
+      collection(dbService, "comments"),
+      where("diaryid", "==", id),
+      orderBy("createdAt", "desc")
+    );
+    onSnapshot(commentQuery, (snapshot) => {
+      const commentObject: any = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setCommentInfo(commentObject);
+    });
+  };
+
+  const commentData: JSX.Element[] = commentInfo.map((el) => {
+    return <Comments key={el.id} info={el} />;
+  });
+
   useEffect(() => {
     getDiaryInfo();
+    getCommentInfo();
   }, []);
 
   return (
@@ -246,6 +273,7 @@ const Edit = () => {
             <Input type="submit" value="Submit" />
           </form>
         </div>
+        {commentData}
       </MainContainer>
     </>
   );

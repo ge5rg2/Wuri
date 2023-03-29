@@ -33,7 +33,7 @@ const Home = () => {
   });
 
   const onWritePageClick = () => {
-    navigate("/write");
+    navigate("/write/single");
   };
 
   const createSimpeUserInfo = async () => {

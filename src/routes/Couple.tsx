@@ -154,7 +154,7 @@ const Couple = () => {
   };
 
   const onWritePageClick = () => {
-    navigate("/write");
+    navigate("/write/couple");
   };
 
   useEffect(() => {

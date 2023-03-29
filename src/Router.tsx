@@ -23,7 +23,7 @@ const Router: React.FC = () => {
             <Route path="/profile" element={<Profile />}></Route>
           </Routes>
           <Routes>
-            <Route path="/write" element={<Write />}></Route>
+            <Route path="/write/:type" element={<Write />}></Route>
           </Routes>
           <Routes>
             <Route path="/edit/:docName/:id" element={<Edit />}></Route>

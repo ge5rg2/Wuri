@@ -7,14 +7,16 @@ import { useSelector } from "../store";
 import { v4 as uuidv4 } from "uuid";
 import Btn from "../components/common/Btn";
 import { MainContainer, SubContainer } from "../styles/WriteStyle";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Write = () => {
+  const { type } = useParams();
   const navigate = useNavigate();
   const fileInput = useRef<HTMLInputElement>(null);
   const { userUid, coupleId } = useSelector((state) => state.user);
   const [title, setTitle] = useState("");
   const [diary, setDiary] = useState("");
+  const [diaryType, setDiaryType] = useState<string>("");
   const [attachment, setAttachment] = useState<any>("");
 
   const onSubmit = async (e: React.SyntheticEvent) => {
@@ -32,7 +34,7 @@ const Write = () => {
           attachmentUrl = await getDownloadURL(snapshot.ref);
         });
       }
-      if (!coupleId) {
+      if (diaryType == "single") {
         await addDoc(collection(dbService, "diarys"), {
           title: title,
           text: diary,
@@ -56,7 +58,7 @@ const Write = () => {
     setDiary("");
     setTitle("");
     onClearAttachment();
-    return coupleId ? navigate("/couple") : navigate("/");
+    return diaryType == "couple" ? navigate("/couple") : navigate("/");
   };
 
   const onClearAttachment = () => {
@@ -88,6 +90,12 @@ const Write = () => {
     let { value } = e.target;
     setTitle(value);
   };
+
+  useEffect(() => {
+    if (type) {
+      setDiaryType(type);
+    }
+  }, []);
 
   return (
     <>

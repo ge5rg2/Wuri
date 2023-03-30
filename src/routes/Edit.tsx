@@ -60,7 +60,7 @@ const Edit = () => {
       if (diaryInfo.attachmentUrl) {
         await deleteObject(urlRef);
       }
-      return docName == "diary" ? navigate("/") : navigate("/couple");
+      return docName == "diarys" ? navigate("/") : navigate("/couple");
     } else {
       return;
     }

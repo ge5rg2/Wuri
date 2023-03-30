@@ -258,22 +258,28 @@ const Edit = () => {
         ) : (
           ""
         )}
-        <div>
-          <img
-            src={userUrl + ""}
-            style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-          />
-          <form onSubmit={onCommentSubmit}>
-            <Input
-              placeholder="Commment!"
-              type="text"
-              value={commentValue}
-              onChange={onCommentChange}
-            />
-            <Input type="submit" value="Submit" />
-          </form>
-        </div>
-        {commentData}
+        {docName == "diarys" ? (
+          ""
+        ) : (
+          <>
+            <div>
+              <img
+                src={userUrl + ""}
+                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+              />
+              <form onSubmit={onCommentSubmit}>
+                <Input
+                  placeholder="Commment!"
+                  type="text"
+                  value={commentValue}
+                  onChange={onCommentChange}
+                />
+                <Input type="submit" value="Submit" />
+              </form>
+            </div>
+            {commentData}
+          </>
+        )}
       </MainContainer>
     </>
   );

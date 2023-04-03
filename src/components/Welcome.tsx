@@ -9,6 +9,11 @@ import {
   GithubAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import {
+  MainContainer,
+  SubContainer,
+  ImgContainer,
+} from "../styles/WelcomeStyle";
 
 const Welcome = () => {
   const [inputs, setInputs] = useState({
@@ -61,44 +66,55 @@ const Welcome = () => {
   };
 
   return (
-    <>
-      <img src="/img/WuriNone.png" />
-      <form onSubmit={onSubmit}>
-        <Input
-          name="email"
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={onChange}
-        />
-        <Input
-          name="password"
-          type="password"
-          placeholder="Password"
-          required
-          value={password}
-          onChange={onChange}
-        />
-        <input type="submit" value={newAccount ? "Create Account" : "Log In"} />
-        {error}
-      </form>
-      <span onClick={toggleAccount}>
-        {newAccount ? "Sign In" : "Create Account"}
-      </span>
-      <div>
-        <Btn
-          onClick={onSocialClick}
-          name="google"
-          children="Continue with Google"
-        />
-        <Btn
-          onClick={onSocialClick}
-          name="github"
-          children="Continue with Github"
-        />
-      </div>
-    </>
+    <MainContainer>
+      <SubContainer>
+        <ImgContainer>
+          <img src="/img/WuriNone.png" />
+        </ImgContainer>
+        <div className="greetingContainer">
+          <div>Welcome to Wuri</div>
+          <div>Log in with your Wuri account to continue</div>
+        </div>
+        <form onSubmit={onSubmit}>
+          <Input
+            name="email"
+            type="email"
+            placeholder="Email"
+            required
+            value={email}
+            onChange={onChange}
+          />
+          <Input
+            name="password"
+            type="password"
+            placeholder="Password"
+            required
+            value={password}
+            onChange={onChange}
+          />
+          <input
+            type="submit"
+            value={newAccount ? "Create Account" : "Log In"}
+          />
+          {error}
+        </form>
+        <span onClick={toggleAccount}>
+          {newAccount ? "Sign In" : "Create Account"}
+        </span>
+        <div>
+          <Btn
+            onClick={onSocialClick}
+            name="google"
+            children="Continue with Google"
+          />
+          <Btn
+            onClick={onSocialClick}
+            name="github"
+            children="Continue with Github"
+          />
+        </div>
+      </SubContainer>
+    </MainContainer>
   );
 };
 

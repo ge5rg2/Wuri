@@ -46,6 +46,7 @@ const Edit = () => {
   const [commentValue, setCommentValue] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [attachment, setAttachment] = useState<any>("");
+  const [firstAttachment, setFirstAttachment] = useState<any>("");
   const [editAble, setEditAble] = useState<boolean>(true);
   const [commentInfo, setCommentInfo] = useState<Comment[]>([]);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -80,6 +81,7 @@ const Edit = () => {
       setNewTitle(data.title);
       setNewDiary(data.text);
       setAttachment(data.attachmentUrl);
+      setFirstAttachment(data.attachmentUrl);
       setDate(
         `${dataDate.getFullYear()}년 ${
           dataDate.getMonth() + 1
@@ -130,13 +132,15 @@ const Edit = () => {
     e.preventDefault();
     let attachmentUrl = "";
     try {
-      if (attachment !== "") {
+      if (attachment !== "" && firstAttachment != attachment) {
         const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
         await uploadString(fileRef, attachment, "data_url").then(
           async (snapshot) => {
             attachmentUrl = await getDownloadURL(snapshot.ref);
           }
         );
+      } else if (firstAttachment == attachment) {
+        attachmentUrl = firstAttachment;
       }
       await updateDoc(DiaryTextRef, {
         text: newDiary,
@@ -197,7 +201,12 @@ const Edit = () => {
     <>
       <MainContainer>
         <DiaryContainer>
-          <img src={diaryInfo.attachmentUrl} height="100px" width="100px" />
+          {" "}
+          {attachment == "" ? (
+            ""
+          ) : (
+            <img src={attachment} width="50px" height="50px" />
+          )}
           <div>
             {diaryInfo.isEdit
               ? date + " " + (diaryInfo.isEdit ? "(편집됨)" : "")
@@ -218,7 +227,11 @@ const Edit = () => {
             <>
               {attachment && typeof attachment === "string" && (
                 <div>
-                  <img src={attachment} width="50px" height="50px" />
+                  {attachment == "" ? (
+                    ""
+                  ) : (
+                    <img src={attachment} width="50px" height="50px" />
+                  )}
                   <Btn onClick={onClearAttachment} children="Clear" />
                 </div>
               )}

@@ -13,6 +13,7 @@ import {
   MainContainer,
   SubContainer,
   ImgContainer,
+  BtnContianer,
 } from "../styles/WelcomeStyle";
 
 const Welcome = () => {
@@ -75,6 +76,14 @@ const Welcome = () => {
           <div>Welcome to Wuri</div>
           <div>Log in with your Wuri account to continue</div>
         </div>
+        <BtnContianer>
+          <div className="BtnContianer_Sub">
+            <Btn children="Sign in" />
+          </div>
+          <div className="BtnContianer_Sub">
+            <Btn children="Sign up" />
+          </div>
+        </BtnContianer>
         <form onSubmit={onSubmit}>
           <Input
             name="email"

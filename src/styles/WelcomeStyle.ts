@@ -26,3 +26,10 @@ export const ImgContainer = styled.div`
     width: 50%;
   }
 `;
+
+export const BtnContianer = styled.div`
+  display: flex;
+  justify-content: center;
+  .BtnContianer_Sub {
+  }
+`;

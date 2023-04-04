@@ -16,12 +16,21 @@ import {
   BtnContianer,
 } from "../styles/WelcomeStyle";
 
+type MyStateType = {
+  isSignUp: boolean;
+  isLogIn: boolean;
+};
+
 const Welcome = () => {
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
-  const [newAccount, setNewAccount] = useState(true);
+  const [newAccount, setNewAccount] = useState(false);
+  const [currentState, setCurrentState] = useState<MyStateType>({
+    isSignUp: false,
+    isLogIn: false,
+  });
   const [error, setError] = useState("");
   const { email, password } = inputs;
 
@@ -51,6 +60,11 @@ const Welcome = () => {
   };
   const toggleAccount = () => setNewAccount((prev) => !prev);
 
+  const onAuthClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const { value } = e.target as HTMLInputElement;
+  };
+
   const onSocialClick = async (event: React.MouseEvent) => {
     const { name } = event.target as HTMLInputElement;
     let provider;
@@ -68,23 +82,46 @@ const Welcome = () => {
 
   return (
     <MainContainer>
-      <SubContainer>
-        <ImgContainer>
-          <img src="/img/WuriNone.png" />
-        </ImgContainer>
-        <div className="greetingContainer">
-          <div>Welcome to Wuri</div>
-          <div>Log in with your Wuri account to continue</div>
-        </div>
-        <BtnContianer>
-          <div className="BtnContianer_Sub">
-            <Btn size="medium" children="Log in" ButtonType="Emphasized" />
+      {newAccount ? (
+        ""
+      ) : (
+        <SubContainer>
+          <ImgContainer>
+            <img src="/img/WuriNone.png" />
+          </ImgContainer>
+          <div className="greetingContainer">
+            <div>Welcome to Wuri</div>
+            <div>Log in with your Wuri account to continue</div>
           </div>
-          <div className="BtnContianer_Sub">
-            <Btn size="medium" children="Sign up" ButtonType="Emphasized" />
-          </div>
-        </BtnContianer>
-        <form onSubmit={onSubmit}>
+          <BtnContianer>
+            <div className="BtnContianer_Sub">
+              <Btn
+                size="medium"
+                children="Log in"
+                ButtonType="Emphasized"
+                value="login"
+                onClick={onAuthClick}
+              />
+            </div>
+            <div className="BtnContianer_Sub">
+              <Btn
+                size="medium"
+                children="Sign up"
+                ButtonType="Emphasized"
+                value="signUp"
+              />
+            </div>
+          </BtnContianer>
+        </SubContainer>
+      )}
+    </MainContainer>
+  );
+};
+
+export default Welcome;
+
+/* 
+<form onSubmit={onSubmit}>
           <Input
             name="email"
             type="email"
@@ -121,10 +158,4 @@ const Welcome = () => {
             name="github"
             children="Continue with Github"
           />
-        </div>
-      </SubContainer>
-    </MainContainer>
-  );
-};
-
-export default Welcome;
+        </div> */

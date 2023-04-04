@@ -78,10 +78,10 @@ const Welcome = () => {
         </div>
         <BtnContianer>
           <div className="BtnContianer_Sub">
-            <Btn children="Sign in" />
+            <Btn size="medium" children="Log in" ButtonType="Emphasized" />
           </div>
           <div className="BtnContianer_Sub">
-            <Btn children="Sign up" />
+            <Btn size="medium" children="Sign up" ButtonType="Emphasized" />
           </div>
         </BtnContianer>
         <form onSubmit={onSubmit}>

@@ -31,5 +31,9 @@ export const BtnContianer = styled.div`
   display: flex;
   justify-content: center;
   .BtnContianer_Sub {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;

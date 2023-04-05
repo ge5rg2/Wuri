@@ -18,6 +18,7 @@ import {
   AuthHeaderContainer,
   AuthInputContainer,
   AuthPcontainer,
+  AuthBtnContainer,
 } from "../styles/WelcomeStyle";
 
 type MyStateType = {
@@ -102,18 +103,60 @@ const Welcome = () => {
         currentState.isSignUp ? (
           <AuthContainer>
             <div className="AuthImgContainer">
-              <img src="/img/WuriNone.png" />
+              <div className="AuthImgBox">
+                <img src="/img/WuriNone.png" />
+              </div>
             </div>
             <AuthHeaderContainer>
-              <h1>Sign up</h1>
+              <h1>Create your account</h1>
             </AuthHeaderContainer>
-            <Btn
-              size="medium"
-              children="Log in"
-              ButtonType="Emphasized"
-              value="login"
-              onClick={onAuthClick}
-            />
+            <AuthInputContainer>
+              <Input size={3} placeholder="Emaill address" />
+              <Input size={3} placeholder="Password" />
+            </AuthInputContainer>
+            <AuthInputContainer>
+              <Btn
+                children="Continue"
+                size="large"
+                ButtonType="Emphasized"
+                value="continue"
+              />
+            </AuthInputContainer>
+            <AuthPcontainer>
+              <p>
+                {`Already have an account? `}
+                <a
+                  className="a_SignUp"
+                  onClick={() =>
+                    setCurrentState((prevState) => ({
+                      isSignUp: false,
+                      isLogIn: true,
+                    }))
+                  }
+                >
+                  Log in
+                </a>
+              </p>
+            </AuthPcontainer>
+            <div className="div_divider">
+              <span>OR</span>
+            </div>
+            <AuthBtnContainer>
+              <Btn
+                onClick={onSocialClick}
+                name="google"
+                size="large"
+                ButtonType="Default"
+                children="Continue with Google"
+              />
+              <Btn
+                onClick={onSocialClick}
+                size="large"
+                ButtonType="Default"
+                name="github"
+                children="Continue with Github"
+              />
+            </AuthBtnContainer>
           </AuthContainer>
         ) : (
           <AuthContainer>
@@ -127,11 +170,12 @@ const Welcome = () => {
             </AuthHeaderContainer>
             <AuthInputContainer>
               <Input size={3} placeholder="Emaill address" />
+              <Input size={3} placeholder="Password" />
             </AuthInputContainer>
             <AuthInputContainer>
               <Btn
-                size="large"
                 children="Continue"
+                size="large"
                 ButtonType="Emphasized"
                 value="continue"
               />
@@ -155,6 +199,22 @@ const Welcome = () => {
             <div className="div_divider">
               <span>OR</span>
             </div>
+            <AuthBtnContainer>
+              <Btn
+                onClick={onSocialClick}
+                name="google"
+                size="large"
+                ButtonType="Default"
+                children="Continue with Google"
+              />
+              <Btn
+                onClick={onSocialClick}
+                size="large"
+                ButtonType="Default"
+                name="github"
+                children="Continue with Github"
+              />
+            </AuthBtnContainer>
           </AuthContainer>
         )
       ) : (

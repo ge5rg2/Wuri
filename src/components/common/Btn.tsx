@@ -16,6 +16,10 @@ const getButtonType = (ButtonType?: "Critical" | "Default" | "Emphasized") => {
     case "Default":
       return css`
         background-color: #30363d;
+        border: 1px solid ${palette.gray[400]};
+        &:hover {
+          border: 1px solid ${palette.gray[200]};
+        }
       `;
     case "Emphasized":
       return css`

@@ -41,6 +41,8 @@ export const AuthContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  width: 300px;
   .AuthImgContainer {
     display: flex;
     justify-content: center;
@@ -93,7 +95,6 @@ export const AuthHeaderContainer = styled.div`
   h1 {
     font-size: 2rem;
     font-weight: 550;
-    padding: 1rem 4rem; // set screen width
   }
 `;
 
@@ -101,6 +102,9 @@ export const AuthInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1rem 0;
+  input:first-child {
+    margin-bottom: 0.5rem;
+  }
 `;
 
 export const AuthPcontainer = styled.div`
@@ -109,5 +113,17 @@ export const AuthPcontainer = styled.div`
   .a_SignUp {
     cursor: pointer;
     color: ${palette.defaultColor};
+    &:hover {
+      color: ${palette.defaultActionColor};
+    }
+  }
+`;
+
+export const AuthBtnContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  Button {
+    margin-top: 0.5rem;
   }
 `;

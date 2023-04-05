@@ -100,9 +100,9 @@ const Welcome = () => {
       {isAccount ? (
         currentState.isSignUp ? (
           <AuthContainer>
-            <ImgContainer>
+            <div className="AuthImgContainer">
               <img src="/img/WuriNone.png" />
-            </ImgContainer>
+            </div>
             <AuthHeaderContainer>
               <h1>Sign up</h1>
             </AuthHeaderContainer>
@@ -116,9 +116,11 @@ const Welcome = () => {
           </AuthContainer>
         ) : (
           <AuthContainer>
-            <ImgContainer>
-              <img src="/img/WuriNone.png" />
-            </ImgContainer>
+            <div className="AuthImgContainer">
+              <div className="AuthImgBox">
+                <img src="/img/WuriNone.png" />
+              </div>
+            </div>
             <AuthHeaderContainer>
               <h1>Welcome back</h1>
             </AuthHeaderContainer>

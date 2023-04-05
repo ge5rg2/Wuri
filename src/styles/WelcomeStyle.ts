@@ -4,7 +4,6 @@ import palette from "./palette";
 export const MainContainer = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
   min-height: 100vh;
 `;
 
@@ -39,6 +38,19 @@ export const AuthContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  .AuthImgContainer {
+    display: flex;
+    justify-content: center;
+    .AuthImgBox {
+      top: 1rem;
+      position: fixed;
+      display: flex;
+      justify-content: center;
+      img {
+        width: 50%;
+      }
+    }
+  }
 `;
 
 export const AuthHeaderContainer = styled.div`
@@ -48,7 +60,7 @@ export const AuthHeaderContainer = styled.div`
   h1 {
     font-size: 2rem;
     font-weight: 550;
-    padding: 1rem 0.5rem;
+    padding: 1rem 4rem; // set screen width
   }
 `;
 

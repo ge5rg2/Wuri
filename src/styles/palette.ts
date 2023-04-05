@@ -73,6 +73,8 @@ const palette = {
     900: "#662400",
   },
   black: "#1F2937",
+  defaultColor: "#10a37f",
+  defaultActionColor: "#007bad",
 };
 
 export default palette;

@@ -14,6 +14,9 @@ import {
   SubContainer,
   ImgContainer,
   BtnContianer,
+  AuthContainer,
+  AuthHeaderContainer,
+  AuthInputContainer,
 } from "../styles/WelcomeStyle";
 
 type MyStateType = {
@@ -26,7 +29,7 @@ const Welcome = () => {
     email: "",
     password: "",
   });
-  const [newAccount, setNewAccount] = useState(false);
+  const [isAccount, setIsAccount] = useState(false);
   const [currentState, setCurrentState] = useState<MyStateType>({
     isSignUp: false,
     isLogIn: false,
@@ -47,7 +50,7 @@ const Welcome = () => {
     try {
       let data;
       const auth = getAuth();
-      if (newAccount) {
+      if (isAccount) {
         data = await createUserWithEmailAndPassword(auth, email, password);
       } else {
         data = await signInWithEmailAndPassword(auth, email, password);
@@ -58,11 +61,23 @@ const Welcome = () => {
       console.log(error);
     }
   };
-  const toggleAccount = () => setNewAccount((prev) => !prev);
+  const toggleAccount = () => setIsAccount((prev) => !prev);
 
   const onAuthClick = (e: React.MouseEvent) => {
     e.preventDefault();
     const { value } = e.target as HTMLInputElement;
+    setIsAccount(true);
+    if (value === "login") {
+      setCurrentState((prevState) => ({
+        isSignUp: false,
+        isLogIn: true,
+      }));
+    } else if (value === "signUp") {
+      setCurrentState((prevState) => ({
+        isSignUp: true,
+        isLogIn: false,
+      }));
+    }
   };
 
   const onSocialClick = async (event: React.MouseEvent) => {
@@ -82,8 +97,49 @@ const Welcome = () => {
 
   return (
     <MainContainer>
-      {newAccount ? (
-        ""
+      {isAccount ? (
+        currentState.isSignUp ? (
+          <AuthContainer>
+            <ImgContainer>
+              <img src="/img/WuriNone.png" />
+            </ImgContainer>
+            <AuthHeaderContainer>
+              <h1>Sign up</h1>
+            </AuthHeaderContainer>
+            <Btn
+              size="medium"
+              children="Log in"
+              ButtonType="Emphasized"
+              value="login"
+              onClick={onAuthClick}
+            />
+          </AuthContainer>
+        ) : (
+          <AuthContainer>
+            <ImgContainer>
+              <img src="/img/WuriNone.png" />
+            </ImgContainer>
+            <AuthHeaderContainer>
+              <h1>Welcome back</h1>
+            </AuthHeaderContainer>
+            <AuthInputContainer>
+              <Input size={3} placeholder="Emaill address" />
+            </AuthInputContainer>
+            <Btn
+              size="large"
+              children="Continue"
+              ButtonType="Emphasized"
+              value="continue"
+            />
+            <Btn
+              size="medium"
+              children="Sign up"
+              ButtonType="Emphasized"
+              value="signUp"
+              onClick={onAuthClick}
+            />
+          </AuthContainer>
+        )
       ) : (
         <SubContainer>
           <ImgContainer>
@@ -140,12 +196,12 @@ export default Welcome;
           />
           <input
             type="submit"
-            value={newAccount ? "Create Account" : "Log In"}
+            value={isAccount ? "Create Account" : "Log In"}
           />
           {error}
         </form>
         <span onClick={toggleAccount}>
-          {newAccount ? "Sign In" : "Create Account"}
+          {isAccount ? "Sign In" : "Create Account"}
         </span>
         <div>
           <Btn

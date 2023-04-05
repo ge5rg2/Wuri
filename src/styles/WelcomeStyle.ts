@@ -34,3 +34,26 @@ export const BtnContianer = styled.div`
     padding: 0 0.5rem;
   }
 `;
+
+export const AuthContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+export const AuthHeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  h1 {
+    font-size: 2rem;
+    font-weight: 550;
+    padding: 1rem 0.5rem;
+  }
+`;
+
+export const AuthInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0;
+`;

@@ -63,6 +63,17 @@ const Welcome = () => {
   const onAuthClick = (e: React.MouseEvent) => {
     e.preventDefault();
     const { value } = e.target as HTMLInputElement;
+    if (value == "login") {
+      setCurrentState((prevState) => ({
+        isSignUp: false,
+        isLogIn: true,
+      }));
+    } else if (value == "signUp") {
+      setCurrentState((prevState) => ({
+        isSignUp: true,
+        isLogIn: false,
+      }));
+    }
   };
 
   const onSocialClick = async (event: React.MouseEvent) => {
@@ -109,6 +120,7 @@ const Welcome = () => {
                 children="Sign up"
                 ButtonType="Emphasized"
                 value="signUp"
+                onClick={onAuthClick}
               />
             </div>
           </BtnContianer>

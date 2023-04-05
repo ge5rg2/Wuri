@@ -10,6 +10,9 @@ export const MainContainer = styled.div`
 export const SubContainer = styled.div`
   margin: 0 auto;
   padding-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   .greetingContainer {
     text-align: center;
     div {
@@ -51,6 +54,17 @@ export const AuthContainer = styled.div`
       }
     }
   }
+  .div_divider {
+    text-align: center;
+    padding-top: 2rem;
+    span:before {
+      content: "";
+      border-bottom: 1px solid #ffff;
+      flex: 1 0 auto;
+      height: 0.5em;
+      margin: 0;
+    }
+  }
 `;
 
 export const AuthHeaderContainer = styled.div`
@@ -67,5 +81,14 @@ export const AuthHeaderContainer = styled.div`
 export const AuthInputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
+`;
+
+export const AuthPcontainer = styled.div`
+  display: flex;
+  justify-content: center;
+  .a_SignUp {
+    cursor: pointer;
+    color: ${palette.defaultColor};
+  }
 `;

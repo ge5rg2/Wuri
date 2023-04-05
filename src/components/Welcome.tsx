@@ -17,6 +17,7 @@ import {
   AuthContainer,
   AuthHeaderContainer,
   AuthInputContainer,
+  AuthPcontainer,
 } from "../styles/WelcomeStyle";
 
 type MyStateType = {
@@ -127,19 +128,33 @@ const Welcome = () => {
             <AuthInputContainer>
               <Input size={3} placeholder="Emaill address" />
             </AuthInputContainer>
-            <Btn
-              size="large"
-              children="Continue"
-              ButtonType="Emphasized"
-              value="continue"
-            />
-            <Btn
-              size="medium"
-              children="Sign up"
-              ButtonType="Emphasized"
-              value="signUp"
-              onClick={onAuthClick}
-            />
+            <AuthInputContainer>
+              <Btn
+                size="large"
+                children="Continue"
+                ButtonType="Emphasized"
+                value="continue"
+              />
+            </AuthInputContainer>
+            <AuthPcontainer>
+              <p>
+                {`Don't have an account? `}
+                <a
+                  className="a_SignUp"
+                  onClick={() =>
+                    setCurrentState((prevState) => ({
+                      isSignUp: true,
+                      isLogIn: false,
+                    }))
+                  }
+                >
+                  Sign up
+                </a>
+              </p>
+            </AuthPcontainer>
+            <div className="div_divider">
+              <span>OR</span>
+            </div>
           </AuthContainer>
         )
       ) : (

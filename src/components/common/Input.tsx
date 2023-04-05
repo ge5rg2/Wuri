@@ -30,7 +30,7 @@ const getInputSize = (size?: 1 | 2 | 3) => {
 
 const Base = styled.input<BaseProps>`
   height: 3rem; // 40px
-  background-color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.bgColor} !important;
   color: ${(props) => props.theme.textColor};
   border-radius: 10px; // 4px
   border: 1px solid ${palette.gray[400]};

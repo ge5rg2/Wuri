@@ -52,7 +52,7 @@ const Welcome = () => {
     try {
       let data;
       const auth = getAuth();
-      if (isAccount) {
+      if (currentState.isSignUp) {
         data = await createUserWithEmailAndPassword(auth, email, password);
       } else {
         data = await signInWithEmailAndPassword(auth, email, password);
@@ -60,7 +60,9 @@ const Welcome = () => {
       console.log(data);
     } catch (error: any) {
       setError(error.message);
-      console.log(error);
+      if (error.message == "Firebase: Error (auth/email-already-in-use).") {
+        alert("This Email is already in use.");
+      }
     }
   };
   const toggleAccount = () => setIsAccount((prev) => !prev);
@@ -111,8 +113,24 @@ const Welcome = () => {
               <h1>Create your account</h1>
             </AuthHeaderContainer>
             <AuthInputContainer>
-              <Input size={3} placeholder="Emaill address" />
-              <Input size={3} placeholder="Password" />
+              <Input
+                name="email"
+                type="email"
+                placeholder="Emaill address"
+                required
+                size={3}
+                value={email}
+                onChange={onChange}
+              />
+              <Input
+                name="password"
+                type="password"
+                placeholder="Password"
+                required
+                size={3}
+                value={password}
+                onChange={onChange}
+              />
             </AuthInputContainer>
             <AuthInputContainer>
               <Btn
@@ -120,6 +138,7 @@ const Welcome = () => {
                 size="large"
                 ButtonType="Emphasized"
                 value="continue"
+                onClick={onSubmit}
               />
             </AuthInputContainer>
             <AuthPcontainer>
@@ -169,8 +188,24 @@ const Welcome = () => {
               <h1>Welcome back</h1>
             </AuthHeaderContainer>
             <AuthInputContainer>
-              <Input size={3} placeholder="Emaill address" />
-              <Input size={3} placeholder="Password" />
+              <Input
+                name="email"
+                type="email"
+                placeholder="Emaill address"
+                required
+                size={3}
+                value={email}
+                onChange={onChange}
+              />
+              <Input
+                name="password"
+                type="password"
+                placeholder="Password"
+                required
+                size={3}
+                value={password}
+                onChange={onChange}
+              />
             </AuthInputContainer>
             <AuthInputContainer>
               <Btn
@@ -178,6 +213,7 @@ const Welcome = () => {
                 size="large"
                 ButtonType="Emphasized"
                 value="continue"
+                onClick={onSubmit}
               />
             </AuthInputContainer>
             <AuthPcontainer>

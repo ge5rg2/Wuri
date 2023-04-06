@@ -1,6 +1,14 @@
 import styled from "styled-components";
 import palette from "./palette";
 
+export const AppContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
 export const MainContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -41,8 +49,7 @@ export const AuthContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  width: 300px;
+  width: 350px;
   .AuthImgContainer {
     display: flex;
     justify-content: center;
@@ -92,6 +99,7 @@ export const AuthHeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   h1 {
     font-size: 2rem;
     font-weight: 550;

@@ -6,6 +6,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, collection, getDocs, query, where } from "@firebase/firestore";
 import { useDispatch } from "./store";
 import { userActions } from "./store/userSlice";
+import { AppContainer, ImgContainer } from "./styles/WelcomeStyle";
 
 const App = () => {
   const [init, setInit] = useState(false);
@@ -85,7 +86,16 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      {init ? <Router /> : "Initializing..."}
+      {init ? (
+        <Router />
+      ) : (
+        <AppContainer>
+          <ImgContainer>
+            <img src="/img/WuriNone.png" />
+          </ImgContainer>
+          <div>Initializing...</div>
+        </AppContainer>
+      )}
     </>
   );
 };

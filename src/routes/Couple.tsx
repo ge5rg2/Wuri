@@ -19,7 +19,7 @@ import { useSelector, useDispatch } from "../store";
 import { userActions } from "../store/userSlice";
 import { getAuth } from "firebase/auth";
 import { SubContainer } from "../styles/HomeStyle";
-import Diarys from "../components/Diarys";
+import CoupleDiarys from "../components/CoupleDiarys";
 import Btn from "../components/common/Btn";
 import { Diary } from "../interface/tpyes";
 
@@ -130,7 +130,9 @@ const Couple = () => {
   };
 
   const diaryData: JSX.Element[] = diarys.map((el) => {
-    return <Diarys key={el.id} diary={el.text} obj={el} doc="couple_diarys" />;
+    return (
+      <CoupleDiarys key={el.id} diary={el.text} obj={el} doc="couple_diarys" />
+    );
   });
 
   const callCoupleData = async () => {
@@ -164,7 +166,6 @@ const Couple = () => {
   return (
     <>
       <MainContainer>
-        <div>Couple</div>
         {!isCouple && (
           <form onSubmit={onSubmit}>
             <Input
@@ -189,8 +190,8 @@ const Couple = () => {
                 src={coupleUrl + ""}
               />
               <Btn onClick={onWritePageClick} children="What's on your mind?" />
+              {diaryData}
             </SubContainer>
-            {diaryData}
           </>
         )}
       </MainContainer>

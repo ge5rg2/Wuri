@@ -19,7 +19,11 @@ import { useSelector } from "../store";
 import Btn from "../components/common/Btn";
 import { v4 as uuidv4 } from "uuid";
 import { getAuth } from "firebase/auth";
-import { MainContainer, SubContainer } from "../styles/HomeStyle";
+import {
+  MainContainer,
+  SubContainer,
+  IntroContainer,
+} from "../styles/HomeStyle";
 
 const Home = () => {
   const auth = getAuth();
@@ -78,13 +82,16 @@ const Home = () => {
     <>
       <MainContainer>
         <SubContainer>
-          <img
-            style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-            src={userStore.userUrl + ""}
-          />
-          <Btn onClick={onWritePageClick} children="What's on your mind?" />
+          <IntroContainer>
+            <img style={{ borderRadius: "50%" }} src={userStore.userUrl + ""} />
+            <Btn
+              onClick={onWritePageClick}
+              children={"What's on your mind " + userStore.userName + "?"}
+              ButtonType="Emphasized"
+            />
+          </IntroContainer>
+          {diaryData}
         </SubContainer>
-        {diaryData}
       </MainContainer>
     </>
   );

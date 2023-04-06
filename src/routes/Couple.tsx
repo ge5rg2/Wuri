@@ -1,4 +1,3 @@
-import { MainContainer } from "../styles/HomeStyle";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/common/Input";
@@ -18,7 +17,11 @@ import { dbService } from "../myBase";
 import { useSelector, useDispatch } from "../store";
 import { userActions } from "../store/userSlice";
 import { getAuth } from "firebase/auth";
-import { SubContainer } from "../styles/HomeStyle";
+import {
+  SubContainer,
+  MainContainer,
+  IntroContainer,
+} from "../styles/CoupleStyle";
 import CoupleDiarys from "../components/CoupleDiarys";
 import Btn from "../components/common/Btn";
 import { Diary } from "../interface/tpyes";
@@ -179,20 +182,21 @@ const Couple = () => {
           </form>
         )}
         {isCouple && (
-          <>
-            <SubContainer>
+          <SubContainer>
+            <IntroContainer>
               <img
-                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+                style={{ borderRadius: "50%" }}
                 src={userUrl + ""}
+                className="OwnerImg"
               />
-              <img
-                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-                src={coupleUrl + ""}
+              <img style={{ borderRadius: "50%" }} src={coupleUrl + ""} />
+              <Btn
+                onClick={onWritePageClick}
+                children={"What's on your mind " + userName + "?"}
               />
-              <Btn onClick={onWritePageClick} children="What's on your mind?" />
-              {diaryData}
-            </SubContainer>
-          </>
+            </IntroContainer>
+            {diaryData}
+          </SubContainer>
         )}
       </MainContainer>
     </>

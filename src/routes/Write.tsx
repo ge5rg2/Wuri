@@ -13,7 +13,7 @@ const Write = () => {
   const { type } = useParams();
   const navigate = useNavigate();
   const fileInput = useRef<HTMLInputElement>(null);
-  const { userUid, coupleId } = useSelector((state) => state.user);
+  const { userUid, coupleId, userUrl } = useSelector((state) => state.user);
   const [title, setTitle] = useState("");
   const [diary, setDiary] = useState("");
   const [diaryType, setDiaryType] = useState<string>("");
@@ -48,6 +48,7 @@ const Write = () => {
           text: diary,
           createdAt: date,
           creatorId: userUid,
+          creatorImg: userUrl,
           coupleId: coupleId,
           attachmentUrl,
         });

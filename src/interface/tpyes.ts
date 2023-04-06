@@ -31,6 +31,7 @@ export interface diaryProps {
   doc: string;
   diary: string;
   obj: any;
+  img?: any;
 }
 
 export interface menuState {

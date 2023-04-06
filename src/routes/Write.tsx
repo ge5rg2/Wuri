@@ -82,7 +82,7 @@ const Write = () => {
     }
   };
 
-  const onContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let { value } = e.target;
     setDiary(value);
   };
@@ -108,7 +108,8 @@ const Write = () => {
               value={title}
               onChange={onTitleChange}
               type="text"
-              placeholder="Summarize your day in one word"
+              maxLength={20}
+              placeholder="Summarize your day in one sentence"
             />
             {attachment && typeof attachment === "string" && (
               <div>
@@ -122,10 +123,9 @@ const Write = () => {
               onChange={onFileChange}
               ref={fileInput}
             />
-            <Input
+            <textarea
               value={diary}
               onChange={onContentChange}
-              type="text"
               placeholder="What's on your mind?"
             />
             <Input type="submit" value="diary" />

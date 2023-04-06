@@ -245,6 +245,7 @@ const Edit = () => {
                 <Input
                   className="title"
                   type="text"
+                  maxLength={20}
                   placeholder="Edit your diary title"
                   value={newTitle}
                   required

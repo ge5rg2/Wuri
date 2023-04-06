@@ -32,7 +32,7 @@ const Base = styled.input<BaseProps>`
   height: 3rem; // 40px
   background-color: ${(props) => props.theme.bgColor} !important;
   color: ${(props) => props.theme.textColor};
-  border-radius: 10px; // 4px
+  border-radius: 10px;
   border: 1px solid ${palette.gray[400]};
   outline: none;
 

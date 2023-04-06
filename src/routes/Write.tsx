@@ -99,40 +99,34 @@ const Write = () => {
   }, []);
 
   return (
-    <>
-      <MainContainer>
-        <div>Write</div>
-        <SubContainer>
-          <form onSubmit={onSubmit}>
-            <Input
-              value={title}
-              onChange={onTitleChange}
-              type="text"
-              maxLength={20}
-              placeholder="Summarize your day in one sentence"
-            />
-            {attachment && typeof attachment === "string" && (
-              <div>
-                <img src={attachment} width="50px" height="50px" />
-                <Btn onClick={onClearAttachment} children="Clear" />
-              </div>
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={onFileChange}
-              ref={fileInput}
-            />
-            <textarea
-              value={diary}
-              onChange={onContentChange}
-              placeholder="What's on your mind?"
-            />
-            <Input type="submit" value="diary" />
-          </form>
-        </SubContainer>
-      </MainContainer>
-    </>
+    <MainContainer>
+      <div>Write</div>
+      <SubContainer>
+        <form onSubmit={onSubmit}>
+          <Input
+            value={title}
+            onChange={onTitleChange}
+            type="text"
+            maxLength={20}
+            placeholder="Summarize your day in one sentence"
+          />
+          {attachment && typeof attachment === "string" && (
+            <div>
+              <img src={attachment} width="50px" height="50px" />
+              <Btn onClick={onClearAttachment} children="Clear" />
+            </div>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onFileChange}
+            ref={fileInput}
+          />
+          <textarea value={diary} onChange={onContentChange} maxLength={500} />
+          <Input type="submit" value="Submit" />
+        </form>
+      </SubContainer>
+    </MainContainer>
   );
 };
 

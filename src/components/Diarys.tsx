@@ -2,12 +2,22 @@ import { diaryProps } from "../interface/tpyes";
 import { useState, useEffect } from "react";
 import Btn from "./common/Btn";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+const DiaryContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: 0.5rem 0;
+  text-align: center;
+`;
 
 const Diarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {
+  const [date, setDate] = useState<string>("");
   const navigate = useNavigate();
 
   const onToggleDetail = () => {
-    console.log(obj);
+    console.log(obj.title);
     navigate(`/edit/${doc}/${obj.id}`);
   };
 
@@ -23,14 +33,27 @@ const Diarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {
   }, [DiaryTextRef]);
  */
 
+  useEffect(() => {
+    let dataDate = obj.createdAt.toDate();
+    setDate(
+      `${new Intl.DateTimeFormat("en-EN", {
+        year: "numeric",
+        month: "long",
+        weekday: "long",
+      }).format(dataDate)}`
+    );
+  }, []);
+
   return (
-    <div>
-      {obj.attachmentUrl && (
-        <img src={obj.attachmentUrl} height="50px" width="50px" />
-      )}
-      <h4>{diary}</h4>
-      <Btn children="Detail" onClick={onToggleDetail} ButtonType="Default" />
-    </div>
+    <DiaryContainer>
+      <div className="DateBox">{date}</div>
+      <Btn
+        children={obj.title ? obj.title : ""}
+        onClick={onToggleDetail}
+        ButtonType="Default"
+        size="large"
+      />
+    </DiaryContainer>
   );
 };
 

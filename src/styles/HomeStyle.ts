@@ -36,6 +36,7 @@ export const IntroContainer = styled.div`
   img {
     height: 60px;
     width: 60px;
+    cursor: pointer;
   }
   Button {
     margin-left: 0.5rem;

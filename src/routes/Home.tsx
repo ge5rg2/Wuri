@@ -24,6 +24,7 @@ import {
   SubContainer,
   IntroContainer,
 } from "../styles/HomeStyle";
+import Test from "../components/Test";
 
 const Home = () => {
   const auth = getAuth();
@@ -83,7 +84,11 @@ const Home = () => {
       <MainContainer>
         <SubContainer>
           <IntroContainer>
-            <img style={{ borderRadius: "50%" }} src={userStore.userUrl + ""} />
+            <img
+              style={{ borderRadius: "50%" }}
+              src={userStore.userUrl + ""}
+              onClick={() => navigate("/profile")}
+            />
             <Btn
               onClick={onWritePageClick}
               children={"What's on your mind " + userStore.userName + "?"}

@@ -11,6 +11,7 @@ import {
   SubContainer,
   FormContainer,
   UploadImgContainer,
+  UploadBtnContainer,
 } from "../styles/WriteStyle";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -23,6 +24,40 @@ const Write = () => {
   const [diary, setDiary] = useState("");
   const [diaryType, setDiaryType] = useState<string>("");
   const [attachment, setAttachment] = useState<any>("");
+  const [isDragging, setIsDragging] = useState(false);
+
+  const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer.files) {
+      setIsDragging(true);
+    }
+  };
+  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = e.dataTransfer?.files;
+    if (files?.length) {
+      const theFile = files[0];
+      const reader = new FileReader();
+      reader.onloadend = (finishedEvent) => {
+        const result = (finishedEvent.currentTarget as FileReader).result;
+        setAttachment(result);
+      };
+      reader.readAsDataURL(theFile);
+    }
+    setIsDragging(false);
+  };
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -122,10 +157,18 @@ const Write = () => {
               </UploadImgContainer>
             )}
             {attachment && typeof attachment === "string" ? (
-              <Btn onClick={onClearAttachment} children="Clear" />
+              <UploadBtnContainer>
+                <Btn onClick={onClearAttachment} children="Clear" />
+              </UploadBtnContainer>
             ) : (
-              <div className="upload">
-                <label htmlFor="file">Drag or click to upload</label>
+              <div
+                className="upload"
+                onDragEnter={onDragEnter}
+                onDragLeave={onDragLeave}
+                onDragOver={onDragOver}
+                onDrop={onDrop}
+              >
+                <label htmlFor="file">Drag & Drop a File Here</label>
                 <input
                   type="file"
                   accept="image/*"

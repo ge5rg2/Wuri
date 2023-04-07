@@ -37,6 +37,12 @@ export const SubContainer = styled.div`
 export const UploadImgContainer = styled.div`
   display: flex;
   justify-content: center;
+  border: 1px solid ${palette.gray[400]};
+`;
+
+export const UploadBtnContainer = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 export const FormContainer = styled.form`
@@ -49,17 +55,23 @@ export const FormContainer = styled.form`
     display: none;
   }
   #dropzone {
-    position: relative;
-    border: 1px solid wheat;
+    border: 1px solid ${palette.gray[400]};
+    &:hover {
+      border: 1px solid ${palette.gray[200]};
+    }
   }
   .upload {
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    &:hover {
-      background: rgb(77, 77, 77);
-      color: #fff;
+    text-align: center;
+    label {
+      cursor: pointer;
+      display: block;
+      padding: 2rem;
+
+      color: ${palette.gray[400]};
+      &:hover {
+        color: ${palette.gray[200]};
+      }
     }
   }
 `;

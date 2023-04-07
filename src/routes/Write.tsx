@@ -150,7 +150,7 @@ const Write = () => {
             maxLength={20}
             placeholder="Summarize your day in one sentence"
           />
-          <div id="dropzone">
+          <div className={isDragging ? "dropzone_dragging" : "dropzone"}>
             {attachment && typeof attachment === "string" && (
               <UploadImgContainer>
                 <img src={attachment} width="50px" height="50px" />

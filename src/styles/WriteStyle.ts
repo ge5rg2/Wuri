@@ -53,46 +53,57 @@ export const FormContainer = styled.form`
   #file {
     display: none;
   }
-  #dropzone {
+  .dropzone {
+    transition: all ease-in-out 0.3s;
     border: 2px dashed ${palette.gray[400]};
+  }
+  .dropzone_dragging {
+    transition: all ease-in-out 0.3s;
+    border: 2px dashed ${palette.defaultColor};
+    .upload {
+      text-align: center;
+      position: relative;
+      background-color: ${palette.gray[600]};
+      cursor: pointer;
+    }
+    .fileBtn {
+      opacity: 0.5;
+    }
+  }
+  .filePlaceholder {
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    padding: 4rem;
+    color: ${palette.gray[400]};
+  }
+  .filePlaceholder::before {
+    content: "Drag & Drop a File Here";
+    position: absolute;
+    top: 10%;
+    left: 25%;
+  }
+  .fileBtn {
+    display: block;
+    position: absolute;
+    cursor: pointer;
+    top: 40%;
+    left: 30%;
+    padding: 1rem;
+    border-radius: 10px;
+    font-weight: 500;
+    border: 1px solid ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.textColor};
+    color: ${(props) => props.theme.bgColor};
+    transition: all ease-in-out 0.3s;
     &:hover {
-      border: 2px dashed ${palette.gray[200]};
+      background-color: ${(props) => props.theme.bgColor};
+      color: ${(props) => props.theme.textColor};
     }
   }
   .upload {
     text-align: center;
     position: relative;
     cursor: pointer;
-    .filePlaceholder {
-      cursor: pointer;
-      text-align: center;
-      display: block;
-      padding: 4rem;
-      color: ${palette.gray[400]};
-    }
-    .filePlaceholder::before {
-      content: "Drag & Drop a File Here";
-      position: absolute;
-      top: 10%;
-      left: 25%;
-    }
-    .fileBtn {
-      display: block;
-      position: absolute;
-      cursor: pointer;
-      top: 40%;
-      left: 30%;
-      padding: 1rem;
-      border-radius: 10px;
-      font-weight: 500;
-      border: 1px solid ${(props) => props.theme.textColor};
-      background-color: ${(props) => props.theme.textColor};
-      color: ${(props) => props.theme.bgColor};
-      transition: all ease-in-out 0.5s;
-      &:hover {
-        background-color: ${(props) => props.theme.bgColor};
-        color: ${(props) => props.theme.textColor};
-      }
-    }
   }
 `;

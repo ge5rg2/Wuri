@@ -6,7 +6,12 @@ import { ref, uploadString, getDownloadURL } from "@firebase/storage";
 import { useSelector } from "../store";
 import { v4 as uuidv4 } from "uuid";
 import Btn from "../components/common/Btn";
-import { MainContainer, SubContainer } from "../styles/WriteStyle";
+import {
+  MainContainer,
+  SubContainer,
+  FormContainer,
+  UploadImgContainer,
+} from "../styles/WriteStyle";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Write = () => {
@@ -102,7 +107,7 @@ const Write = () => {
     <MainContainer>
       <div>Write</div>
       <SubContainer>
-        <form onSubmit={onSubmit}>
+        <FormContainer onSubmit={onSubmit}>
           <Input
             value={title}
             onChange={onTitleChange}
@@ -110,21 +115,31 @@ const Write = () => {
             maxLength={20}
             placeholder="Summarize your day in one sentence"
           />
-          {attachment && typeof attachment === "string" && (
-            <div>
-              <img src={attachment} width="50px" height="50px" />
+          <div id="dropzone">
+            {attachment && typeof attachment === "string" && (
+              <UploadImgContainer>
+                <img src={attachment} width="50px" height="50px" />
+              </UploadImgContainer>
+            )}
+            {attachment && typeof attachment === "string" ? (
               <Btn onClick={onClearAttachment} children="Clear" />
-            </div>
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={onFileChange}
-            ref={fileInput}
-          />
+            ) : (
+              <div className="upload">
+                <label htmlFor="file">Drag or click to upload</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={onFileChange}
+                  ref={fileInput}
+                  id="file"
+                />
+              </div>
+            )}
+          </div>
+
           <textarea value={diary} onChange={onContentChange} maxLength={500} />
           <Input type="submit" value="Submit" />
-        </form>
+        </FormContainer>
       </SubContainer>
     </MainContainer>
   );

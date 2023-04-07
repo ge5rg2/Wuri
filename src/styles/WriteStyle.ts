@@ -29,11 +29,37 @@ export const MainContainer = styled.div`
 export const SubContainer = styled.div`
   margin: 0 auto;
   width: 350px;
-  form {
-    display: flex;
-    flex-direction: column;
-  }
   img {
     border-radius: 50%;
+  }
+`;
+
+export const UploadImgContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export const FormContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+  input {
+    padding: 1rem;
+  }
+  #file {
+    display: none;
+  }
+  #dropzone {
+    position: relative;
+    border: 1px solid wheat;
+  }
+  .upload {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      background: rgb(77, 77, 77);
+      color: #fff;
+    }
   }
 `;

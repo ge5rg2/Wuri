@@ -168,7 +168,10 @@ const Write = () => {
                 onDragOver={onDragOver}
                 onDrop={onDrop}
               >
-                <label htmlFor="file">Drag & Drop a File Here</label>
+                <label className="filePlaceholder" htmlFor="file"></label>
+                <label className="fileBtn" htmlFor="file">
+                  Click to upload
+                </label>
                 <input
                   type="file"
                   accept="image/*"

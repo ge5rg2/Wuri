@@ -37,7 +37,6 @@ export const SubContainer = styled.div`
 export const UploadImgContainer = styled.div`
   display: flex;
   justify-content: center;
-  border: 1px solid ${palette.gray[400]};
 `;
 
 export const UploadBtnContainer = styled.div`
@@ -55,22 +54,44 @@ export const FormContainer = styled.form`
     display: none;
   }
   #dropzone {
-    border: 1px solid ${palette.gray[400]};
+    border: 2px dashed ${palette.gray[400]};
     &:hover {
-      border: 1px solid ${palette.gray[200]};
+      border: 2px dashed ${palette.gray[200]};
     }
   }
   .upload {
-    cursor: pointer;
     text-align: center;
-    label {
+    position: relative;
+    cursor: pointer;
+    .filePlaceholder {
       cursor: pointer;
+      text-align: center;
       display: block;
-      padding: 2rem;
-
+      padding: 4rem;
       color: ${palette.gray[400]};
+    }
+    .filePlaceholder::before {
+      content: "Drag & Drop a File Here";
+      position: absolute;
+      top: 10%;
+      left: 25%;
+    }
+    .fileBtn {
+      display: block;
+      position: absolute;
+      cursor: pointer;
+      top: 40%;
+      left: 30%;
+      padding: 1rem;
+      border-radius: 10px;
+      font-weight: 500;
+      border: 1px solid ${(props) => props.theme.textColor};
+      background-color: ${(props) => props.theme.textColor};
+      color: ${(props) => props.theme.bgColor};
+      transition: all ease-in-out 0.5s;
       &:hover {
-        color: ${palette.gray[200]};
+        background-color: ${(props) => props.theme.bgColor};
+        color: ${(props) => props.theme.textColor};
       }
     }
   }

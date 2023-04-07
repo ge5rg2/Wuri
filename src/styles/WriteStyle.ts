@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import palette from "./palette";
 
+export const Subtitle = styled.div`
+  margin: 1rem 0 0.5rem 0;
+  text-align: start;
+`;
+
 export const MainContainer = styled.div`
   padding-top: 3rem;
   margin: 0 auto;
@@ -15,6 +20,7 @@ export const MainContainer = styled.div`
     color: ${palette.gray[200]};
     font-size: 1rem;
     padding: 1rem;
+    margin-bottom: 1rem;
     background-color: ${(props) => props.theme.bgColor};
   }
   textarea::-webkit-scrollbar {
@@ -29,24 +35,33 @@ export const MainContainer = styled.div`
 export const SubContainer = styled.div`
   margin: 0 auto;
   width: 350px;
-  img {
-    border-radius: 50%;
-  }
 `;
 
 export const UploadImgContainer = styled.div`
   display: flex;
   justify-content: center;
+  padding: 1rem;
+  img {
+    max-width: 300px;
+    max-height: 450px;
+  }
 `;
 
 export const UploadBtnContainer = styled.div`
   display: flex;
   justify-content: center;
+  padding: 1rem 0;
+  Button {
+    width: 30%;
+  }
 `;
 
 export const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
+  Button {
+    margin-bottom: 1rem;
+  }
   input {
     padding: 1rem;
   }
@@ -54,10 +69,12 @@ export const FormContainer = styled.form`
     display: none;
   }
   .dropzone {
+    border-radius: 10px;
     transition: all ease-in-out 0.3s;
     border: 2px dashed ${palette.gray[400]};
   }
   .dropzone_dragging {
+    border-radius: 10px;
     transition: all ease-in-out 0.3s;
     border: 2px dashed ${palette.defaultColor};
     .upload {

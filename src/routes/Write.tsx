@@ -12,6 +12,7 @@ import {
   FormContainer,
   UploadImgContainer,
   UploadBtnContainer,
+  Subtitle,
 } from "../styles/WriteStyle";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -24,7 +25,9 @@ const Write = () => {
   const [diary, setDiary] = useState("");
   const [diaryType, setDiaryType] = useState<string>("");
   const [attachment, setAttachment] = useState<any>("");
+  const [fileName, setFileName] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
+  const [date, setDate] = useState<string>("");
 
   const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -49,6 +52,7 @@ const Write = () => {
     const files = e.dataTransfer?.files;
     if (files?.length) {
       const theFile = files[0];
+      setFileName(theFile.name);
       const reader = new FileReader();
       reader.onloadend = (finishedEvent) => {
         const result = (finishedEvent.currentTarget as FileReader).result;
@@ -98,12 +102,14 @@ const Write = () => {
     }
     setDiary("");
     setTitle("");
+
     onClearAttachment();
     return diaryType == "couple" ? navigate("/couple") : navigate("/");
   };
 
   const onClearAttachment = () => {
     setAttachment("");
+    setFileName("");
     if (fileInput.current) {
       fileInput.current.value = "";
     }
@@ -113,6 +119,7 @@ const Write = () => {
     const files = e.target?.files;
     if (files?.length) {
       const theFile = files[0];
+      setFileName(theFile.name);
       const reader = new FileReader();
       reader.onloadend = (finishedEvent) => {
         const result = (finishedEvent.currentTarget as FileReader).result;
@@ -133,6 +140,14 @@ const Write = () => {
   };
 
   useEffect(() => {
+    let dataDate = new Date();
+    setDate(
+      `${new Intl.DateTimeFormat("en-EN", {
+        year: "numeric",
+        month: "long",
+        weekday: "long",
+      }).format(dataDate)}`
+    );
     if (type) {
       setDiaryType(type);
     }
@@ -140,8 +155,8 @@ const Write = () => {
 
   return (
     <MainContainer>
-      <div>Write</div>
       <SubContainer>
+        <Subtitle>{title ? title : "Title"}</Subtitle>
         <FormContainer onSubmit={onSubmit}>
           <Input
             value={title}
@@ -150,15 +165,21 @@ const Write = () => {
             maxLength={20}
             placeholder="Summarize your day in one sentence"
           />
+          <Subtitle>{attachment ? fileName : "Image"}</Subtitle>
           <div className={isDragging ? "dropzone_dragging" : "dropzone"}>
             {attachment && typeof attachment === "string" && (
               <UploadImgContainer>
-                <img src={attachment} width="50px" height="50px" />
+                <img src={attachment} />
               </UploadImgContainer>
             )}
             {attachment && typeof attachment === "string" ? (
               <UploadBtnContainer>
-                <Btn onClick={onClearAttachment} children="Clear" />
+                <Btn
+                  onClick={onClearAttachment}
+                  children="Clear"
+                  size="medium"
+                  ButtonType="Default"
+                />
               </UploadBtnContainer>
             ) : (
               <div
@@ -183,8 +204,15 @@ const Write = () => {
             )}
           </div>
 
+          <Subtitle>{diary ? date : "Diary"}</Subtitle>
           <textarea value={diary} onChange={onContentChange} maxLength={500} />
-          <Input type="submit" value="Submit" />
+          <Btn
+            children="Submit"
+            size="large"
+            ButtonType="Emphasized"
+            value="Submit"
+            onClick={onSubmit}
+          />
         </FormContainer>
       </SubContainer>
     </MainContainer>

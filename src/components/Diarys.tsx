@@ -40,6 +40,7 @@ const Diarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {
         year: "numeric",
         month: "long",
         weekday: "long",
+        day: "numeric",
       }).format(dataDate)}`
     );
   }, []);

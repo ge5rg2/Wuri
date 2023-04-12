@@ -2,7 +2,8 @@ import {
   MainContainer,
   DiaryContainer,
   FormContainer,
-} from "../styles/HomeStyle";
+  ImgContainer,
+} from "../styles/EditStyle";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   doc,
@@ -83,12 +84,20 @@ const Edit = () => {
       setAttachment(data.attachmentUrl);
       setFirstAttachment(data.attachmentUrl);
       setDate(
+        `${new Intl.DateTimeFormat("en-EN", {
+          year: "numeric",
+          month: "long",
+          weekday: "long",
+          day: "numeric",
+        }).format(dataDate)}`
+      );
+      /*       setDate(
         `${dataDate.getFullYear()}년 ${
           dataDate.getMonth() + 1
         }월 ${dataDate.getDate()}일 ${new Intl.DateTimeFormat("ko-KR", {
           weekday: "long",
         }).format(data.createdAt.toDate())}`
-      );
+      ); */
     } else {
       console.log("No such document");
     }
@@ -198,104 +207,107 @@ const Edit = () => {
   }, []);
 
   return (
-    <>
-      <MainContainer>
-        <DiaryContainer>
-          {" "}
-          {attachment == "" ? (
-            ""
-          ) : (
-            <img src={attachment} width="50px" height="50px" />
-          )}
-          <div>
-            {diaryInfo.isEdit
-              ? date + " " + (diaryInfo.isEdit ? "(편집됨)" : "")
-              : date}
-          </div>
-          {editing ? (
-            ""
-          ) : (
-            <>
-              <div>{diaryInfo.title}</div>
-              <div>{diaryInfo.text}</div>
-            </>
-          )}
-        </DiaryContainer>
-
-        {editAble ? (
-          editing ? (
-            <>
-              {attachment && typeof attachment === "string" && (
-                <div>
-                  {attachment == "" ? (
-                    ""
-                  ) : (
-                    <img src={attachment} width="50px" height="50px" />
-                  )}
-                  <Btn onClick={onClearAttachment} children="Clear" />
-                </div>
-              )}
-              <FormContainer>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={onFileChange}
-                  ref={fileInput}
-                />
-                <Input
-                  className="title"
-                  type="text"
-                  maxLength={20}
-                  placeholder="Edit your diary title"
-                  value={newTitle}
-                  required
-                  onChange={onChange}
-                />
-                <Input
-                  className="text"
-                  type="text"
-                  placeholder="Edit your diary"
-                  value={newDiary}
-                  required
-                  onChange={onChange}
-                />
-              </FormContainer>
-              <Btn children="Update Diary" onClick={onSubmit} />
-              <Btn children="Delete Diary" onClick={onDeleteClick} />
-              <Btn onClick={toggleEditing} children="Cancel" />
-            </>
-          ) : (
-            <>
-              <Btn children="Edit Diary" onClick={toggleEditing} />
-            </>
-          )
+    <MainContainer>
+      <DiaryContainer>
+        {" "}
+        {attachment == "" ? (
+          ""
         ) : (
-          ""
+          <ImgContainer>
+            <img src={attachment} />
+          </ImgContainer>
         )}
-        {docName == "diarys" ? (
+        <div>
+          {diaryInfo.isEdit
+            ? date + " " + (diaryInfo.isEdit ? "(Edited)" : "")
+            : date}
+        </div>
+        {editing ? (
           ""
+        ) : (
+          <div className="DiaryContent">
+            <div className="DiaryContent_title">{diaryInfo.title}</div>
+            <div className="DiaryContent_text">{diaryInfo.text}</div>
+          </div>
+        )}
+      </DiaryContainer>
+
+      {editAble ? (
+        editing ? (
+          <>
+            {attachment && typeof attachment === "string" && (
+              <div>
+                {attachment == "" ? (
+                  ""
+                ) : (
+                  <ImgContainer>
+                    <img src={attachment} />
+                  </ImgContainer>
+                )}
+                <Btn onClick={onClearAttachment} children="Clear" />
+              </div>
+            )}
+            <FormContainer>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={onFileChange}
+                ref={fileInput}
+              />
+              <Input
+                className="title"
+                type="text"
+                maxLength={20}
+                placeholder="Edit your diary title"
+                value={newTitle}
+                required
+                onChange={onChange}
+              />
+              <Input
+                className="text"
+                type="text"
+                placeholder="Edit your diary"
+                value={newDiary}
+                required
+                onChange={onChange}
+              />
+            </FormContainer>
+            <Btn children="Update Diary" onClick={onSubmit} />
+            <Btn children="Delete Diary" onClick={onDeleteClick} />
+            <Btn onClick={toggleEditing} children="Cancel" />
+          </>
         ) : (
           <>
-            <div>
-              <img
-                src={userUrl + ""}
-                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-              />
-              <form onSubmit={onCommentSubmit}>
-                <Input
-                  placeholder="Commment!"
-                  type="text"
-                  value={commentValue}
-                  onChange={onCommentChange}
-                />
-                <Input type="submit" value="Submit" />
-              </form>
-            </div>
-            {commentData}
+            <Btn children="Edit Diary" onClick={toggleEditing} />
           </>
-        )}
-      </MainContainer>
-    </>
+        )
+      ) : (
+        ""
+      )}
+      {docName == "diarys" ? (
+        ""
+      ) : (
+        <>
+          <div>
+            <img
+              src={userUrl + ""}
+              style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+            />
+
+            <form onSubmit={onCommentSubmit}>
+              <Input
+                placeholder="Commment!"
+                type="text"
+                value={commentValue}
+                onChange={onCommentChange}
+              />
+              <Input type="submit" value="Submit" />
+            </form>
+            {commentData}
+          </div>
+        </>
+      )}
+    </MainContainer>
   );
 };
 

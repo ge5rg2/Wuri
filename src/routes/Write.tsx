@@ -146,6 +146,7 @@ const Write = () => {
         year: "numeric",
         month: "long",
         weekday: "long",
+        day: "numeric",
       }).format(dataDate)}`
     );
     if (type) {

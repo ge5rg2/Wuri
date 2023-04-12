@@ -43,7 +43,7 @@ export const UploadImgContainer = styled.div`
   padding: 1rem;
   img {
     max-width: 300px;
-    max-height: 450px;
+    max-height: 500px;
   }
 `;
 

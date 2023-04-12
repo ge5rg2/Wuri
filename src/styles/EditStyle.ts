@@ -7,13 +7,12 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 350px;
 `;
 
 export const DiaryContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  width: 350px;
   .DiaryContent {
     display: flex;
     flex-direction: column;
@@ -23,6 +22,7 @@ export const DiaryContainer = styled.div`
       border: 1px solid #ffff;
       padding: 1rem;
       height: 50vh;
+      width: 100%;
     }
 
     .DiaryContent_title {

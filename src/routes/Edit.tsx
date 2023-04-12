@@ -217,7 +217,7 @@ const Edit = () => {
             <img src={attachment} />
           </ImgContainer>
         )}
-        <div>
+        <div style={{ textAlign: "center" }}>
           {diaryInfo.isEdit
             ? date + " " + (diaryInfo.isEdit ? "(Edited)" : "")
             : date}

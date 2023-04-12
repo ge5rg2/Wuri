@@ -227,7 +227,12 @@ const Edit = () => {
         ) : (
           <div className="DiaryContent">
             <div className="DiaryContent_title">{diaryInfo.title}</div>
-            <div className="DiaryContent_text">{diaryInfo.text}</div>
+            <div
+              className="DiaryContent_text"
+              style={{ whiteSpace: "pre-wrap" }}
+            >
+              {diaryInfo.text}
+            </div>
           </div>
         )}
       </DiaryContainer>

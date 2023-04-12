@@ -206,7 +206,12 @@ const Write = () => {
           </div>
 
           <Subtitle>{diary ? date : "Diary"}</Subtitle>
-          <textarea value={diary} onChange={onContentChange} maxLength={500} />
+          <textarea
+            style={{ whiteSpace: "pre-wrap" }}
+            value={diary}
+            onChange={onContentChange}
+            maxLength={500}
+          />
           <Btn
             children="Submit"
             size="large"

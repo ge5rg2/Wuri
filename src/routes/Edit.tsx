@@ -217,7 +217,7 @@ const Edit = () => {
             <img src={attachment} />
           </ImgContainer>
         )}
-        <div style={{ textAlign: "center" }}>
+        <div className="DiaryContent_date" style={{ textAlign: "center" }}>
           {diaryInfo.isEdit
             ? date + " " + (diaryInfo.isEdit ? "(Edited)" : "")
             : date}
@@ -282,9 +282,13 @@ const Edit = () => {
             <Btn onClick={toggleEditing} children="Cancel" />
           </>
         ) : (
-          <>
-            <Btn children="Edit Diary" onClick={toggleEditing} />
-          </>
+          <Btn
+            className="EditBtn_style"
+            children="Edit Diary"
+            onClick={toggleEditing}
+            ButtonType="Emphasized"
+            size="large"
+          />
         )
       ) : (
         ""

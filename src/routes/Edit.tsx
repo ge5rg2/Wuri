@@ -265,22 +265,22 @@ const Edit = () => {
     <MainContainer>
       <DiaryContainer>
         {" "}
-        {attachment == "" ? (
-          ""
-        ) : (
-          <ImgContainer>
-            <img src={attachment} />
-          </ImgContainer>
-        )}
-        <div className="DiaryContent_date" style={{ textAlign: "center" }}>
-          {diaryInfo.isEdit
-            ? date + " " + (diaryInfo.isEdit ? "(Edited)" : "")
-            : date}
-        </div>
         {editing ? (
           ""
         ) : (
           <div className="DiaryContent">
+            {attachment == "" ? (
+              ""
+            ) : (
+              <ImgContainer>
+                <img src={attachment} />
+              </ImgContainer>
+            )}
+            <div className="DiaryContent_date" style={{ textAlign: "center" }}>
+              {diaryInfo.isEdit
+                ? date + " " + (diaryInfo.isEdit ? "(Edited)" : "")
+                : date}
+            </div>
             <div className="DiaryContent_title">{diaryInfo.title}</div>
             <div
               className="DiaryContent_text"
@@ -333,12 +333,6 @@ const Edit = () => {
                   </div>
                 )}
               </div>
-              {/*               <input
-                type="file"
-                accept="image/*"
-                onChange={onFileChange}
-                ref={fileInput}
-              /> */}
               <Input
                 className="title"
                 type="text"

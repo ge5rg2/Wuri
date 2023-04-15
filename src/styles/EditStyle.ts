@@ -51,11 +51,9 @@ export const ImgContainer = styled.div`
 `;
 
 export const MainEditContainer = styled.div`
-  padding-top: 3rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 350px;
   textarea {
     border-radius: 10px;

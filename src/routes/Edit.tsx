@@ -1,9 +1,14 @@
 import {
   MainContainer,
   DiaryContainer,
-  FormContainer,
   ImgContainer,
+  MainEditContainer,
 } from "../styles/EditStyle";
+import {
+  UploadBtnContainer,
+  FormContainer,
+  UploadImgContainer,
+} from "../styles/WriteStyle";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   doc,
@@ -51,9 +56,43 @@ const Edit = () => {
   const [editAble, setEditAble] = useState<boolean>(true);
   const [commentInfo, setCommentInfo] = useState<Comment[]>([]);
   const fileInput = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const DiaryTextRef = doc(dbService, `${docName}`, `${id}`);
   const urlRef = ref(storageService, diaryInfo.attachmentUrl);
+
+  const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer.files) {
+      setIsDragging(true);
+    }
+  };
+  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = e.dataTransfer?.files;
+    if (files?.length) {
+      const theFile = files[0];
+      const reader = new FileReader();
+      reader.onloadend = (finishedEvent) => {
+        const result = (finishedEvent.currentTarget as FileReader).result;
+        setAttachment(result);
+      };
+      reader.readAsDataURL(theFile);
+    }
+    setIsDragging(false);
+  };
 
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this diary?");
@@ -123,8 +162,24 @@ const Edit = () => {
     }
   };
 
-  const toggleEditing = () => setEditing((prev) => !prev);
+  const toggleEditing = () => {
+    if (attachment == "") {
+      setAttachment(firstAttachment);
+    }
+    setEditing((prev) => !prev);
+  };
 
+  const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    let { value } = e.target;
+    setNewDiary(value);
+  };
+
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let { value } = e.target;
+    setNewTitle(value);
+  };
+
+  /* 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const type = e.target.classList[2];
     const {
@@ -135,7 +190,7 @@ const Edit = () => {
     } else if (type == "text") {
       setNewDiary(value);
     }
-  };
+  }; */
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -239,26 +294,51 @@ const Edit = () => {
 
       {editAble ? (
         editing ? (
-          <>
-            {attachment && typeof attachment === "string" && (
-              <div>
-                {attachment == "" ? (
-                  ""
-                ) : (
-                  <ImgContainer>
-                    <img src={attachment} />
-                  </ImgContainer>
-                )}
-                <Btn onClick={onClearAttachment} children="Clear" />
-              </div>
-            )}
+          <MainEditContainer>
             <FormContainer>
-              <input
+              <div className={isDragging ? "dropzone_dragging" : "dropzone"}>
+                {attachment && typeof attachment === "string" && (
+                  <UploadImgContainer>
+                    <img src={attachment} />
+                  </UploadImgContainer>
+                )}
+                {attachment && typeof attachment === "string" ? (
+                  <UploadBtnContainer>
+                    <Btn
+                      onClick={onClearAttachment}
+                      children="Clear"
+                      size="medium"
+                      ButtonType="Default"
+                    />
+                  </UploadBtnContainer>
+                ) : (
+                  <div
+                    className="upload"
+                    onDragEnter={onDragEnter}
+                    onDragLeave={onDragLeave}
+                    onDragOver={onDragOver}
+                    onDrop={onDrop}
+                  >
+                    <label className="filePlaceholder" htmlFor="file"></label>
+                    <label className="fileBtn" htmlFor="file">
+                      Click to upload
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={onFileChange}
+                      ref={fileInput}
+                      id="file"
+                    />
+                  </div>
+                )}
+              </div>
+              {/*               <input
                 type="file"
                 accept="image/*"
                 onChange={onFileChange}
                 ref={fileInput}
-              />
+              /> */}
               <Input
                 className="title"
                 type="text"
@@ -266,21 +346,19 @@ const Edit = () => {
                 placeholder="Edit your diary title"
                 value={newTitle}
                 required
-                onChange={onChange}
+                onChange={onTitleChange}
               />
-              <Input
-                className="text"
-                type="text"
-                placeholder="Edit your diary"
+              <textarea
+                style={{ whiteSpace: "pre-wrap" }}
                 value={newDiary}
-                required
-                onChange={onChange}
+                onChange={onContentChange}
+                maxLength={500}
               />
             </FormContainer>
             <Btn children="Update Diary" onClick={onSubmit} />
             <Btn children="Delete Diary" onClick={onDeleteClick} />
             <Btn onClick={toggleEditing} children="Cancel" />
-          </>
+          </MainEditContainer>
         ) : (
           <Btn
             className="EditBtn_style"

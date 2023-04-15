@@ -25,22 +25,20 @@ export const DiaryContainer = styled.div`
   .DiaryContent {
     display: flex;
     flex-direction: column;
-    border: 1px solid #ffff;
+    border: 1px solid ${palette.gray[200]};
+    border-radius: 10px;
     .DiaryContent_text {
-      border: 1px solid #ffff;
       padding: 1rem;
       height: 50vh;
     }
 
     .DiaryContent_title {
       padding: 1rem;
-      border: 1px solid #ffff;
       font-size: 1.5rem;
+      border-bottom: 1px solid ${palette.gray[200]};
     }
   }
 `;
-
-export const FormContainer = styled.div``;
 
 export const ImgContainer = styled.div`
   display: flex;
@@ -49,5 +47,32 @@ export const ImgContainer = styled.div`
     cursor: pointer;
     max-width: 200px;
     max-height: 350px;
+  }
+`;
+
+export const MainEditContainer = styled.div`
+  padding-top: 3rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 350px;
+  textarea {
+    border-radius: 10px;
+    resize: none;
+    height: 50vh;
+    width: 100%;
+    color: ${palette.gray[200]};
+    font-size: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: ${(props) => props.theme.bgColor};
+  }
+  textarea::-webkit-scrollbar {
+    width: 10px;
+  }
+  textarea::-webkit-scrollbar-thumb {
+    background-color: ${palette.gray[200]};
+    border-radius: 10px;
   }
 `;

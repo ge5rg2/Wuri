@@ -3,6 +3,7 @@ import {
   DiaryContainer,
   ImgContainer,
   MainEditContainer,
+  EditBtnContainer,
 } from "../styles/EditStyle";
 import {
   UploadBtnContainer,
@@ -264,11 +265,10 @@ const Edit = () => {
   return (
     <MainContainer>
       <DiaryContainer>
-        {" "}
         {editing ? (
           ""
         ) : (
-          <div className="DiaryContent">
+          <>
             {attachment == "" ? (
               ""
             ) : (
@@ -281,14 +281,16 @@ const Edit = () => {
                 ? date + " " + (diaryInfo.isEdit ? "(Edited)" : "")
                 : date}
             </div>
-            <div className="DiaryContent_title">{diaryInfo.title}</div>
-            <div
-              className="DiaryContent_text"
-              style={{ whiteSpace: "pre-wrap" }}
-            >
-              {diaryInfo.text}
+            <div className="DiaryContent">
+              <div className="DiaryContent_title">{diaryInfo.title}</div>
+              <div
+                className="DiaryContent_text"
+                style={{ whiteSpace: "pre-wrap" }}
+              >
+                {diaryInfo.text}
+              </div>
             </div>
-          </div>
+          </>
         )}
       </DiaryContainer>
 
@@ -333,6 +335,14 @@ const Edit = () => {
                   </div>
                 )}
               </div>
+              <div
+                className="DiaryContent_date"
+                style={{ textAlign: "center" }}
+              >
+                {diaryInfo.isEdit
+                  ? date + " " + (diaryInfo.isEdit ? "(Edited)" : "")
+                  : date}
+              </div>
               <Input
                 className="title"
                 type="text"
@@ -349,9 +359,26 @@ const Edit = () => {
                 maxLength={500}
               />
             </FormContainer>
-            <Btn children="Update Diary" onClick={onSubmit} />
-            <Btn children="Delete Diary" onClick={onDeleteClick} />
-            <Btn onClick={toggleEditing} children="Cancel" />
+            <EditBtnContainer>
+              <Btn
+                ButtonType="Emphasized"
+                size="large"
+                children="Update"
+                onClick={onSubmit}
+              />
+              <Btn
+                ButtonType="Critical"
+                size="large"
+                children="Delete"
+                onClick={onDeleteClick}
+              />
+              <Btn
+                ButtonType="Default"
+                size="large"
+                onClick={toggleEditing}
+                children="Cancel"
+              />
+            </EditBtnContainer>
           </MainEditContainer>
         ) : (
           <Btn

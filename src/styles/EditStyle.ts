@@ -9,6 +9,9 @@ export const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 350px;
+  .DiaryContent_date {
+    padding: 0.5rem 0;
+  }
   .EditBtn_style {
     width: 100%;
     margin: 1rem 0;
@@ -19,9 +22,6 @@ export const DiaryContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  .DiaryContent_date {
-    padding: 1rem 0;
-  }
   .DiaryContent {
     display: flex;
     flex-direction: column;
@@ -73,4 +73,9 @@ export const MainEditContainer = styled.div`
     background-color: ${palette.gray[200]};
     border-radius: 10px;
   }
+`;
+
+export const EditBtnContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;

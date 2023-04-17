@@ -294,7 +294,9 @@ const Edit = () => {
     <MainContainer>
       {expandImg ? (
         <ExpandImgContainer>
-          <img src={attachment} />
+          <div className="modal__box">
+            <img src={attachment} />
+          </div>
         </ExpandImgContainer>
       ) : (
         ""

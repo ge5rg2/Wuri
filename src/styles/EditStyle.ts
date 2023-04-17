@@ -51,10 +51,28 @@ export const ImgContainer = styled.div`
 `;
 
 export const ExpandImgContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  img {
-    cursor: pointer;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  .modal__box {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+    img {
+      @media (max-width: 800px) {
+        cursor: pointer;
+        max-width: 350px;
+        max-height: 500px;
+      }
+
+      cursor: pointer;
+      max-width: 600px;
+      max-height: 850px;
+    }
   }
 `;
 

@@ -103,6 +103,9 @@ export const CommentContainer = styled.div`
       }
     }
   }
+  .ContainerOpacity {
+    opacity: 0.2;
+  }
 `;
 
 export const CommentDataContainer = styled.div`
@@ -140,6 +143,42 @@ export const CommentDataContainer = styled.div`
           margin: 0.5rem 0;
         }
       }
+    }
+  }
+`;
+
+export const EditModal = styled.div`
+  position: absolute;
+  z-index: 5;
+  right: 2rem;
+  top: -0.2rem;
+  opacity: 1 !important;
+  background-color: ${palette.gray[500]};
+  display: flex;
+  .deleteIcon {
+    span {
+      font-size: 0.8rem;
+    }
+    transition: all ease-in-out 0.3s;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    &:hover {
+      background-color: ${palette.red[500]};
+    }
+  }
+  .editIcon {
+    span {
+      font-size: 0.8rem;
+    }
+    transition: all ease-in-out 0.3s;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    cursor: pointer;
+    &:hover {
+      background-color: ${palette.defaultColor};
     }
   }
 `;

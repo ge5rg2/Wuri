@@ -33,6 +33,8 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {  
   line-height: 1;
+  position: relative;
+
 }
 menu, ol, ul {
   list-style: none;

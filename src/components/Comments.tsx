@@ -11,7 +11,7 @@ import {
   deleteDoc,
   onSnapshot,
 } from "@firebase/firestore";
-import { CommentDataContainer } from "../styles/EditStyle";
+import { CommentDataContainer, EditModal } from "../styles/EditStyle";
 import { dbService } from "../myBase";
 import { getAuth } from "firebase/auth";
 import { useState, useEffect, useRef } from "react";
@@ -76,7 +76,27 @@ const Comments: React.FC<commentProps> = ({ info }) => {
 
   return (
     <CommentDataContainer>
-      <div className="CommentData_container">
+      {isMore ? (
+        <EditModal>
+          <div className="editIcon">
+            <EditIcon />
+            <span>Edit comment</span>
+          </div>
+          <div className="deleteIcon">
+            <DeleteForeverIcon />
+            <span>Delete comment</span>
+          </div>
+        </EditModal>
+      ) : (
+        ""
+      )}
+      <div
+        className={
+          isMore
+            ? "ContainerOpacity CommentData_container"
+            : "CommentData_container"
+        }
+      >
         <div className="CommentData_img">
           <img
             src={createdUser.userUrl}
@@ -90,7 +110,7 @@ const Comments: React.FC<commentProps> = ({ info }) => {
             </div>
             <div className="CommentData_comment_subcontainer_more">
               <div className="CommentData_comment_date">{date}</div>
-              {isMore ? <div>ss</div> : ""}
+
               {canEdit ? (
                 <div
                   ref={moreRef}

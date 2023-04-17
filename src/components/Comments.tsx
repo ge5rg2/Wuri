@@ -14,14 +14,20 @@ import {
 import { CommentDataContainer } from "../styles/EditStyle";
 import { dbService } from "../myBase";
 import { getAuth } from "firebase/auth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const Comments: React.FC<commentProps> = ({ info }) => {
+  const moreRef = useRef<HTMLDivElement>(null);
   const [createdUser, setCreatedUser] = useState<commentUser>({
     userName: "",
     userUrl: "",
   });
   const [date, setDate] = useState<string>("");
+  const [canEdit, setCanEdit] = useState<boolean>(false);
+  const [isMore, setIsMore] = useState<boolean>(false);
   const { text, creatorId, diaryid, id } = info;
   const currentUser = getAuth().currentUser;
 
@@ -34,6 +40,9 @@ const Comments: React.FC<commentProps> = ({ info }) => {
     const userQuerySnapshot = await getDocs(userQuery);
     const { userName, userUrl } = userQuerySnapshot.docs[0].data();
     setCreatedUser({ userName, userUrl });
+    if (currentUser?.uid == creatorId) {
+      setCanEdit(true);
+    }
   };
 
   const dateSet = () => {
@@ -47,9 +56,22 @@ const Comments: React.FC<commentProps> = ({ info }) => {
     );
   };
 
+  const onMoreClick = () => {
+    setIsMore((props) => !props);
+  };
+
   useEffect(() => {
     getCommentUserInfo();
     dateSet();
+    const handleClick = (event: any) => {
+      if (moreRef.current && !moreRef.current.contains(event.target)) {
+        setIsMore(false);
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
   }, []);
 
   return (
@@ -61,11 +83,33 @@ const Comments: React.FC<commentProps> = ({ info }) => {
             style={{ width: "50px", height: "50px", borderRadius: "50%" }}
           />
         </div>
-        <div className="CommentData_comment">
-          <div>{createdUser.userName}</div>
-          <div>{date}</div>
-          <div>{text}</div>
-          {currentUser?.uid == creatorId ? <Btn children="edit" /> : ""}
+        <div className="CommentData_comment_container">
+          <div className="CommentData_comment_subcontainer">
+            <div className="CommentData_comment_name">
+              {createdUser.userName}
+            </div>
+            <div className="CommentData_comment_subcontainer_more">
+              <div className="CommentData_comment_date">{date}</div>
+              {isMore ? <div>ss</div> : ""}
+              {canEdit ? (
+                <div
+                  ref={moreRef}
+                  onClick={onMoreClick}
+                  className="CommentData_comment_more"
+                >
+                  <MoreHorizIcon />
+                </div>
+              ) : (
+                <div
+                  className="CommentData_comment_more"
+                  style={{ visibility: "hidden" }}
+                >
+                  <MoreHorizIcon />
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="CommentData_comment_text">{text}</div>
         </div>
       </div>
     </CommentDataContainer>

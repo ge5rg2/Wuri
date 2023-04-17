@@ -433,6 +433,7 @@ const Edit = () => {
                 type="text"
                 value={commentValue}
                 onChange={onCommentChange}
+                maxLength={50}
               />
               <div className="CommentForm_Btn">
                 <Btn

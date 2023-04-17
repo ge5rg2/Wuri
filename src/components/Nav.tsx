@@ -31,23 +31,14 @@ const Nav = () => {
   };
 
   const onDiaryClcik = () => {
-    dispatch(menuActions.openDiary());
-    dispatch(menuActions.closeCouple());
-    dispatch(menuActions.closeProfile());
     navigate("/");
   };
 
   const onProfileClcik = () => {
-    dispatch(menuActions.openProfile());
-    dispatch(menuActions.closeCouple());
-    dispatch(menuActions.closeDiary());
     navigate("/profile");
   };
 
   const onCoupleClcik = () => {
-    dispatch(menuActions.openCouple());
-    dispatch(menuActions.closeDiary());
-    dispatch(menuActions.closeProfile());
     navigate("/couple");
   };
 

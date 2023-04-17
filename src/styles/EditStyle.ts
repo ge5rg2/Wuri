@@ -14,7 +14,7 @@ export const MainContainer = styled.div`
   }
   .EditBtn_style {
     width: 100%;
-    margin: 1rem 0;
+    margin: 1rem 0 0 0;
   }
 `;
 
@@ -81,9 +81,11 @@ export const EditBtnContainer = styled.div`
 `;
 
 export const CommentContainer = styled.div`
+  margin: 1rem 0 0 0;
   .CommemtForm_container {
     width: 350px;
     display: flex;
+    margin-bottom: 1.5rem;
     .CommemtForm_img {
       margin-right: 0.5rem;
     }
@@ -96,6 +98,7 @@ export const CommentContainer = styled.div`
       }
       input {
         width: 100%;
+        word-wrap: break-word;
         padding: 1rem;
       }
     }
@@ -105,12 +108,38 @@ export const CommentContainer = styled.div`
 export const CommentDataContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 0.5rem 0 1rem 0;
   width: 100%;
+  position: relative;
   .CommentData_container {
     display: flex;
     .CommentData_img {
+      margin-right: 0.5rem;
     }
-    .CommentData_comment {
+    .CommentData_comment_container {
+      .CommentData_comment_subcontainer {
+        display: flex;
+        align-items: center;
+        .CommentData_comment_name {
+          margin-right: 0.5rem;
+        }
+        .CommentData_comment_subcontainer_more {
+          display: flex;
+          align-items: center;
+          .CommentData_comment_date {
+            font-size: 0.8rem;
+            color: ${palette.gray[400]};
+          }
+          .CommentData_comment_more {
+            position: absolute;
+            cursor: pointer;
+            right: 0;
+          }
+        }
+        .CommentData_comment_text {
+          margin: 0.5rem 0;
+        }
+      }
     }
   }
 `;

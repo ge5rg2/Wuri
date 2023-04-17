@@ -145,6 +145,11 @@ export const CommentDataContainer = styled.div`
       }
     }
   }
+  .CommentForm_Btn {
+    button:first-child {
+      margin-right: 0.5rem;
+    }
+  }
 `;
 
 export const EditModal = styled.div`
@@ -160,7 +165,7 @@ export const EditModal = styled.div`
       font-size: 0.8rem;
     }
     transition: all ease-in-out 0.3s;
-    padding: 0.5rem;
+    padding: 1rem;
     cursor: pointer;
     display: flex;
     align-items: center;

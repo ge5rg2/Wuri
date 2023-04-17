@@ -79,3 +79,38 @@ export const EditBtnContainer = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const CommentContainer = styled.div`
+  .CommemtForm_container {
+    width: 350px;
+    display: flex;
+    .CommemtForm_img {
+      margin-right: 0.5rem;
+    }
+    .CommemtForm_form {
+      width: 100%;
+      .CommentForm_Btn {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+      }
+      input {
+        width: 100%;
+        padding: 1rem;
+      }
+    }
+  }
+`;
+
+export const CommentDataContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  .CommentData_container {
+    display: flex;
+    .CommentData_img {
+    }
+    .CommentData_comment {
+    }
+  }
+`;

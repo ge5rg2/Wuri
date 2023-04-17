@@ -11,6 +11,7 @@ import {
   deleteDoc,
   onSnapshot,
 } from "@firebase/firestore";
+import { CommentDataContainer } from "../styles/EditStyle";
 import { dbService } from "../myBase";
 import { getAuth } from "firebase/auth";
 import { useState, useEffect } from "react";
@@ -52,16 +53,22 @@ const Comments: React.FC<commentProps> = ({ info }) => {
   }, []);
 
   return (
-    <>
-      <img
-        src={createdUser.userUrl}
-        style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-      />
-      <div>{createdUser.userName}</div>
-      <div>{date}</div>
-      <div>{text}</div>
-      {currentUser?.uid == creatorId ? <Btn children="edit" /> : ""}
-    </>
+    <CommentDataContainer>
+      <div className="CommentData_container">
+        <div className="CommentData_img">
+          <img
+            src={createdUser.userUrl}
+            style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+          />
+        </div>
+        <div className="CommentData_comment">
+          <div>{createdUser.userName}</div>
+          <div>{date}</div>
+          <div>{text}</div>
+          {currentUser?.uid == creatorId ? <Btn children="edit" /> : ""}
+        </div>
+      </div>
+    </CommentDataContainer>
   );
 };
 

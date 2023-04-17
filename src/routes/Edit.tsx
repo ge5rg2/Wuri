@@ -4,6 +4,7 @@ import {
   ImgContainer,
   MainEditContainer,
   EditBtnContainer,
+  CommentContainer,
 } from "../styles/EditStyle";
 import {
   UploadBtnContainer,
@@ -418,25 +419,34 @@ const Edit = () => {
       {docName == "diarys" ? (
         ""
       ) : (
-        <>
-          <div>
-            <img
-              src={userUrl + ""}
-              style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-            />
-
-            <form onSubmit={onCommentSubmit}>
+        <CommentContainer>
+          <div className="CommemtForm_container">
+            <div className="CommemtForm_img">
+              <img
+                src={userUrl + ""}
+                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+              />
+            </div>
+            <div className="CommemtForm_form">
               <Input
-                placeholder="Commment!"
+                placeholder="Commment"
                 type="text"
                 value={commentValue}
                 onChange={onCommentChange}
               />
-              <Input type="submit" value="Submit" />
-            </form>
-            {commentData}
+              <div className="CommentForm_Btn">
+                <Btn
+                  size="small"
+                  ButtonType="Emphasized"
+                  children="Submit"
+                  value="Submit"
+                  onClick={onCommentSubmit}
+                />
+              </div>
+            </div>
           </div>
-        </>
+          {commentData}
+        </CommentContainer>
       )}
     </MainContainer>
   );

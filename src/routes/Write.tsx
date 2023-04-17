@@ -28,6 +28,7 @@ const Write = () => {
   const [fileName, setFileName] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
   const [date, setDate] = useState<string>("");
+  const [emojiValue, setEmojiValue] = useState("");
 
   const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -139,6 +140,26 @@ const Write = () => {
     setTitle(value);
   };
 
+  const onPaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const clipboardData = e.clipboardData;
+    const pastedData = clipboardData.getData("text");
+    const { selectionStart, selectionEnd } = e.currentTarget;
+    const newValue =
+      emojiValue.slice(0, selectionStart) +
+      pastedData +
+      emojiValue.slice(selectionEnd);
+    setEmojiValue(newValue);
+  };
+
+  const handleCompositionEnd = (e: any) => {
+    const textarea = e.target as HTMLTextAreaElement;
+    const newValue =
+      emojiValue.slice(0, textarea.selectionStart) +
+      e.data +
+      emojiValue.slice(textarea.selectionEnd);
+    setEmojiValue(newValue);
+  };
+
   useEffect(() => {
     let dataDate = new Date();
     setDate(
@@ -210,6 +231,8 @@ const Write = () => {
             style={{ whiteSpace: "pre-wrap" }}
             value={diary}
             onChange={onContentChange}
+            onCompositionEnd={handleCompositionEnd}
+            onPaste={onPaste}
             maxLength={500}
           />
           <Btn

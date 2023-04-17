@@ -58,6 +58,7 @@ const Edit = () => {
   const [commentInfo, setCommentInfo] = useState<Comment[]>([]);
   const fileInput = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [emojiValue, setEmojiValue] = useState("");
 
   const DiaryTextRef = doc(dbService, `${docName}`, `${id}`);
   const urlRef = ref(storageService, diaryInfo.attachmentUrl);
@@ -257,6 +258,26 @@ const Edit = () => {
     return <Comments key={el.id} info={el} />;
   });
 
+  const onPaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const clipboardData = e.clipboardData;
+    const pastedData = clipboardData.getData("text");
+    const { selectionStart, selectionEnd } = e.currentTarget;
+    const newValue =
+      emojiValue.slice(0, selectionStart) +
+      pastedData +
+      emojiValue.slice(selectionEnd);
+    setEmojiValue(newValue);
+  };
+
+  const handleCompositionEnd = (e: any) => {
+    const textarea = e.target as HTMLTextAreaElement;
+    const newValue =
+      emojiValue.slice(0, textarea.selectionStart) +
+      e.data +
+      emojiValue.slice(textarea.selectionEnd);
+    setEmojiValue(newValue);
+  };
+
   useEffect(() => {
     getDiaryInfo();
     getCommentInfo();
@@ -356,6 +377,8 @@ const Edit = () => {
                 style={{ whiteSpace: "pre-wrap" }}
                 value={newDiary}
                 onChange={onContentChange}
+                onCompositionEnd={handleCompositionEnd}
+                onPaste={onPaste}
                 maxLength={500}
               />
             </FormContainer>

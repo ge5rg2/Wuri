@@ -1,4 +1,4 @@
-import { MainContainer } from "../styles/HomeStyle";
+import { MainContainer, SubContainer } from "../styles/ProfileStyle";
 import React, { useEffect, useState, useRef } from "react";
 import {
   doc,
@@ -107,11 +107,11 @@ const Profile = () => {
   const getLoginMethod = () => {
     if (user !== null) {
       if (provider == "password") {
-        setLoginMethod("Log in via Email account");
+        setLoginMethod("Logged in with Email account");
       } else if (provider == "google.com") {
-        setLoginMethod("Log in via Google account");
+        setLoginMethod("Logged in with Google account");
       } else if (provider == "github.com") {
-        setLoginMethod("Log in via Github account");
+        setLoginMethod("Logged in with Github account");
       }
     }
   };

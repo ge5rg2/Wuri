@@ -5,6 +5,7 @@ import {
   MainEditContainer,
   EditBtnContainer,
   CommentContainer,
+  ExpandImgContainer,
 } from "../styles/EditStyle";
 import {
   UploadBtnContainer,
@@ -60,6 +61,7 @@ const Edit = () => {
   const fileInput = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [emojiValue, setEmojiValue] = useState("");
+  const [expandImg, setExpandImg] = useState<boolean>(false);
 
   const DiaryTextRef = doc(dbService, `${docName}`, `${id}`);
   const urlRef = ref(storageService, diaryInfo.attachmentUrl);
@@ -279,6 +281,10 @@ const Edit = () => {
     setEmojiValue(newValue);
   };
 
+  const onImgClick = () => {
+    setExpandImg(true);
+  };
+
   useEffect(() => {
     getDiaryInfo();
     getCommentInfo();
@@ -286,6 +292,13 @@ const Edit = () => {
 
   return (
     <MainContainer>
+      {expandImg ? (
+        <ExpandImgContainer>
+          <img src={attachment} />
+        </ExpandImgContainer>
+      ) : (
+        ""
+      )}
       <DiaryContainer>
         {editing ? (
           ""
@@ -294,7 +307,7 @@ const Edit = () => {
             {attachment == "" ? (
               ""
             ) : (
-              <ImgContainer>
+              <ImgContainer onClick={onImgClick}>
                 <img src={attachment} />
               </ImgContainer>
             )}

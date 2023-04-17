@@ -50,6 +50,14 @@ export const ImgContainer = styled.div`
   }
 `;
 
+export const ExpandImgContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  img {
+    cursor: pointer;
+  }
+`;
+
 export const MainEditContainer = styled.div`
   margin: 0 auto;
   display: flex;

@@ -313,21 +313,21 @@ const Profile = () => {
           <Btn onClick={onEditProfile} children="Cancel" />
         </>
       ) : (
-        <>
+        <SubContainer>
           <img
             src={userUrl + ""}
-            style={{ height: "10%", width: "10%", borderRadius: "50%" }}
+            style={{ height: "50px", width: "50px", borderRadius: "50%" }}
           />
           <div>{userName}</div>
           <div>{loginMethod}</div>
           <Btn children="Edit profile" onClick={onEditProfile} />
-        </>
+        </SubContainer>
       )}
       {isCouple ? (
         <>
           <img
             src={coupleUrl + "-"}
-            style={{ height: "10%", width: "10%", borderRadius: "50%" }}
+            style={{ height: "50px", width: "50px", borderRadius: "50%" }}
           />
           <div>{coupleName}</div>
           <Btn onClick={disconnectCouple} children="Disconnect" />

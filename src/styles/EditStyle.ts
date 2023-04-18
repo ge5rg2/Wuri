@@ -59,6 +59,7 @@ export const ExpandImgContainer = styled.div`
   background: rgba(0, 0, 0, 0.8);
   .modal__box {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     height: 100vh;
     align-items: center;
@@ -68,7 +69,6 @@ export const ExpandImgContainer = styled.div`
         max-width: 350px;
         max-height: 500px;
       }
-
       cursor: pointer;
       max-width: 600px;
       max-height: 850px;

@@ -10,4 +10,7 @@ export const MainContainer = styled.div`
   align-items: center;
 `;
 
-export const SubContainer = styled.div``;
+export const SubContainer = styled.div`
+  border: 1px solid #ffff;
+  width: 350px;
+`;

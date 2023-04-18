@@ -3,6 +3,19 @@ import { useState, useEffect } from "react";
 import Btn from "./common/Btn";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import {
+  doc,
+  collection,
+  getDocs,
+  query,
+  where,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  onSnapshot,
+  orderBy,
+} from "@firebase/firestore";
+import { dbService } from "../myBase";
 
 const CoupleDiaryContainer = styled.div`
   display: flex;
@@ -25,11 +38,22 @@ const DiaryContainer = styled.div`
 
 const CoupleDiarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {
   const [date, setDate] = useState<string>("");
+  const [userImg, setUserImg] = useState<string>("");
   const navigate = useNavigate();
 
   const onToggleDetail = () => {
-    console.log(obj.creatorImg);
     navigate(`/edit/${doc}/${obj.id}`);
+  };
+
+  const getUserImg = async () => {
+    const userQuery = query(
+      collection(dbService, "userInfo"),
+      where("userId", "==", obj.creatorId)
+    );
+
+    const userQuerySnapshot = await getDocs(userQuery);
+    const { userUrl } = userQuerySnapshot.docs[0].data();
+    setUserImg(userUrl);
   };
 
   // firestore already give us data that edited diary
@@ -45,6 +69,7 @@ const CoupleDiarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {
  */
 
   useEffect(() => {
+    getUserImg();
     let dataDate = obj.createdAt.toDate();
     setDate(
       `${new Intl.DateTimeFormat("en-EN", {
@@ -57,7 +82,7 @@ const CoupleDiarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {
 
   return (
     <CoupleDiaryContainer>
-      <img src={obj.creatorImg + ""} height="50px" width="50px" />
+      <img src={userImg + ""} height="50px" width="50px" />
       <DiaryContainer>
         <h4>{date}</h4>
         <Btn

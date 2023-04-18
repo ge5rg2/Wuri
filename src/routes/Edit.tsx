@@ -39,6 +39,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "../store";
 import Comments from "../components/Comments";
 import { Comment } from "../interface/tpyes";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 const Edit = () => {
   const navigate = useNavigate();
@@ -293,9 +294,9 @@ const Edit = () => {
   return (
     <MainContainer>
       {expandImg ? (
-        <ExpandImgContainer>
+        <ExpandImgContainer className="modal__container">
           <div className="modal__box">
-            <img src={attachment} />
+            <img src={attachment} onClick={() => setExpandImg(false)} />
           </div>
         </ExpandImgContainer>
       ) : (

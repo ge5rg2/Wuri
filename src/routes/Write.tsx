@@ -93,7 +93,6 @@ const Write = () => {
           text: diary,
           createdAt: date,
           creatorId: userUid,
-          creatorImg: userUrl,
           coupleId: coupleId,
           attachmentUrl,
         });

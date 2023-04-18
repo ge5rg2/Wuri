@@ -11,6 +11,10 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "../store";
 import { menuActions } from "../store/menuSlice";
+import GroupIcon from "@mui/icons-material/Group";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 
 const Nav = () => {
   const dispatch = useDispatch();
@@ -61,11 +65,7 @@ const Nav = () => {
   return (
     <Wraper>
       <MainContainer>
-        <IconContainer
-          /*           onMouseOver={onMenuMouseOver}
-          onMouseLeave={onMenuMouseLeave} */
-          onClick={onMenuClick}
-        >
+        <IconContainer onClick={onMenuClick}>
           {menuState.isMenu ? (
             <>
               <KeyboardDoubleArrowRightIcon
@@ -75,15 +75,19 @@ const Nav = () => {
               <SubContainer>
                 <div className="subNav">
                   <div onClick={onSignOut} className="subNavDiv">
-                    Sign out
+                    <LogoutIcon />
+                    Log out
                   </div>
                   <div className="subNavDiv" onClick={onDiaryClcik}>
+                    <MenuBookIcon />
                     Diary
                   </div>
                   <div className="subNavDiv" onClick={onProfileClcik}>
+                    <AssignmentIndIcon />
                     Profile
                   </div>
                   <div className="subNavDiv" onClick={onCoupleClcik}>
+                    <GroupIcon />
                     Couple
                   </div>
                 </div>

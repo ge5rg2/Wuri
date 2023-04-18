@@ -76,6 +76,7 @@ const Base = styled.button<BaseProps>`
   border-radius: 10px;
   background: none;
   border: none;
+  transition: all ease-in-out 0.3s;
   cursor: pointer;
 
   ${({ ButtonType }) => getButtonType(ButtonType)};

@@ -39,3 +39,24 @@ export const IntroContainer = styled.div`
     left: -1.5rem;
   }
 `;
+
+export const ConnectContainer = styled.div`
+  padding-bottom: 3rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 350px;
+  button {
+    width: 100%;
+  }
+  input {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 550;
+  }
+`;

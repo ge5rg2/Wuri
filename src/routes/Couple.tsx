@@ -21,6 +21,7 @@ import {
   SubContainer,
   MainContainer,
   IntroContainer,
+  ConnectContainer,
 } from "../styles/CoupleStyle";
 import CoupleDiarys from "../components/CoupleDiarys";
 import Btn from "../components/common/Btn";
@@ -41,12 +42,18 @@ const Couple = () => {
 
   const onCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { value } = e.target;
+    value = value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
     setCoupleCode(value);
   };
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const codeRef = collection(dbService, "connect");
+
+    if (!coupleCode) {
+      alert("Please enter the code");
+      return;
+    }
     const snap = await getDoc(doc(dbService, "connect", `${coupleCode}`));
     if (typeof snap.data() == "undefined") {
       alert("That code is Undefind!");
@@ -125,7 +132,8 @@ const Couple = () => {
             )
           );
         }
-        return alert(`Connected with ${userData.userName}`);
+        alert(`Connected with ${userData.userName}`);
+        return window.location.reload();
       } else {
         return alert("cancel");
       }
@@ -168,18 +176,27 @@ const Couple = () => {
 
   return (
     <>
-      <MainContainer>
+      <MainContainer style={!isCouple ? { justifyContent: "center" } : {}}>
         {!isCouple && (
-          <form onSubmit={onSubmit}>
-            <Input
-              type="text"
-              placeholder="Type couple code!"
-              value={coupleCode}
-              onChange={onCodeChange}
-              maxLength={6}
-            />
-            <Btn type="submit" children="Check" />
-          </form>
+          <ConnectContainer>
+            <h1>Verification🔑</h1>
+            <form>
+              <Input
+                type="text"
+                placeholder="Type couple code!"
+                value={coupleCode}
+                onChange={onCodeChange}
+                maxLength={6}
+              />
+              <Btn
+                type="submit"
+                ButtonType="Emphasized"
+                size="large"
+                children="Check"
+                onClick={onSubmit}
+              />
+            </form>
+          </ConnectContainer>
         )}
         {isCouple && (
           <SubContainer>

@@ -7,7 +7,7 @@ export const Subtitle = styled.div`
 `;
 
 export const MainContainer = styled.div`
-  padding-top: 3rem;
+  padding-top: 4rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

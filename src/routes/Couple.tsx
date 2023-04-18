@@ -205,8 +205,13 @@ const Couple = () => {
                 style={{ borderRadius: "50%" }}
                 src={userUrl + ""}
                 className="OwnerImg"
+                onClick={() => navigate("/profile")}
               />
-              <img style={{ borderRadius: "50%" }} src={coupleUrl + ""} />
+              <img
+                style={{ borderRadius: "50%" }}
+                src={coupleUrl + ""}
+                onClick={() => navigate("/profile")}
+              />
               <Btn
                 onClick={onWritePageClick}
                 children={"What's on your mind " + userName + "?"}

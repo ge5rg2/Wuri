@@ -2,7 +2,7 @@ import styled from "styled-components";
 import palette from "./palette";
 
 export const MainContainer = styled.div`
-  padding-top: 3rem;
+  padding-top: 4rem;
   padding-bottom: 3rem;
   margin: 0 auto;
   display: flex;
@@ -82,6 +82,7 @@ export const MainEditContainer = styled.div`
   flex-direction: column;
   width: 350px;
   textarea {
+    margin-top: 0.5rem;
     border-radius: 10px;
     resize: none;
     height: 50vh;

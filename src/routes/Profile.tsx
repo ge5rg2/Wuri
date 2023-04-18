@@ -1,4 +1,11 @@
-import { MainContainer, SubContainer } from "../styles/ProfileStyle";
+import {
+  MainContainer,
+  SubContainer,
+  ProfileEditContainer,
+  UploadImgContainer,
+  UploadBtnContainer,
+  FormContainer,
+} from "../styles/ProfileStyle";
 import React, { useEffect, useState, useRef } from "react";
 import {
   doc,
@@ -32,6 +39,7 @@ const Profile = () => {
   const [editProfile, setEditProfile] = useState<boolean>(false);
   const [editUserName, setEditUserName] = useState<string>("");
   const [attachment, setAttachment] = useState<any>("");
+  const [isDragging, setIsDragging] = useState(false);
   const { userUid, userUrl, userName, coupleId, coupleName, coupleUrl } =
     useSelector((state) => state.user);
 
@@ -107,11 +115,11 @@ const Profile = () => {
   const getLoginMethod = () => {
     if (user !== null) {
       if (provider == "password") {
-        setLoginMethod("Logged in with Email account");
+        setLoginMethod("이메일 계정으로 로그인 됨");
       } else if (provider == "google.com") {
-        setLoginMethod("Logged in with Google account");
+        setLoginMethod("구글 계정으로 로그인 됨");
       } else if (provider == "github.com") {
-        setLoginMethod("Logged in with Github account");
+        setLoginMethod("깃허브 계정으로 로그인 됨");
       }
     }
   };
@@ -281,6 +289,39 @@ const Profile = () => {
     // need to change userInfo document
   };
 
+  const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer.files) {
+      setIsDragging(true);
+    }
+  };
+  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = e.dataTransfer?.files;
+    if (files?.length) {
+      const theFile = files[0];
+      const reader = new FileReader();
+      reader.onloadend = (finishedEvent) => {
+        const result = (finishedEvent.currentTarget as FileReader).result;
+        setAttachment(result);
+      };
+      reader.readAsDataURL(theFile);
+    }
+    setIsDragging(false);
+  };
+
   useEffect(() => {
     getMyAccount();
   }, []);
@@ -288,39 +329,69 @@ const Profile = () => {
   return (
     <MainContainer>
       {editProfile ? (
-        <>
-          <form>
-            <Input
-              type="text"
-              placeholder="User Name"
-              value={editUserName}
-              onChange={onChange}
-            />
-            {attachment && typeof attachment === "string" && (
-              <div>
-                <img src={attachment} width="50px" height="50px" />
-                <Btn onClick={onClearAttachment} children="Clear" />
-              </div>
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={onFileChange}
-              ref={fileInput}
-            />
-          </form>
+        <ProfileEditContainer>
+          <FormContainer>
+            <div className={isDragging ? "dropzone_dragging" : "dropzone"}>
+              {attachment && typeof attachment === "string" && (
+                <UploadImgContainer>
+                  <img src={attachment} />
+                </UploadImgContainer>
+              )}
+              {attachment && typeof attachment === "string" ? (
+                <UploadBtnContainer>
+                  <Btn
+                    onClick={onClearAttachment}
+                    children="Clear"
+                    size="medium"
+                    ButtonType="Default"
+                  />
+                </UploadBtnContainer>
+              ) : (
+                <div
+                  className="upload"
+                  onDragEnter={onDragEnter}
+                  onDragLeave={onDragLeave}
+                  onDragOver={onDragOver}
+                  onDrop={onDrop}
+                >
+                  <label className="filePlaceholder" htmlFor="file"></label>
+                  <label className="fileBtn" htmlFor="file">
+                    Click to upload
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={onFileChange}
+                    ref={fileInput}
+                    id="file"
+                  />
+                </div>
+              )}
+            </div>
+          </FormContainer>
+          <Input
+            type="text"
+            placeholder="User Name"
+            value={editUserName}
+            onChange={onChange}
+          />
           <Btn children="Update Diary" onClick={onSubmit} />
           <Btn onClick={onEditProfile} children="Cancel" />
-        </>
+        </ProfileEditContainer>
       ) : (
         <SubContainer>
           <img
             src={userUrl + ""}
-            style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+            style={{ height: "150px", width: "150px", borderRadius: "50%" }}
           />
-          <div>{userName}</div>
-          <div>{loginMethod}</div>
-          <Btn children="Edit profile" onClick={onEditProfile} />
+          <div className="profile__userName">{userName}</div>
+          <div className="profile__loginMethod">{loginMethod}</div>
+          <Btn
+            children="Edit profile"
+            ButtonType="Default"
+            size="medium"
+            onClick={onEditProfile}
+          />
         </SubContainer>
       )}
       {isCouple ? (

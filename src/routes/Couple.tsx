@@ -81,6 +81,7 @@ const Couple = () => {
         `Are you sure connected to ${userData.userName}?`
       );
       if (ok) {
+        const date = new Date();
         const q = query(
           collection(dbService, "userInfo"),
           where("userId", "==", data?.creatorId)
@@ -89,6 +90,7 @@ const Couple = () => {
         const { id } = querySnapshot.docs[0];
         await updateDoc(doc(dbService, "userInfo", `${id}`), {
           coupleId: userUid,
+          coupleDate: date,
         });
         const q2 = query(
           collection(dbService, "userInfo"),
@@ -99,6 +101,7 @@ const Couple = () => {
           doc(dbService, "userInfo", `${querySnapshot2.docs[0].id}`),
           {
             coupleId: data?.creatorId,
+            coupleDate: date,
           }
         );
         const CoupleUserQuery = query(

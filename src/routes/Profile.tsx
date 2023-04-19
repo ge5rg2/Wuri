@@ -44,6 +44,7 @@ const Profile = () => {
   const [diarySize, setDiarySize] = useState(0);
   const [coupleDiarySize, setCoupleDiarySize] = useState(0);
   const [commentsSize, setCommentsSize] = useState(0);
+  const [matchedDate, setMatchedDate] = useState<string>("");
   const { userUid, userUrl, userName, coupleId, coupleName, coupleUrl } =
     useSelector((state) => state.user);
 
@@ -89,6 +90,7 @@ const Profile = () => {
       collection(dbService, "comments"),
       where("creatorId", "==", userUid)
     );
+
     const diaryQuerySnapshot = await getDocs(diaryQ);
     const coupleDiarySnapshot = await getDocs(coupleDiaryQ);
     const commentsSnapshot = await getDocs(commentsQ);
@@ -105,6 +107,7 @@ const Profile = () => {
 
     if (coupleId) {
       setIsCouple(true);
+      getCoupleDate();
     } else {
       const codeRef = collection(dbService, "connect");
       const q = query(codeRef, where("creatorId", "==", userUid));
@@ -131,6 +134,27 @@ const Profile = () => {
         setEditUserName(userName);
       }
     }
+  };
+
+  const getCoupleDate = async () => {
+    const userInfoQ = query(
+      collection(dbService, "userInfo"),
+      where("userId", "==", userUid)
+    );
+
+    const infoSnapshot = await getDocs(userInfoQ);
+    const coupleDate = infoSnapshot.docs[0]
+      .data()
+      .coupleDate.toDate()
+      .getTime();
+    setInterval(() => {
+      const matchingDate = new Date().getTime() - coupleDate;
+      const second = Math.floor((matchingDate / 1000) % 60);
+      const minute = Math.floor((matchingDate / 1000 / 60) % 60);
+      const hour = Math.floor(matchingDate / 1000 / 60 / 60) % 24;
+      const day = Math.floor(matchingDate / 1000 / 60 / 60 / 24);
+      setMatchedDate(`${day}day ${hour}hour ${minute}minute ${second}second`);
+    }, 1000);
   };
 
   const getLoginMethod = () => {
@@ -178,12 +202,14 @@ const Profile = () => {
         doc(dbService, "userInfo", `${CoupleUserQuerySnapshot.docs[0].id}`),
         {
           coupleId: deleteField(),
+          coupleDate: deleteField(),
         }
       );
       await updateDoc(
         doc(dbService, "userInfo", `${UserQuerySnapshot.docs[0].id}`),
         {
           coupleId: deleteField(),
+          coupleDate: deleteField(),
         }
       );
       dispatch(
@@ -439,21 +465,21 @@ const Profile = () => {
         <span style={{ fontSize: "0.7rem" }}>Posted</span>
         {diarySize != 0 ? (
           <div className="sum__box">
-            <span>{diarySize} diarys</span>
+            <span>📒 {diarySize} diarys</span>
           </div>
         ) : (
           ""
         )}
         {coupleDiarySize != 0 ? (
           <div className="sum__box">
-            <span>{coupleDiarySize} couple diarys</span>
+            <span>📚 {coupleDiarySize} couple diarys</span>
           </div>
         ) : (
           ""
         )}
         {commentsSize != 0 ? (
           <div className="sum__box">
-            <span>{commentsSize} comments</span>
+            <span>💬 {commentsSize} comments</span>
           </div>
         ) : (
           ""
@@ -466,6 +492,7 @@ const Profile = () => {
             style={{ height: "50px", width: "50px", borderRadius: "50%" }}
           />
           <div>{coupleName}</div>
+          <span>{matchedDate}</span>
           <Btn onClick={disconnectCouple} children="Disconnect" />
         </>
       ) : randomCode ? (

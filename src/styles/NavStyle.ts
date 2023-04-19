@@ -6,6 +6,7 @@ export const Wraper = styled.div`
   position: fixed;
   height: 3rem;
   top: 0;
+  z-index: 5;
   background-color: ${(props) => props.theme.bgColor};
 `;
 

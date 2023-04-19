@@ -147,7 +147,7 @@ export const FormContainer = styled.form`
     position: absolute;
     cursor: pointer;
     top: 40%;
-    left: 15%;
+    left: 17%;
     padding: 1rem;
     border-radius: 10px;
     font-weight: 500;

@@ -147,6 +147,10 @@ export const CommentDataContainer = styled.div`
       margin-right: 0.5rem;
     }
     .CommentData_comment_container {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 10px;
+      background-color: ${palette.gray[700]};
       .CommentData_comment_subcontainer {
         display: flex;
         align-items: center;
@@ -163,7 +167,7 @@ export const CommentDataContainer = styled.div`
           .CommentData_comment_more {
             position: absolute;
             cursor: pointer;
-            right: 0;
+            right: 10px;
           }
         }
         .CommentData_comment_text {

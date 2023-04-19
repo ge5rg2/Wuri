@@ -139,9 +139,9 @@ const Profile = () => {
       if (expiration > 10) {
         alert("The validity period of the existing code has expired.");
         await deleteDoc(doc(dbService, "connect", `${connectCode}`));
-        setRandomCode("");
+        return setRandomCode("");
       } else {
-        setRandomCode(connectCode);
+        return setRandomCode(connectCode);
       }
     }
   };

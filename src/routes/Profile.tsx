@@ -5,6 +5,7 @@ import {
   UploadImgContainer,
   UploadBtnContainer,
   FormContainer,
+  SumContainer,
 } from "../styles/ProfileStyle";
 import React, { useEffect, useState, useRef } from "react";
 import {
@@ -40,6 +41,9 @@ const Profile = () => {
   const [editUserName, setEditUserName] = useState<string>("");
   const [attachment, setAttachment] = useState<any>("");
   const [isDragging, setIsDragging] = useState(false);
+  const [diarySize, setDiarySize] = useState(0);
+  const [coupleDiarySize, setCoupleDiarySize] = useState(0);
+  const [commentsSize, setCommentsSize] = useState(0);
   const { userUid, userUrl, userName, coupleId, coupleName, coupleUrl } =
     useSelector((state) => state.user);
 
@@ -72,16 +76,33 @@ const Profile = () => {
   };
 
   const getMyAccount = async () => {
-    /*     const q = query(
+    const diaryQ = query(
       collection(dbService, "diarys"),
-      where("creatorId", "==", userInfo.userUid)
+      where("creatorId", "==", userUid)
     );
-    const querySnapshot = await getDocs(q);
-       
-    console.log(
-      querySnapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()))
-    ); 
-     */
+    const coupleDiaryQ = query(
+      collection(dbService, "couple_diarys"),
+      where("creatorId", "==", userUid)
+    );
+
+    const commentsQ = query(
+      collection(dbService, "comments"),
+      where("creatorId", "==", userUid)
+    );
+    const diaryQuerySnapshot = await getDocs(diaryQ);
+    const coupleDiarySnapshot = await getDocs(coupleDiaryQ);
+    const commentsSnapshot = await getDocs(commentsQ);
+
+    if (diaryQuerySnapshot) {
+      setCoupleDiarySize(coupleDiarySnapshot.size);
+    }
+    if (coupleDiarySnapshot) {
+      setDiarySize(diaryQuerySnapshot.size);
+    }
+    if (commentsSnapshot) {
+      setCommentsSize(commentsSnapshot.size);
+    }
+
     if (coupleId) {
       setIsCouple(true);
     } else {
@@ -413,6 +434,31 @@ const Profile = () => {
           />
         </SubContainer>
       )}
+      <div>Summarize</div>
+      <SumContainer>
+        <span style={{ fontSize: "0.7rem" }}>Posted</span>
+        {diarySize != 0 ? (
+          <div className="sum__box">
+            <span>{diarySize} diarys</span>
+          </div>
+        ) : (
+          ""
+        )}
+        {coupleDiarySize != 0 ? (
+          <div className="sum__box">
+            <span>{coupleDiarySize} couple diarys</span>
+          </div>
+        ) : (
+          ""
+        )}
+        {commentsSize != 0 ? (
+          <div className="sum__box">
+            <span>{commentsSize} comments</span>
+          </div>
+        ) : (
+          ""
+        )}
+      </SumContainer>
       {isCouple ? (
         <>
           <img

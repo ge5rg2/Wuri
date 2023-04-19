@@ -56,7 +56,7 @@ export const ProfileEditContainer = styled.div`
   .edit__btn {
     display: flex;
     justify-content: space-between;
-    margin-top: 1rem;
+    margin: 1rem 0;
     button {
       width: 50%;
       margin: 0 0.9rem;
@@ -152,5 +152,17 @@ export const FormContainer = styled.form`
     text-align: center;
     position: relative;
     cursor: pointer;
+  }
+`;
+
+export const SumContainer = styled.div`
+  width: 50%;
+  border: 1px solid ${(props) => props.theme.textColor};
+  background-color: ${(props) => props.theme.bgColor};
+  border-radius: 10px;
+  padding: 1rem;
+  .sum__box {
+    display: flex;
+    margin: 0.5rem 0;
   }
 `;

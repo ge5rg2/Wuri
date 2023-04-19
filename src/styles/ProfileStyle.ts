@@ -25,7 +25,6 @@ export const SubContainer = styled.div`
     padding: 0 0 0.5rem 0;
   }
   img {
-    background-color: ${palette.gray[200]};
     border-radius: 50%;
     margin-bottom: 0.5rem;
     cursor: pointer;
@@ -41,6 +40,28 @@ export const ProfileEditContainer = styled.div`
   width: 350px;
   flex-direction: column;
   align-items: center;
+
+  .edit__input {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    input {
+      padding: 1rem;
+    }
+    span {
+      font-size: 0.8rem;
+      margin-bottom: 0.3rem;
+    }
+  }
+  .edit__btn {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    button {
+      width: 50%;
+      margin: 0 0.9rem;
+    }
+  }
 `;
 
 export const UploadImgContainer = styled.div`
@@ -98,22 +119,23 @@ export const FormContainer = styled.form`
   .filePlaceholder {
     cursor: pointer;
     text-align: center;
-    display: block;
+    display: flex;
+    justify-content: center;
     padding: 4rem;
     color: ${palette.gray[400]};
   }
   .filePlaceholder::before {
-    content: "Drag & Drop a File Here";
+    content: "Drag & Drop a Img Here";
     position: absolute;
     top: 10%;
-    left: 1.5rem;
   }
   .fileBtn {
-    display: block;
+    display: flex;
+    justify-content: center;
     position: absolute;
     cursor: pointer;
     top: 40%;
-    left: 18%;
+    left: 15%;
     padding: 1rem;
     border-radius: 10px;
     font-weight: 500;

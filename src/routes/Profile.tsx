@@ -233,6 +233,10 @@ const Profile = () => {
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     let attachmentUrl = "";
+    if (userName == editUserName && userUrl == attachment) {
+      alert("Nothing changed!");
+      return setEditProfile((props) => !props);
+    }
     try {
       if (attachment !== "") {
         if (attachment !== userUrl) {
@@ -369,14 +373,29 @@ const Profile = () => {
               )}
             </div>
           </FormContainer>
-          <Input
-            type="text"
-            placeholder="User Name"
-            value={editUserName}
-            onChange={onChange}
-          />
-          <Btn children="Update Diary" onClick={onSubmit} />
-          <Btn onClick={onEditProfile} children="Cancel" />
+          <div className="edit__input">
+            <span>User name</span>
+            <Input
+              type="text"
+              placeholder="User Name"
+              value={editUserName}
+              onChange={onChange}
+            />
+          </div>
+          <div className="edit__btn">
+            <Btn
+              children="Update"
+              ButtonType="Emphasized"
+              size="medium"
+              onClick={onSubmit}
+            />
+            <Btn
+              onClick={onEditProfile}
+              ButtonType="Critical"
+              size="medium"
+              children="Cancel"
+            />
+          </div>
         </ProfileEditContainer>
       ) : (
         <SubContainer>

@@ -6,6 +6,7 @@ import {
   UploadBtnContainer,
   FormContainer,
   SumContainer,
+  CoupleContainer,
 } from "../styles/ProfileStyle";
 import React, { useEffect, useState, useRef } from "react";
 import {
@@ -109,21 +110,7 @@ const Profile = () => {
       setIsCouple(true);
       getCoupleDate();
     } else {
-      const codeRef = collection(dbService, "connect");
-      const q = query(codeRef, where("creatorId", "==", userUid));
-      const querySnapshot = await getDocs(q);
-      if (querySnapshot.size > 0) {
-        const currentCodeData = querySnapshot.docs[0].data();
-        const connectCode = querySnapshot.docs[0].id;
-        let codeTime = currentCodeData.createdAt.toDate().getTime();
-        let expiration = Math.floor(date.getTime() - codeTime) / 1000 / 60;
-        if (expiration > 10) {
-          alert("The validity period of the existing code has expired.");
-          await deleteDoc(doc(dbService, "connect", `${connectCode}`));
-        } else {
-          setRandomCode(connectCode);
-        }
-      }
+      getCoupleCode();
     }
     if (user !== null) {
       getLoginMethod();
@@ -132,6 +119,29 @@ const Profile = () => {
       }
       if (userName) {
         setEditUserName(userName);
+      }
+    }
+  };
+
+  const getCoupleCode = async () => {
+    const codeRef = collection(dbService, "connect");
+    const q = query(codeRef, where("creatorId", "==", userUid));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.size > 0) {
+      const currentCodeData = querySnapshot.docs[0].data();
+      const connectCode = querySnapshot.docs[0].id;
+      let codeTime = currentCodeData.createdAt.toDate().getTime();
+      let expiration = Math.floor(date.getTime() - codeTime) / 1000 / 60;
+      let deadLine = date.getTime() - codeTime;
+      const second = 60 - Math.floor((deadLine / 1000) % 60);
+      const minute = 10 - Math.floor((deadLine / 1000 / 60) % 60);
+      console.log(`${minute}분 ${second}초 남음`);
+      if (expiration > 10) {
+        alert("The validity period of the existing code has expired.");
+        await deleteDoc(doc(dbService, "connect", `${connectCode}`));
+        setRandomCode("");
+      } else {
+        setRandomCode(connectCode);
       }
     }
   };
@@ -147,14 +157,20 @@ const Profile = () => {
       .data()
       .coupleDate.toDate()
       .getTime();
-    setInterval(() => {
+
+    const matchingDate = new Date().getTime() - coupleDate;
+    const day = Math.floor(matchingDate / 1000 / 60 / 60 / 24);
+    setMatchedDate(`${day} day`);
+    /*     setInterval(() => {
       const matchingDate = new Date().getTime() - coupleDate;
+       
       const second = Math.floor((matchingDate / 1000) % 60);
       const minute = Math.floor((matchingDate / 1000 / 60) % 60);
-      const hour = Math.floor(matchingDate / 1000 / 60 / 60) % 24;
+      const hour = Math.floor(matchingDate / 1000 / 60 / 60) % 24; 
+      
       const day = Math.floor(matchingDate / 1000 / 60 / 60 / 24);
-      setMatchedDate(`${day}day ${hour}hour ${minute}minute ${second}second`);
-    }, 1000);
+      setMatchedDate(`💞${day}day`);
+    }, 1000); */
   };
 
   const getLoginMethod = () => {
@@ -462,7 +478,11 @@ const Profile = () => {
       )}
       <div>Summarize</div>
       <SumContainer>
-        <span style={{ fontSize: "0.7rem" }}>Posted</span>
+        {diarySize != 0 || coupleDiarySize != 0 || commentsSize != 0 ? (
+          <span style={{ fontSize: "0.7rem" }}>Posted</span>
+        ) : (
+          <span style={{ fontSize: "0.7rem", color: "red" }}>No data</span>
+        )}
         {diarySize != 0 ? (
           <div className="sum__box">
             <span>📒 {diarySize} diarys</span>
@@ -486,24 +506,47 @@ const Profile = () => {
         )}
       </SumContainer>
       {isCouple ? (
-        <>
-          <img
-            src={coupleUrl + "-"}
-            style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-          />
-          <div>{coupleName}</div>
-          <span>{matchedDate}</span>
-          <Btn onClick={disconnectCouple} children="Disconnect" />
-        </>
+        <CoupleContainer>
+          <div className="couple__title">Couple Info</div>
+          <div className="couple__box">
+            <div className="couple__box_info">
+              <img
+                src={coupleUrl + "-"}
+                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+              />
+              <div>{coupleName}</div>
+            </div>
+            <div className="couple__box_sub">
+              <span>💞{matchedDate}</span>
+              <Btn
+                onClick={disconnectCouple}
+                size="small"
+                ButtonType="Critical"
+                children="Disconnect"
+              />
+            </div>
+          </div>
+        </CoupleContainer>
       ) : randomCode ? (
-        <>
+        <div className="couple__code">
+          <span style={{ textAlign: "center" }}>Code🔑</span>
           <div>{randomCode}</div>
-          <Btn onClick={createCoupleCode} children="Code reissue." />
-        </>
+          <Btn
+            onClick={createCoupleCode}
+            size="large"
+            ButtonType="Couple"
+            children="Code reissue"
+          />
+        </div>
       ) : (
         <>
-          <div>
-            <Btn onClick={createCoupleCode} children="Create couple code!" />
+          <div className="couple__code">
+            <Btn
+              onClick={createCoupleCode}
+              size="large"
+              ButtonType="Couple"
+              children="Create couple code!"
+            />
           </div>
         </>
       )}

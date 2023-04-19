@@ -8,6 +8,18 @@ export const MainContainer = styled.div`
   flex-direction: column;
   min-height: 100vh;
   align-items: center;
+  .couple__code {
+    margin-top: 2rem;
+    text-align: center;
+    div {
+      border: 1px solid ${(props) => props.theme.textColor};
+      background-color: ${(props) => props.theme.bgColor};
+      border-radius: 10px;
+      padding: 0.75rem 1.8rem; // 12px 28.8px
+      font-size: 1rem; // 16px
+      margin-bottom: 0.5rem;
+    }
+  }
 `;
 
 export const SubContainer = styled.div`
@@ -156,7 +168,7 @@ export const FormContainer = styled.form`
 `;
 
 export const SumContainer = styled.div`
-  width: 50%;
+  width: 300px;
   border: 1px solid ${(props) => props.theme.textColor};
   background-color: ${(props) => props.theme.bgColor};
   border-radius: 10px;
@@ -164,5 +176,36 @@ export const SumContainer = styled.div`
   .sum__box {
     display: flex;
     margin: 0.5rem 0;
+  }
+`;
+
+export const CoupleContainer = styled.div`
+  margin-top: 1rem;
+  .couple__title {
+    text-align: center;
+  }
+  .couple__box {
+    width: 300px;
+    border: 1px solid ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.bgColor};
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    .couple__box_info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      div {
+        font-size: 0.8rem;
+      }
+    }
+    .couple__box_sub {
+      margin-left: 1rem;
+      width: 100%;
+      padding: 1rem 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 `;

@@ -5,13 +5,15 @@ import { css } from "styled-components";
 interface BaseProps {
   variant?: "text" | "contained" | "outlined";
   size?: "small" | "medium" | "large";
-  ButtonType?: "Critical" | "Default" | "Emphasized";
+  ButtonType?: "Critical" | "Default" | "Emphasized" | "Couple";
   disabled?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
 }
 
-const getButtonType = (ButtonType?: "Critical" | "Default" | "Emphasized") => {
+const getButtonType = (
+  ButtonType?: "Critical" | "Default" | "Emphasized" | "Couple"
+) => {
   switch (ButtonType) {
     case "Default":
       return css`
@@ -25,7 +27,7 @@ const getButtonType = (ButtonType?: "Critical" | "Default" | "Emphasized") => {
       return css`
         background-color: rgba(16, 163, 127);
         &:hover {
-          background-color: #1a7f64;
+          background-color: #0e8c6d;
         }
       `;
     case "Critical":
@@ -33,6 +35,14 @@ const getButtonType = (ButtonType?: "Critical" | "Default" | "Emphasized") => {
         background-color: ${palette.red[600]};
         &:hover {
           background-color: ${palette.red[800]};
+        }
+      `;
+
+    case "Couple":
+      return css`
+        background-color: ${(props) => props.theme.accentColor};
+        &:hover {
+          background-color: #7256ff;
         }
       `;
     default:
@@ -87,7 +97,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   size?: "small" | "medium" | "large";
   variant?: "text" | "contained" | "outlined";
-  ButtonType?: "Critical" | "Default" | "Emphasized";
+  ButtonType?: "Critical" | "Default" | "Emphasized" | "Couple";
   disabled?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;

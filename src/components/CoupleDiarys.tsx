@@ -23,6 +23,9 @@ const CoupleDiaryContainer = styled.div`
   width: 90%;
   margin: 0.5rem 0;
   text-align: center;
+  img {
+    margin-top: 1rem;
+  }
 `;
 
 const DiaryContainer = styled.div`

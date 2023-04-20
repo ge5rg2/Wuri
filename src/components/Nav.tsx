@@ -8,7 +8,7 @@ import {
 import { getAuth, signOut } from "firebase/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "../store";
 import { menuActions } from "../store/menuSlice";
 import GroupIcon from "@mui/icons-material/Group";
@@ -62,6 +62,16 @@ const Nav = () => {
     dispatch(menuActions.closeMenu());
   }; */
 
+  useEffect(() => {
+    if (menuState.isMenu) {
+      document.getElementById("subContainer")?.classList.remove("animateEnd");
+      document.getElementById("subContainer")?.classList.add("animateStart");
+    } else {
+      document.getElementById("subContainer")?.classList.remove("animateStart");
+      document.getElementById("subContainer")?.classList.add("animateEnd");
+    }
+  }, [menuState.isMenu]);
+
   return (
     <Wraper>
       <MainContainer>
@@ -72,26 +82,6 @@ const Nav = () => {
                 style={{ color: "#ffff", cursor: "pointer" }}
                 fontSize="large"
               />
-              <SubContainer>
-                <div className="subNav">
-                  <div onClick={onSignOut} className="subNavDiv">
-                    <LogoutIcon />
-                    Log out
-                  </div>
-                  <div className="subNavDiv" onClick={onDiaryClcik}>
-                    <MenuBookIcon />
-                    Diary
-                  </div>
-                  <div className="subNavDiv" onClick={onProfileClcik}>
-                    <AssignmentIndIcon />
-                    Profile
-                  </div>
-                  <div className="subNavDiv" onClick={onCoupleClcik}>
-                    <GroupIcon />
-                    Couple
-                  </div>
-                </div>
-              </SubContainer>
             </>
           ) : (
             <MenuIcon
@@ -99,6 +89,26 @@ const Nav = () => {
               fontSize="large"
             />
           )}
+          <SubContainer id="subContainer" className="animateEnd">
+            <div className="subNav">
+              <div className="subNavDiv" onClick={onSignOut}>
+                <LogoutIcon />
+                Log out
+              </div>
+              <div className="subNavDiv" onClick={onDiaryClcik}>
+                <MenuBookIcon />
+                Diary
+              </div>
+              <div className="subNavDiv" onClick={onProfileClcik}>
+                <AssignmentIndIcon />
+                Profile
+              </div>
+              <div className="subNavDiv" onClick={onCoupleClcik}>
+                <GroupIcon />
+                Couple
+              </div>
+            </div>
+          </SubContainer>
         </IconContainer>
         <img onClick={onDiaryClcik} src="/img/WuriNone.png" />
       </MainContainer>

@@ -67,6 +67,15 @@ const Write = () => {
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     let attachmentUrl = "";
+    let blank_pattern = /^\s+|\s+$/g;
+    if (title.replace(blank_pattern, "") == "") {
+      document.getElementById("diaryTitle")?.focus();
+      return alert("Blank titles are not allowed!");
+    }
+    if (diary.replace(blank_pattern, "") == "") {
+      document.getElementById("diaryText")?.focus();
+      return alert("Blank text is not allowed!");
+    }
     const date = new Date();
     try {
       if (attachment !== "") {
@@ -180,6 +189,7 @@ const Write = () => {
         <Subtitle>{title ? title : "Title"}</Subtitle>
         <FormContainer onSubmit={onSubmit}>
           <Input
+            id="diaryTitle"
             value={title}
             onChange={onTitleChange}
             type="text"
@@ -229,6 +239,7 @@ const Write = () => {
           <textarea
             style={{ whiteSpace: "pre-wrap" }}
             value={diary}
+            id="diaryText"
             onChange={onContentChange}
             onCompositionEnd={handleCompositionEnd}
             onPaste={onPaste}

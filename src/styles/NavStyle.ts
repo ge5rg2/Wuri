@@ -55,6 +55,35 @@ export const MainContainer = styled.div`
     width: 100px;
     cursor: pointer;
   }
+  .animateEnd {
+    animation: 0.5s up;
+    animation-fill-mode: forwards;
+    pointer-events: none;
+    @keyframes up {
+      from {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+      to {
+        transform: translate(0, -20px);
+        opacity: 0;
+      }
+    }
+  }
+  .animateStart {
+    animation: 0.3s ease-in down;
+    @keyframes down {
+      from {
+        transform: translate(0, -20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+    }
+  }
 `;
 
 export const IconContainer = styled.div`

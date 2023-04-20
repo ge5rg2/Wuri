@@ -76,6 +76,12 @@ const Comments: React.FC<commentProps> = ({ info }) => {
 
   const onCommentUpdate = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    let blank_pattern = /^\s+|\s+$/g;
+    if (newCommentValue.replace(blank_pattern, "") == "") {
+      document.getElementById("newCommentValue")?.focus();
+      setNewCommentValue("");
+      return alert("Blank titles are not allowed!");
+    }
     await updateDoc(CommetnRef, {
       text: newCommentValue,
     });
@@ -126,6 +132,7 @@ const Comments: React.FC<commentProps> = ({ info }) => {
           </div>
           <div className="CommemtForm_form">
             <Input
+              id="newCommentValue"
               placeholder="Commment"
               type="text"
               value={newCommentValue}

@@ -77,14 +77,14 @@ const Nav = () => {
       <MainContainer>
         <IconContainer onClick={onMenuClick}>
           {menuState.isMenu ? (
-            <>
-              <KeyboardDoubleArrowRightIcon
-                style={{ color: "#ffff", cursor: "pointer" }}
-                fontSize="large"
-              />
-            </>
+            <KeyboardDoubleArrowRightIcon
+              id="DoubleArrowIcon"
+              style={{ color: "#ffff", cursor: "pointer" }}
+              fontSize="large"
+            />
           ) : (
             <MenuIcon
+              id="MenuIcon"
               style={{ color: "#ffff", cursor: "pointer" }}
               fontSize="large"
             />

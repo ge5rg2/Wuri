@@ -201,6 +201,17 @@ const Edit = () => {
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     let attachmentUrl = "";
+    let blank_pattern = /^\s+|\s+$/g;
+    if (newTitle.replace(blank_pattern, "") == "") {
+      document.getElementById("newDiaryTitle")?.focus();
+      setNewTitle("");
+      return alert("Blank titles are not allowed!");
+    }
+    if (newDiary.replace(blank_pattern, "") == "") {
+      document.getElementById("newDiaryText")?.focus();
+      setNewDiary("");
+      return alert("Blank text is not allowed!");
+    }
     try {
       if (attachment !== "" && firstAttachment != attachment) {
         const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
@@ -233,6 +244,12 @@ const Edit = () => {
 
   const onCommentSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    let blank_pattern = /^\s+|\s+$/g;
+    if (commentValue.replace(blank_pattern, "") == "") {
+      document.getElementById("newComment")?.focus();
+      setCommentValue("");
+      return alert("Blank comments is not allowed!");
+    }
     const date = new Date();
     await addDoc(collection(dbService, "comments"), {
       text: commentValue,
@@ -382,6 +399,7 @@ const Edit = () => {
                   : date}
               </div>
               <Input
+                id="newDiaryTitle"
                 className="title"
                 type="text"
                 maxLength={20}
@@ -391,6 +409,7 @@ const Edit = () => {
                 onChange={onTitleChange}
               />
               <textarea
+                id="newDiaryText"
                 style={{ whiteSpace: "pre-wrap" }}
                 value={newDiary}
                 onChange={onContentChange}
@@ -445,6 +464,7 @@ const Edit = () => {
             </div>
             <div className="CommemtForm_form">
               <Input
+                id="newComment"
                 placeholder="Commment"
                 type="text"
                 value={commentValue}

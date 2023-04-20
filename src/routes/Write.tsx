@@ -70,10 +70,12 @@ const Write = () => {
     let blank_pattern = /^\s+|\s+$/g;
     if (title.replace(blank_pattern, "") == "") {
       document.getElementById("diaryTitle")?.focus();
+      setTitle("");
       return alert("Blank titles are not allowed!");
     }
     if (diary.replace(blank_pattern, "") == "") {
       document.getElementById("diaryText")?.focus();
+      setDiary("");
       return alert("Blank text is not allowed!");
     }
     const date = new Date();

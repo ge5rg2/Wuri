@@ -29,6 +29,38 @@ export const SubContainer = styled.div`
     width: 100%;
     text-align: center;
   }
+  .animateDisplay {
+    display: none;
+  }
+
+  .animateEnd {
+    animation: 0.3s up;
+    animation-fill-mode: forwards;
+    @keyframes up {
+      from {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+      to {
+        transform: translate(0, -30px);
+        opacity: 0;
+      }
+    }
+  }
+  .animateStart {
+    animation: 0.3s ease-in down;
+    @keyframes down {
+      from {
+        transform: translate(0, -30px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+    }
+  }
 `;
 
 export const DiaryContainer = styled.div`

@@ -177,6 +177,31 @@ const Home = () => {
       });
   };
 
+  const onCalendarIconClick = () => {
+    if (!calendar) {
+      document
+        .getElementById("calendarContainer")
+        ?.classList.remove("animateEnd");
+      document
+        .getElementById("calendarContainer")
+        ?.classList.remove("animateDisplay");
+      document
+        .getElementById("calendarContainer")
+        ?.classList.add("animateStart");
+    } else {
+      document
+        .getElementById("calendarContainer")
+        ?.classList.remove("animateStart");
+      document.getElementById("calendarContainer")?.classList.add("animateEnd");
+      setTimeout(() => {
+        document
+          .getElementById("calendarContainer")
+          ?.classList.add("animateDisplay");
+      }, 300);
+    }
+    setCalendar((prev) => !prev);
+  };
+
   useEffect(() => {
     const now = new Date();
     const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -222,6 +247,12 @@ const Home = () => {
       .catch((error) => {
         console.log(error);
       });
+    if (!calendar) {
+      document.getElementById("calendarContainer")?.classList.add("animateEnd");
+      document
+        .getElementById("calendarContainer")
+        ?.classList.add("animateDisplay");
+    }
   }, []);
 
   return (
@@ -240,41 +271,34 @@ const Home = () => {
           />
         </IntroContainer>
         <CalendarIcon>
-          <div
-            onClick={() => setCalendar((prev) => !prev)}
-            className="calendarIcon__box"
-          >
+          <div onClick={onCalendarIconClick} className="calendarIcon__box">
             🗓{calendar ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </div>
         </CalendarIcon>
-        {calendar ? (
-          <CalendarContainer>
-            <Calendar
-              onActiveStartDateChange={({
-                action,
-                activeStartDate,
-                value,
-                view,
-              }) => onCalendarAreaChange(activeStartDate, view)}
-              minDate={new Date(1672498800000)}
-              minDetail="year"
-              maxDate={new Date()}
-              calendarType="US"
-              locale="en-EN"
-              value={value}
-              onChange={onCalendarChange}
-              tileClassName={({ date, view }) => {
-                if (
-                  markDiary.find((x) => x === moment(date).format("DD-MM-YYYY"))
-                ) {
-                  return "highlight";
-                }
-              }}
-            />
-          </CalendarContainer>
-        ) : (
-          ""
-        )}
+        <CalendarContainer id="calendarContainer" className="animateEnd">
+          <Calendar
+            onActiveStartDateChange={({
+              action,
+              activeStartDate,
+              value,
+              view,
+            }) => onCalendarAreaChange(activeStartDate, view)}
+            minDate={new Date(1672498800000)}
+            minDetail="year"
+            maxDate={new Date()}
+            calendarType="US"
+            locale="en-EN"
+            value={value}
+            onChange={onCalendarChange}
+            tileClassName={({ date, view }) => {
+              if (
+                markDiary.find((x) => x === moment(date).format("DD-MM-YYYY"))
+              ) {
+                return "highlight";
+              }
+            }}
+          />
+        </CalendarContainer>
         {isExistDiary ? (
           <>{selectedDiaryData}</>
         ) : isExistMonth ? (

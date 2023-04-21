@@ -6,6 +6,7 @@ export const CalendarContainer = styled.div`
   align-items: center;
   width: 350px;
   max-width: 90%;
+
   .react-calendar {
     border-radius: 10px;
     background-color: ${(props) => props.theme.textColor};

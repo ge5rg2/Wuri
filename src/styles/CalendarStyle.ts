@@ -147,4 +147,14 @@ export const CalendarContainer = styled.div`
   .react-calendar--selectRange .react-calendar__tile--hover {
     background-color: #e6e6e6;
   }
+  .highlight {
+    position: relative;
+    abbr::after {
+      font-size: 0.5rem;
+      left: 37%;
+      bottom: -0.2rem;
+      position: absolute;
+      content: "✅";
+    }
+  }
 `;

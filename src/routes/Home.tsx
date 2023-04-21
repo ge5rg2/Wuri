@@ -33,6 +33,7 @@ import { CalendarContainer } from "../styles/CalendarStyle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { startOfDay, endOfDay } from "date-fns";
+import moment from "moment";
 
 const theme = createTheme({
   palette: {
@@ -56,6 +57,7 @@ const Home = () => {
   const [selectedDiary, setSelectedDiary] = useState<Diary[]>([]);
   const [isExistDiary, setIsExistDiary] = useState(false);
   const [isExistMonth, setIsExistMonth] = useState<boolean>(true);
+  const [markDiary, setMarkDiary] = useState<string[]>([]);
   const [value, onChange] = useState(new Date());
 
   const onWritePageClick = () => {
@@ -125,8 +127,6 @@ const Home = () => {
 
   const onCalendarAreaChange = async (activeStartDate: any, view: any) => {
     // activeStartDate 를 통해 find 후 state 에 저장
-    console.log(activeStartDate);
-    console.log(view);
     const firstDayOfMonth = new Date(
       activeStartDate.getFullYear(),
       activeStartDate.getMonth(),
@@ -154,6 +154,20 @@ const Home = () => {
           weeklyDiarys.push(weeklyDiary);
           startIndex = endIndex;
         }
+        const createdAts = weeklyDiarys
+          .flatMap((diaryArray) =>
+            diaryArray.map((diary: any) => diary.createdAt)
+          )
+          .map((createdAt) => {
+            const date = new Date(createdAt.toDate());
+            return `${date.getDate().toString().padStart(2, "0")}-${(
+              date.getMonth() + 1
+            )
+              .toString()
+              .padStart(2, "0")}-${date.getFullYear()}`;
+          });
+
+        setMarkDiary(createdAts);
         setIsExistMonth(true);
         setDiarys(weeklyDiarys);
         setCurrentDiary([weeklyDiarys[0]]);
@@ -187,6 +201,20 @@ const Home = () => {
           weeklyDiarys.push(weeklyDiary);
           startIndex = endIndex;
         }
+        const createdAts = weeklyDiarys
+          .flatMap((diaryArray) =>
+            diaryArray.map((diary: any) => diary.createdAt)
+          )
+          .map((createdAt) => {
+            const date = new Date(createdAt.toDate());
+            return `${date.getDate().toString().padStart(2, "0")}-${(
+              date.getMonth() + 1
+            )
+              .toString()
+              .padStart(2, "0")}-${date.getFullYear()}`;
+          });
+
+        setMarkDiary(createdAts);
         setIsExistMonth(true);
         setDiarys(weeklyDiarys);
         setCurrentDiary([weeklyDiarys[0]]);
@@ -232,8 +260,16 @@ const Home = () => {
               minDetail="year"
               maxDate={new Date()}
               calendarType="US"
+              locale="en-EN"
               value={value}
               onChange={onCalendarChange}
+              tileClassName={({ date, view }) => {
+                if (
+                  markDiary.find((x) => x === moment(date).format("DD-MM-YYYY"))
+                ) {
+                  return "highlight";
+                }
+              }}
             />
           </CalendarContainer>
         ) : (

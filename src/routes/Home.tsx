@@ -23,8 +23,26 @@ import {
   MainContainer,
   SubContainer,
   IntroContainer,
+  DiaryBox,
+  CalendarIcon,
 } from "../styles/HomeStyle";
-import Test from "../components/Test";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Pagination } from "@mui/material";
+import Calendar from "react-calendar";
+import { CalendarContainer } from "../styles/CalendarStyle";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#10a37f",
+    },
+    secondary: {
+      main: "#2B2B2B",
+    },
+  },
+});
 
 const Home = () => {
   const auth = getAuth();
@@ -32,73 +50,110 @@ const Home = () => {
   const userStore = useSelector((state) => state.user);
   const uid = userStore.userUid;
   const [diarys, setDiarys] = useState<Diary[]>([]);
-
-  const diaryData: JSX.Element[] = diarys.map((el) => {
-    return <Diarys key={el.id} diary={el.text} obj={el} doc="diarys" />;
-  });
+  const [currentDiary, setCurrentDiary] = useState<Diary[]>([]);
+  const [calendar, setCalendar] = useState(false);
+  const [value, onChange] = useState(new Date());
 
   const onWritePageClick = () => {
     navigate("/write/single");
   };
 
-  const createSimpeUserInfo = async () => {
+  const callMonthlyDiary = async (firstDay: Date, lastDay: Date) => {
     const q = query(
-      collection(dbService, "userInfo"),
-      where("userId", "==", userStore.userUid)
+      collection(dbService, "diarys"),
+      where("creatorId", "==", uid),
+      where("createdAt", ">=", firstDay),
+      where("createdAt", "<=", lastDay),
+      orderBy("createdAt", "desc")
     );
-    const querySnapshot = await getDocs(q);
-    if (querySnapshot.size > 0) {
-      const { id } = querySnapshot.docs[0];
-      await updateDoc(doc(dbService, "userInfo", `${id}`), {
-        userName: userStore.userName,
-        userUrl: userStore.userUrl,
-        userId: uid,
-      });
-    } else {
-      await addDoc(collection(dbService, "userInfo"), {
-        userName: userStore.userName,
-        userUrl: userStore.userUrl,
-        userId: uid,
-      });
+    const snapshot = await getDocs(q);
+    const diaryObject: any = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return diaryObject;
+  };
+
+  const diaryData: JSX.Element[] = currentDiary.flat().map((el) => {
+    return <Diarys key={el.id} diary={el.text} obj={el} doc="diarys" />;
+  });
+
+  const onPageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    let pageDiary = diarys[page - 1];
+    if (pageDiary) {
+      setCurrentDiary([pageDiary]);
     }
   };
 
   useEffect(() => {
-    const q = query(
-      collection(dbService, "diarys"),
-      where("creatorId", "==", uid),
-      orderBy("createdAt", "desc")
+    const now = new Date();
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDayOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      0,
+      23,
+      59,
+      59
     );
-    onSnapshot(q, (snapshot) => {
-      const diaryObject: any = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      createSimpeUserInfo();
-      setDiarys(diaryObject);
-    });
+    callMonthlyDiary(firstDayOfMonth, lastDayOfMonth)
+      .then((diaryObject: any) => {
+        const weeklyDiarys = [];
+        let startIndex = 0;
+        while (startIndex < diaryObject.length) {
+          const endIndex = startIndex + 7;
+          const weeklyDiary = diaryObject.slice(startIndex, endIndex);
+          weeklyDiarys.push(weeklyDiary);
+          startIndex = endIndex;
+        }
+        setDiarys(weeklyDiarys);
+        setCurrentDiary([weeklyDiarys[0]]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
-    <>
-      <MainContainer>
-        <SubContainer>
-          <IntroContainer>
-            <img
-              style={{ borderRadius: "50%" }}
-              src={userStore.userUrl + ""}
-              onClick={() => navigate("/profile")}
-            />
-            <Btn
-              onClick={onWritePageClick}
-              children={"What's on your mind " + userStore.userName + "?"}
-              ButtonType="Emphasized"
-            />
-          </IntroContainer>
-          {diaryData}
-        </SubContainer>
-      </MainContainer>
-    </>
+    <MainContainer>
+      <SubContainer>
+        <IntroContainer>
+          <img
+            style={{ borderRadius: "50%" }}
+            src={userStore.userUrl + ""}
+            onClick={() => navigate("/profile")}
+          />
+          <Btn
+            onClick={onWritePageClick}
+            children={"What's on your mind " + userStore.userName + "?"}
+            ButtonType="Emphasized"
+          />
+        </IntroContainer>
+        <CalendarIcon>
+          <div
+            onClick={() => setCalendar((prev) => !prev)}
+            className="calendarIcon__box"
+          >
+            📆{calendar ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </div>
+        </CalendarIcon>
+        {calendar ? (
+          <CalendarContainer>
+            <Calendar value={value} />
+          </CalendarContainer>
+        ) : (
+          ""
+        )}
+        <DiaryBox>{diaryData}</DiaryBox>
+        <ThemeProvider theme={theme}>
+          <Pagination
+            count={diarys.length}
+            color="primary"
+            onChange={onPageChange}
+          />
+        </ThemeProvider>
+      </SubContainer>
+    </MainContainer>
   );
 };
 export default Home;

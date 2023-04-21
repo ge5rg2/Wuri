@@ -18,6 +18,9 @@ export const SubContainer = styled.div`
   img {
     border-radius: 50%;
   }
+  .MuiPaginationItem-text {
+    color: ${(props) => props.theme.textColor};
+  }
 `;
 
 export const DiaryContainer = styled.div`
@@ -41,5 +44,30 @@ export const IntroContainer = styled.div`
   Button {
     margin-left: 0.5rem;
     padding: 0 2rem;
+  }
+`;
+
+export const DiaryBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 600px;
+`;
+
+export const CalendarIcon = styled.div`
+  margin: 0.5rem 0;
+  width: 90%;
+  display: flex;
+  justify-content: flex-end;
+  .calendarIcon__box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+    &:hover {
+      color: ${palette.defaultColor};
+    }
   }
 `;

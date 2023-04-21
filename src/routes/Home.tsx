@@ -32,6 +32,7 @@ import Calendar from "react-calendar";
 import { CalendarContainer } from "../styles/CalendarStyle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { startOfDay, endOfDay } from "date-fns";
 
 const theme = createTheme({
   palette: {
@@ -52,6 +53,8 @@ const Home = () => {
   const [diarys, setDiarys] = useState<Diary[]>([]);
   const [currentDiary, setCurrentDiary] = useState<Diary[]>([]);
   const [calendar, setCalendar] = useState(false);
+  const [selectedDiary, setSelectedDiary] = useState<Diary[]>([]);
+  const [isExistDiary, setIsExistDiary] = useState(false);
   const [value, onChange] = useState(new Date());
 
   const onWritePageClick = () => {
@@ -78,10 +81,40 @@ const Home = () => {
     return <Diarys key={el.id} diary={el.text} obj={el} doc="diarys" />;
   });
 
+  const selectedDiaryData: JSX.Element[] = selectedDiary.map((el) => {
+    return <Diarys key={el.id} diary={el.text} obj={el} doc="diarys" />;
+  });
+
   const onPageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     let pageDiary = diarys[page - 1];
     if (pageDiary) {
       setCurrentDiary([pageDiary]);
+    }
+  };
+
+  const onCalendarChange = async (value: any, e: any) => {
+    const start = startOfDay(value);
+    const end = endOfDay(value);
+
+    const q = query(
+      collection(dbService, "diarys"),
+      where("creatorId", "==", uid),
+      where("createdAt", ">=", start),
+      where("createdAt", "<=", end)
+    );
+    const snapshot = await getDocs(q);
+    if (snapshot) {
+      const selectedDiaryObject: any = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      if (selectedDiaryObject.length > 0) {
+        setSelectedDiary(selectedDiaryObject);
+        setIsExistDiary(true);
+      } else {
+        setIsExistDiary(false);
+        setSelectedDiary([]);
+      }
     }
   };
 
@@ -139,19 +172,22 @@ const Home = () => {
         </CalendarIcon>
         {calendar ? (
           <CalendarContainer>
-            <Calendar value={value} />
+            <Calendar value={value} onChange={onCalendarChange} />
           </CalendarContainer>
         ) : (
           ""
         )}
-        <DiaryBox>{diaryData}</DiaryBox>
-        <ThemeProvider theme={theme}>
-          <Pagination
-            count={diarys.length}
-            color="primary"
-            onChange={onPageChange}
-          />
-        </ThemeProvider>
+        {isExistDiary ? <>{selectedDiaryData}</> : ""}
+        {/*         <>
+          <DiaryBox>{diaryData}</DiaryBox>
+          <ThemeProvider theme={theme}>
+            <Pagination
+              count={diarys.length}
+              color="primary"
+              onChange={onPageChange}
+            />
+          </ThemeProvider>
+        </> */}
       </SubContainer>
     </MainContainer>
   );

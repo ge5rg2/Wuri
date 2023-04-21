@@ -10,6 +10,7 @@ export const MainContainer = styled.div`
 `;
 
 export const SubContainer = styled.div`
+  padding-bottom: 5rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -20,6 +21,13 @@ export const SubContainer = styled.div`
   }
   .MuiPaginationItem-text {
     color: ${(props) => props.theme.textColor};
+  }
+  .Nodata__box {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
   }
 `;
 

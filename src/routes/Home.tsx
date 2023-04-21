@@ -55,6 +55,7 @@ const Home = () => {
   const [calendar, setCalendar] = useState(false);
   const [selectedDiary, setSelectedDiary] = useState<Diary[]>([]);
   const [isExistDiary, setIsExistDiary] = useState(false);
+  const [isExistMonth, setIsExistMonth] = useState<boolean>(true);
   const [value, onChange] = useState(new Date());
 
   const onWritePageClick = () => {
@@ -70,6 +71,9 @@ const Home = () => {
       orderBy("createdAt", "desc")
     );
     const snapshot = await getDocs(q);
+    if (!snapshot.size) {
+      return;
+    }
     const diaryObject: any = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -95,7 +99,7 @@ const Home = () => {
   const onCalendarChange = async (value: any, e: any) => {
     const start = startOfDay(value);
     const end = endOfDay(value);
-
+    // Date 숫자형 표현 console.log(value.valueOf());
     const q = query(
       collection(dbService, "diarys"),
       where("creatorId", "==", uid),
@@ -112,10 +116,51 @@ const Home = () => {
         setSelectedDiary(selectedDiaryObject);
         setIsExistDiary(true);
       } else {
+        setIsExistMonth(false);
         setIsExistDiary(false);
         setSelectedDiary([]);
       }
     }
+  };
+
+  const onCalendarAreaChange = async (activeStartDate: any, view: any) => {
+    // activeStartDate 를 통해 find 후 state 에 저장
+    console.log(activeStartDate);
+    console.log(view);
+    const firstDayOfMonth = new Date(
+      activeStartDate.getFullYear(),
+      activeStartDate.getMonth(),
+      1
+    );
+    const lastDayOfMonth = new Date(
+      activeStartDate.getFullYear(),
+      activeStartDate.getMonth() + 1,
+      0,
+      23,
+      59,
+      59
+    );
+    setIsExistDiary(false);
+    callMonthlyDiary(firstDayOfMonth, lastDayOfMonth)
+      .then((diaryObject: any) => {
+        if (!diaryObject) {
+          return setIsExistMonth(false);
+        }
+        const weeklyDiarys = [];
+        let startIndex = 0;
+        while (startIndex < diaryObject.length) {
+          const endIndex = startIndex + 7;
+          const weeklyDiary = diaryObject.slice(startIndex, endIndex);
+          weeklyDiarys.push(weeklyDiary);
+          startIndex = endIndex;
+        }
+        setIsExistMonth(true);
+        setDiarys(weeklyDiarys);
+        setCurrentDiary([weeklyDiarys[0]]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
@@ -131,6 +176,9 @@ const Home = () => {
     );
     callMonthlyDiary(firstDayOfMonth, lastDayOfMonth)
       .then((diaryObject: any) => {
+        if (!diaryObject) {
+          return setIsExistMonth(false);
+        }
         const weeklyDiarys = [];
         let startIndex = 0;
         while (startIndex < diaryObject.length) {
@@ -139,6 +187,7 @@ const Home = () => {
           weeklyDiarys.push(weeklyDiary);
           startIndex = endIndex;
         }
+        setIsExistMonth(true);
         setDiarys(weeklyDiarys);
         setCurrentDiary([weeklyDiarys[0]]);
       })
@@ -167,27 +216,51 @@ const Home = () => {
             onClick={() => setCalendar((prev) => !prev)}
             className="calendarIcon__box"
           >
-            📆{calendar ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            🗓{calendar ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </div>
         </CalendarIcon>
         {calendar ? (
           <CalendarContainer>
-            <Calendar value={value} onChange={onCalendarChange} />
+            <Calendar
+              onActiveStartDateChange={({
+                action,
+                activeStartDate,
+                value,
+                view,
+              }) => onCalendarAreaChange(activeStartDate, view)}
+              minDate={new Date(1672498800000)}
+              minDetail="year"
+              maxDate={new Date()}
+              calendarType="US"
+              value={value}
+              onChange={onCalendarChange}
+            />
           </CalendarContainer>
         ) : (
           ""
         )}
-        {isExistDiary ? <>{selectedDiaryData}</> : ""}
-        {/*         <>
-          <DiaryBox>{diaryData}</DiaryBox>
-          <ThemeProvider theme={theme}>
-            <Pagination
-              count={diarys.length}
-              color="primary"
-              onChange={onPageChange}
+        {isExistDiary ? (
+          <>{selectedDiaryData}</>
+        ) : isExistMonth ? (
+          <>
+            <DiaryBox>{diaryData}</DiaryBox>
+            <ThemeProvider theme={theme}>
+              <Pagination
+                count={diarys.length}
+                color="primary"
+                onChange={onPageChange}
+              />
+            </ThemeProvider>
+          </>
+        ) : (
+          <div className="Nodata__box">
+            <Btn
+              children="Oops, you didn't diary on that date! 😵"
+              ButtonType="Default"
+              size="large"
             />
-          </ThemeProvider>
-        </> */}
+          </div>
+        )}
       </SubContainer>
     </MainContainer>
   );

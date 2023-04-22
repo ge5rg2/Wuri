@@ -15,6 +15,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
+const myImage = require("../img/WuriNone.png");
 
 const Nav = () => {
   const dispatch = useDispatch();
@@ -110,7 +111,7 @@ const Nav = () => {
             </div>
           </SubContainer>
         </IconContainer>
-        <img onClick={onDiaryClcik} src="/img/WuriNone.png" />
+        <img onClick={onDiaryClcik} src={myImage} />
       </MainContainer>
     </Wraper>
   );

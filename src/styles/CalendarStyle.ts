@@ -6,7 +6,6 @@ export const CalendarContainer = styled.div`
   align-items: center;
   width: 350px;
   max-width: 90%;
-
   .react-calendar {
     border-radius: 10px;
     background-color: ${(props) => props.theme.textColor};
@@ -41,6 +40,7 @@ export const CalendarContainer = styled.div`
     margin: 0;
     border: 0;
     outline: none;
+    border-radius: 10px;
   }
 
   .react-calendar button:enabled:hover {
@@ -51,10 +51,12 @@ export const CalendarContainer = styled.div`
     display: flex;
     height: 44px;
     margin-bottom: 1em;
+    border-radius: 10px;
   }
 
   .react-calendar__navigation button {
     min-width: 44px;
+    border-radius: 10px;
     background: none;
   }
 
@@ -75,6 +77,7 @@ export const CalendarContainer = styled.div`
   }
 
   .react-calendar__month-view__weekdays__weekday {
+    color: ${(props) => props.theme.bgColor};
     padding: 0.5em;
   }
 

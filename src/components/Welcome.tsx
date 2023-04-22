@@ -20,6 +20,7 @@ import {
   AuthPcontainer,
   AuthBtnContainer,
 } from "../styles/WelcomeStyle";
+const myImage = require("../img/WuriNone.png");
 
 type MyStateType = {
   isSignUp: boolean;
@@ -60,7 +61,6 @@ const Welcome = () => {
       console.log(data);
     } catch (error: any) {
       console.log(error.message);
-      alert(error.message);
       setError(error.message);
       if (error.message == "Firebase: Error (auth/email-already-in-use).") {
         alert("This Email is already in use.");
@@ -72,6 +72,13 @@ const Welcome = () => {
 
       if (error.message == "Firebase: Error (auth/invalid-email).") {
         alert("Invalid account. Please enter again.");
+        return setInputs({
+          email: "",
+          password: "",
+        });
+      }
+      if (error.message == "Firebase: Error (auth/user-not-found).") {
+        alert("The account was not found.");
         return setInputs({
           email: "",
           password: "",
@@ -123,7 +130,7 @@ const Welcome = () => {
             <AuthContainer>
               <div className="AuthImgContainer">
                 <div className="AuthImgBox">
-                  <img src="/img/WuriNone.png" />
+                  <img src={myImage} />
                 </div>
               </div>
               <AuthHeaderContainer>
@@ -201,7 +208,7 @@ const Welcome = () => {
           <AuthContainer>
             <div className="AuthImgContainer">
               <div className="AuthImgBox">
-                <img src="/img/WuriNone.png" />
+                <img src={myImage} />
               </div>
             </div>
             <AuthHeaderContainer>
@@ -278,7 +285,7 @@ const Welcome = () => {
       ) : (
         <SubContainer>
           <ImgContainer>
-            <img src="/img/WuriNone.png" />
+            <img src={myImage} />
           </ImgContainer>
           <div className="greetingContainer">
             <div>Welcome to Wuri</div>

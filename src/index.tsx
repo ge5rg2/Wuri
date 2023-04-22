@@ -5,6 +5,7 @@ import { store } from "./store";
 import { Provider } from "react-redux";
 import { theme } from "./styles/theme";
 import ReactDOM from "react-dom/client";
+import { HashRouter as Router } from "react-router-dom";
 import App from "./App";
 import Nav from "./components/Nav";
 
@@ -14,9 +15,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <ThemeProvider theme={theme}>
     <Provider store={store}>
-      <BrowserRouter>
+      <Router>
         <App />
-      </BrowserRouter>
+      </Router>
     </Provider>
   </ThemeProvider>
 );

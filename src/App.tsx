@@ -7,6 +7,7 @@ import { doc, collection, getDocs, query, where } from "@firebase/firestore";
 import { useDispatch } from "./store";
 import { userActions } from "./store/userSlice";
 import { AppContainer, ImgContainer } from "./styles/WelcomeStyle";
+const myImage = require("./img/WuriNone.png");
 
 const App = () => {
   const [init, setInit] = useState(false);
@@ -91,7 +92,7 @@ const App = () => {
       ) : (
         <AppContainer>
           <ImgContainer>
-            <img src="/img/WuriNone.png" />
+            <img src={myImage} />
           </ImgContainer>
           <div>Initializing...</div>
         </AppContainer>

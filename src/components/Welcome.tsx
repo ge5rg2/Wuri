@@ -59,9 +59,23 @@ const Welcome = () => {
       }
       console.log(data);
     } catch (error: any) {
+      console.log(error.message);
+      alert(error.message);
       setError(error.message);
       if (error.message == "Firebase: Error (auth/email-already-in-use).") {
         alert("This Email is already in use.");
+        return setInputs({
+          email: "",
+          password: "",
+        });
+      }
+
+      if (error.message == "Firebase: Error (auth/invalid-email).") {
+        alert("Invalid account. Please enter again.");
+        return setInputs({
+          email: "",
+          password: "",
+        });
       }
     }
   };
@@ -85,6 +99,8 @@ const Welcome = () => {
   };
 
   const onSocialClick = async (event: React.MouseEvent) => {
+    // 모바일에서는 기본적으로 새창이 열리는 것이 막혀있기 때문에 preventDefault 를 적용
+    event.preventDefault();
     const { name } = event.target as HTMLInputElement;
     let provider;
     const auth = getAuth();
@@ -162,6 +178,7 @@ const Welcome = () => {
             </div>
             <AuthBtnContainer>
               <Btn
+                Icon="google"
                 onClick={onSocialClick}
                 name="google"
                 size="large"
@@ -169,6 +186,7 @@ const Welcome = () => {
                 children="Continue with Google"
               />
               <Btn
+                Icon="github"
                 onClick={onSocialClick}
                 size="large"
                 ButtonType="Default"
@@ -237,6 +255,7 @@ const Welcome = () => {
             </div>
             <AuthBtnContainer>
               <Btn
+                Icon="google"
                 onClick={onSocialClick}
                 name="google"
                 size="large"
@@ -244,6 +263,7 @@ const Welcome = () => {
                 children="Continue with Google"
               />
               <Btn
+                Icon="github"
                 onClick={onSocialClick}
                 size="large"
                 ButtonType="Default"

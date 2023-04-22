@@ -1,6 +1,8 @@
 import palette from "../../styles/palette";
 import styled from "styled-components";
 import { css } from "styled-components";
+import GoogleIcon from "@mui/icons-material/Google";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 interface BaseProps {
   variant?: "text" | "contained" | "outlined";
@@ -101,6 +103,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
+  Icon?: string;
 }
 const Btn: React.FC<Props> = ({
   children,
@@ -110,6 +113,7 @@ const Btn: React.FC<Props> = ({
   size,
   startIcon,
   endIcon,
+  Icon,
 
   ...props
 }) => {
@@ -123,6 +127,8 @@ const Btn: React.FC<Props> = ({
       endIcon={endIcon}
       {...props}
     >
+      {Icon == "google" ? <GoogleIcon /> : ""}
+      {Icon == "github" ? <GitHubIcon /> : ""}
       {children}
     </Base>
   );

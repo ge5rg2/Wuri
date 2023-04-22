@@ -197,7 +197,7 @@ const Home = () => {
         document
           .getElementById("calendarContainer")
           ?.classList.add("animateDisplay");
-      }, 300);
+      }, 400);
     }
     setCalendar((prev) => !prev);
   };

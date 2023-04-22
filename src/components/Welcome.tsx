@@ -119,82 +119,84 @@ const Welcome = () => {
     <MainContainer>
       {isAccount ? (
         currentState.isSignUp ? (
-          <AuthContainer>
-            <div className="AuthImgContainer">
-              <div className="AuthImgBox">
-                <img src="/img/WuriNone.png" />
+          <>
+            <AuthContainer>
+              <div className="AuthImgContainer">
+                <div className="AuthImgBox">
+                  <img src="/img/WuriNone.png" />
+                </div>
               </div>
-            </div>
-            <AuthHeaderContainer>
-              <h1>Create your account</h1>
-            </AuthHeaderContainer>
-            <AuthInputContainer>
-              <Input
-                name="email"
-                type="email"
-                placeholder="Emaill address"
-                required
-                size={3}
-                value={email}
-                onChange={onChange}
-              />
-              <Input
-                name="password"
-                type="password"
-                placeholder="Password"
-                required
-                size={3}
-                value={password}
-                onChange={onChange}
-              />
-            </AuthInputContainer>
-            <AuthInputContainer>
-              <Btn
-                children="Continue"
-                size="large"
-                ButtonType="Emphasized"
-                value="continue"
-                onClick={onSubmit}
-              />
-            </AuthInputContainer>
-            <AuthPcontainer>
-              <p>
-                {`Already have an account? `}
-                <a
-                  className="a_SignUp"
-                  onClick={() =>
-                    setCurrentState((prevState) => ({
-                      isSignUp: false,
-                      isLogIn: true,
-                    }))
-                  }
-                >
-                  Log in
-                </a>
-              </p>
-            </AuthPcontainer>
-            <div className="div_divider">
-              <span>OR</span>
-            </div>
-            <AuthBtnContainer>
-              <Btn
-                Icon="google"
-                onClick={onSocialClick}
-                name="google"
-                size="large"
-                ButtonType="Default"
-                children="Continue with Google"
-              />
-              <Btn
-                Icon="github"
-                onClick={onSocialClick}
-                size="large"
-                ButtonType="Default"
-                name="github"
-                children="Continue with Github"
-              />
-            </AuthBtnContainer>
-          </AuthContainer>
+              <AuthHeaderContainer>
+                <h1>Create your account</h1>
+              </AuthHeaderContainer>
+              <AuthInputContainer>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Emaill address"
+                  required
+                  size={3}
+                  value={email}
+                  onChange={onChange}
+                />
+                <Input
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  required
+                  size={3}
+                  value={password}
+                  onChange={onChange}
+                />
+              </AuthInputContainer>
+              <AuthInputContainer>
+                <Btn
+                  children="Continue"
+                  size="large"
+                  ButtonType="Emphasized"
+                  value="continue"
+                  onClick={onSubmit}
+                />
+              </AuthInputContainer>
+              <AuthPcontainer>
+                <p>
+                  {`Already have an account? `}
+                  <a
+                    className="a_SignUp"
+                    onClick={() =>
+                      setCurrentState((prevState) => ({
+                        isSignUp: false,
+                        isLogIn: true,
+                      }))
+                    }
+                  >
+                    Log in
+                  </a>
+                </p>
+              </AuthPcontainer>
+              <div className="div_divider">
+                <span>OR</span>
+              </div>
+              <AuthBtnContainer>
+                <Btn
+                  Icon="google"
+                  onClick={onSocialClick}
+                  name="google"
+                  size="large"
+                  ButtonType="Default"
+                  children="Continue with Google"
+                />
+                <Btn
+                  Icon="github"
+                  onClick={onSocialClick}
+                  size="large"
+                  ButtonType="Default"
+                  name="github"
+                  children="Continue with Github"
+                />
+              </AuthBtnContainer>
+            </AuthContainer>
+          </>
         ) : (
           <AuthContainer>
             <div className="AuthImgContainer">

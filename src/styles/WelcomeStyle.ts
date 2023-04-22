@@ -12,13 +12,13 @@ export const AppContainer = styled.div`
 export const MainContainer = styled.div`
   display: flex;
   justify-content: center;
-  min-height: 100vh;
 `;
 
 export const SubContainer = styled.div`
   margin: 0 auto;
   padding-bottom: 100px;
   display: flex;
+  min-height: 100vh;
   flex-direction: column;
   justify-content: center;
   .greetingContainer {
@@ -53,9 +53,9 @@ export const AuthContainer = styled.div`
   .AuthImgContainer {
     display: flex;
     justify-content: center;
+    margin: 0 0 6rem 0;
     .AuthImgBox {
       top: 1rem;
-      position: fixed;
       display: flex;
       justify-content: center;
       img {

@@ -3,7 +3,14 @@ import Router from "./Router";
 import { GlobalStyle } from "./styles/GlobalStyle";
 import { app, dbService } from "./myBase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { doc, collection, getDocs, query, where } from "@firebase/firestore";
+import {
+  doc,
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+} from "@firebase/firestore";
 import { useDispatch } from "./store";
 import { userActions } from "./store/userSlice";
 import { AppContainer, ImgContainer } from "./styles/WelcomeStyle";
@@ -22,6 +29,7 @@ const App = () => {
         const userInfoRef = collection(dbService, "userInfo");
         const userQuery = query(userInfoRef, where("userId", "==", uid));
         const userQuerySnapshot = await getDocs(userQuery);
+
         if (user.email && !user.displayName) {
           dispatch(
             userActions.setLoggedIn({
@@ -67,6 +75,18 @@ const App = () => {
               })
             );
           }
+        } else {
+          await addDoc(collection(dbService, "userInfo"), {
+            userId: uid,
+            userName:
+              user.email && !user.displayName
+                ? user.email?.split("@")[0]
+                : user.displayName,
+            userUrl:
+              user.email && !user.displayName
+                ? "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg"
+                : user.photoURL,
+          });
         }
       } else {
         dispatch(

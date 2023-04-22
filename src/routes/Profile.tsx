@@ -332,6 +332,7 @@ const Profile = () => {
               where("userId", "==", userUid)
             );
             const userInfoSnapshot = await getDocs(userInfoQuery);
+
             const { id } = userInfoSnapshot.docs[0];
             await updateDoc(doc(dbService, "userInfo", `${id}`), {
               userName: editUserName,

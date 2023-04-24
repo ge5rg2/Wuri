@@ -156,7 +156,7 @@ export const CalendarContainer = styled.div`
     abbr::after {
       font-size: 0.5rem;
       left: 37%;
-      bottom: -0.2rem;
+      bottom: -0.1rem;
       position: absolute;
       content: "✅";
     }

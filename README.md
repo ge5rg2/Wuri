@@ -1,12 +1,11 @@
-# Wuri
+# Side project “Wuri” 📒
 
-## Side project “Wuri”
-
+[Wuri.](https://ge5rg2.github.io/Wuri/)
 우리들의 다이어리, Wuri라고 불리는 사이드 프로젝트
 
 > Wuri는 사용자가 일기, 연인과의 데이트, 육아 활동을 기록할 수 있는 사이드 프로젝트 앱입니다. Firebase를 통한 OAuth 로그인, 연인과의 일기 공유, 일기 작성 및 댓글 등의 기능을 제공할 예정입니다. 기술 스택으로는 React, Styled-Components, Firebase, NotionDB가 사용됩니다. 프로젝트는 환영 페이지, 메인 페이지, 일기 페이지, 새 글 페이지, 로그아웃 페이지, 계정 페이지 및 커플 다이어리 페이지를 포함합니다. ERD 다이어그램도 제공됩니다.
 
-## Background
+## Background 🌐
 
 ---
 
@@ -14,9 +13,9 @@
 
 1. 하루 일기를 기록하는 앱.
 2. 연인과의 데이트 일기를 기록합니다.
-3. 육아 활동 기록.
+3. 육아, 반려동물 활동 기록.
 
-## Project goal
+## Project goal 📆
 
 ---
 
@@ -24,7 +23,7 @@
 2. 연인 설정 시, 입력한 연인 정보가 서로 일치하면 일기를 공유할 수 있도록 함.
 3. 작성 또는 댓글(수정 포함)
 
-## Technology stack
+## Technology stack 👨‍🔧
 
 ---
 
@@ -32,15 +31,11 @@
 
 서버 - firebase
 
-DB - NotionDB || firebase
+DB - firebase
 
-배포 - firebase
+배포 - gh-pages, firebase
 
-## Schedule
-
----
-
-## Page component
+## Page component 📃
 
 ---
 
@@ -63,4 +58,4 @@ Main page → 일기 미리보기 / 새 글 작성 / Nav var
 
 [개발자 및 분석가를 위한 무료 데이터베이스 디자이너](https://dbdiagram.io/d/63f3006c296d97641d822e33)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a7ca1cea-5a87-4da2-b478-025e789f4da5/Copy_of_Untitled_Diagram.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a7ca1cea-5a87-4da2-b478-025e789f4da5/Copy_of_Untitled_Diagram.png)
+![다이어그램](/public/img/diagram.png)

@@ -18,8 +18,20 @@ const myImage = require("./img/WuriNone.png");
 
 const App = () => {
   const [init, setInit] = useState(false);
-
   const dispatch = useDispatch();
+
+  /*   let startY = 0;
+  window.addEventListener("touchstart", (e) => {
+    startY = e.touches[0].pageY;
+  });
+
+  window.addEventListener("touchmove", (e) => {
+    const currentY = e.touches[0].pageY;
+    const diffY = currentY - startY;
+    if (diffY > 0 && window.scrollY === 0) {
+      window.location.reload();
+    }
+  }); */
 
   useEffect(() => {
     const auth = getAuth(app);

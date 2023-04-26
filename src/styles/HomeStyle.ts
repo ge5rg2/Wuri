@@ -34,7 +34,7 @@ export const SubContainer = styled.div`
   }
 
   .animateEnd {
-    animation: 0.5s up;
+    animation: 0.3s up;
     animation-fill-mode: forwards;
     @keyframes up {
       from {
@@ -42,16 +42,16 @@ export const SubContainer = styled.div`
         opacity: 1;
       }
       to {
-        transform: translate(0, -30px);
+        transform: translate(0, -20px);
         opacity: 0;
       }
     }
   }
   .animateStart {
-    animation: 0.5s ease-in down;
+    animation: 0.3s ease-in down;
     @keyframes down {
       from {
-        transform: translate(0, -30px);
+        transform: translate(0, -20px);
         opacity: 0;
       }
 

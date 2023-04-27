@@ -7,6 +7,7 @@ import {
   FormContainer,
   SumContainer,
   CoupleContainer,
+  ImgContainer,
 } from "../styles/ProfileStyle";
 import React, { useEffect, useState, useRef } from "react";
 import {
@@ -31,6 +32,7 @@ import { userActions } from "../store/userSlice";
 import { ref, uploadString, getDownloadURL } from "@firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import { ExpandImgContainer } from "../styles/EditStyle";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -46,6 +48,8 @@ const Profile = () => {
   const [coupleDiarySize, setCoupleDiarySize] = useState(0);
   const [commentsSize, setCommentsSize] = useState(0);
   const [matchedDate, setMatchedDate] = useState<string>("");
+  const [expandUserImg, setExpandUserImg] = useState<boolean>(false);
+  const [expandCoupleImg, setExpandCoupleImg] = useState<boolean>(false);
   const { userUid, userUrl, userName, coupleId, coupleName, coupleUrl } =
     useSelector((state) => state.user);
 
@@ -396,6 +400,15 @@ const Profile = () => {
 
   return (
     <MainContainer>
+      {expandUserImg ? (
+        <ExpandImgContainer className="modal__container">
+          <div className="modal__box">
+            <img src={attachment} onClick={() => setExpandUserImg(false)} />
+          </div>
+        </ExpandImgContainer>
+      ) : (
+        ""
+      )}
       {editProfile ? (
         <ProfileEditContainer>
           <FormContainer>
@@ -463,10 +476,9 @@ const Profile = () => {
         </ProfileEditContainer>
       ) : (
         <SubContainer>
-          <img
-            src={userUrl + ""}
-            style={{ height: "150px", width: "150px", borderRadius: "50%" }}
-          />
+          <ImgContainer onClick={() => setExpandUserImg(true)}>
+            <img src={userUrl + ""} style={{ borderRadius: "50%" }} />
+          </ImgContainer>
           <div className="profile__userName">{userName}</div>
           <div className="profile__loginMethod">{loginMethod}</div>
           <Btn
@@ -508,12 +520,30 @@ const Profile = () => {
       </SumContainer>
       {isCouple ? (
         <CoupleContainer>
+          {expandCoupleImg ? (
+            <ExpandImgContainer className="modal__container">
+              <div className="modal__box">
+                <img
+                  src={coupleUrl + "-"}
+                  onClick={() => setExpandCoupleImg(false)}
+                />
+              </div>
+            </ExpandImgContainer>
+          ) : (
+            ""
+          )}
           <div className="couple__title">Couple Info</div>
           <div className="couple__box">
             <div className="couple__box_info">
               <img
                 src={coupleUrl + "-"}
-                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+                style={{
+                  height: "50px",
+                  width: "50px",
+                  borderRadius: "50%",
+                  cursor: "pointer",
+                }}
+                onClick={() => setExpandCoupleImg(true)}
               />
               <div>{coupleName}</div>
             </div>

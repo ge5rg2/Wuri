@@ -184,7 +184,7 @@ export const CommentDataContainer = styled.div`
   }
 
   .animateEnd {
-    animation: 0.2s Comentup;
+    animation: 0.3s Comentup;
     animation-fill-mode: forwards;
     @keyframes Comentup {
       from {
@@ -198,7 +198,7 @@ export const CommentDataContainer = styled.div`
     }
   }
   .animateStart {
-    animation: 0.2s ease-in Comentdown;
+    animation: 0.3s ease-in Comentdown;
     @keyframes Comentdown {
       from {
         transform: translate(-2rem, 0);

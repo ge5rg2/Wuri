@@ -18,7 +18,6 @@ const myImage = require("./img/WuriNone.png");
 
 const App = () => {
   const [init, setInit] = useState(false);
-
   const dispatch = useDispatch();
 
   // 모바일 스크롤 스와이프 시 새로고침

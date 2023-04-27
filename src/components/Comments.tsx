@@ -62,6 +62,16 @@ const Comments: React.FC<commentProps> = ({ info }) => {
   };
 
   const onMoreClick = () => {
+    if (!isMore) {
+      document.getElementById("editModal")?.classList.remove("animateDisplay");
+      document.getElementById("editModal")?.classList.add("animateStart");
+    } else {
+      document.getElementById("editModal")?.classList.remove("animateStart");
+      document.getElementById("editModal")?.classList.add("animateEnd");
+      setTimeout(() => {
+        document.getElementById("editModal")?.classList.add("animateDisplay");
+      }, 300);
+    }
     setIsMore((props) => !props);
   };
 
@@ -111,6 +121,11 @@ const Comments: React.FC<commentProps> = ({ info }) => {
     dateSet();
     const handleClick = (event: any) => {
       if (moreRef.current && !moreRef.current.contains(event.target)) {
+        document.getElementById("editModal")?.classList.remove("animateStart");
+        document.getElementById("editModal")?.classList.add("animateEnd");
+        setTimeout(() => {
+          document.getElementById("editModal")?.classList.add("animateDisplay");
+        }, 200);
         setIsMore(false);
       }
     };
@@ -159,20 +174,16 @@ const Comments: React.FC<commentProps> = ({ info }) => {
         </div>
       ) : (
         <>
-          {isMore ? (
-            <EditModal>
-              <div className="editIcon" onClick={onEditClick}>
-                <EditIcon />
-                <span>Edit comment</span>
-              </div>
-              <div className="deleteIcon" onClick={onDeleteClick}>
-                <DeleteForeverIcon />
-                <span>Delete comment</span>
-              </div>
-            </EditModal>
-          ) : (
-            ""
-          )}
+          <EditModal id="editModal" className="animateDisplay">
+            <div className="editIcon" onClick={onEditClick}>
+              <EditIcon />
+              <span>Edit comment</span>
+            </div>
+            <div className="deleteIcon" onClick={onDeleteClick}>
+              <DeleteForeverIcon />
+              <span>Delete comment</span>
+            </div>
+          </EditModal>
           <div
             className={
               isMore

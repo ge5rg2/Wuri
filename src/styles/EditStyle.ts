@@ -141,6 +141,7 @@ export const CommentDataContainer = styled.div`
   margin: 0.5rem 0 1rem 0;
   width: 100%;
   position: relative;
+  transition: all ease-in-out 0.3s;
   .CommentData_container {
     display: flex;
     .CommentData_img {
@@ -175,6 +176,38 @@ export const CommentDataContainer = styled.div`
   .CommentForm_Btn {
     button:first-child {
       margin-right: 0.5rem;
+    }
+  }
+  .animateDisplay {
+    display: none;
+  }
+
+  .animateEnd {
+    animation: 0.2s Comentup;
+    animation-fill-mode: forwards;
+    @keyframes Comentup {
+      from {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+      to {
+        transform: translate(-2rem, 0);
+        opacity: 0;
+      }
+    }
+  }
+  .animateStart {
+    animation: 0.2s ease-in Comentdown;
+    @keyframes Comentdown {
+      from {
+        transform: translate(-2rem, 0);
+        opacity: 0;
+      }
+
+      to {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
     }
   }
 `;

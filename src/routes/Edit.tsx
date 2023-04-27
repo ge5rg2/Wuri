@@ -40,6 +40,7 @@ import { useSelector } from "../store";
 import Comments from "../components/Comments";
 import { Comment } from "../interface/tpyes";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { fireEvent } from "@testing-library/react";
 
 const Edit = () => {
   const navigate = useNavigate();
@@ -220,8 +221,46 @@ const Edit = () => {
             attachmentUrl = await getDownloadURL(snapshot.ref);
           }
         );
+        if (firstAttachment !== "") {
+          // 여기서 기존 사진 데이터 삭제
+          const startIndex = firstAttachment.lastIndexOf("%2F") + 3;
+          const endIndex = firstAttachment.indexOf("?", startIndex);
+          const fileName = decodeURIComponent(
+            firstAttachment.substring(startIndex, endIndex)
+          );
+          const desertRef = ref(storageService, `${userUid}/${fileName}`);
+          // Delete the file
+          await deleteObject(desertRef)
+            .then(() => {
+              // File deleted successfully
+              console.log("DB 이미지를 성공적으로 삭제했습니다.");
+            })
+            .catch((error) => {
+              // Uh-oh, an error occurred!
+              console.log("Delete Img Error!" + " " + error);
+            });
+        }
       } else if (firstAttachment == attachment) {
         attachmentUrl = firstAttachment;
+      } else if (firstAttachment !== "" && attachment == "") {
+        // 여기서 기존 사진 데이터 삭제
+        const startIndex = firstAttachment.lastIndexOf("%2F") + 3;
+        const endIndex = firstAttachment.indexOf("?", startIndex);
+        const fileName = decodeURIComponent(
+          firstAttachment.substring(startIndex, endIndex)
+        );
+        // fireName -> 업로드된 파일명을 찾기
+        const desertRef = ref(storageService, `${userUid}/${fileName}`);
+        // Delete the file
+        await deleteObject(desertRef)
+          .then(() => {
+            // File deleted successfully
+            console.log("DB 이미지를 성공적으로 삭제했습니다.");
+          })
+          .catch((error) => {
+            // Uh-oh, an error occurred!
+            console.log("Delete Img Error!" + " " + error);
+          });
       }
       await updateDoc(DiaryTextRef, {
         text: newDiary,

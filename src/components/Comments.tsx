@@ -65,8 +65,9 @@ const Comments: React.FC<commentProps> = ({ info }) => {
     setIsMore((props) => !props);
   };
 
-  const onEditClick = () => {
-    setIsEditing(true);
+  const onEditClick = async () => {
+    await setIsEditing(true);
+    document.getElementById("newCommentValue")?.focus();
   };
 
   const onCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {

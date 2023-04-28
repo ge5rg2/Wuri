@@ -497,7 +497,12 @@ const Edit = () => {
             <div className="CommemtForm_img">
               <img
                 src={userUrl + ""}
-                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+                style={{
+                  height: "50px",
+                  width: "50px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
               />
             </div>
             <div className="CommemtForm_form">

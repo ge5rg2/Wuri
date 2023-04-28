@@ -40,6 +40,7 @@ import { useSelector } from "../store";
 import Comments from "../components/Comments";
 import { Comment } from "../interface/tpyes";
 import imageCompression from "browser-image-compression";
+import Loading from "../components/common/Loading";
 
 const Edit = () => {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ const Edit = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [emojiValue, setEmojiValue] = useState("");
   const [expandImg, setExpandImg] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const DiaryTextRef = doc(dbService, `${docName}`, `${id}`);
   const urlRef = ref(storageService, diaryInfo.attachmentUrl);
@@ -139,6 +141,8 @@ const Edit = () => {
       maxWidthOrHeight: 1000, // 최대 넓이(혹은 높이)
       useWebWorker: true,
     };
+
+    setLoading(true);
     try {
       const compressedFile = await imageCompression(file, options);
       console.log(compressedFile);
@@ -151,6 +155,8 @@ const Edit = () => {
     } catch (error) {
       console.log(error);
     }
+
+    setLoading(false);
   };
 
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -230,6 +236,7 @@ const Edit = () => {
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setLoading(true);
     let attachmentUrl = "";
     let blank_pattern = /^\s+|\s+$/g;
     if (newTitle.replace(blank_pattern, "") == "") {
@@ -272,6 +279,7 @@ const Edit = () => {
     }
     getDiaryInfo();
     onClearAttachment();
+    setLoading(false);
     setEditing((prev) => !prev);
   };
 
@@ -344,10 +352,20 @@ const Edit = () => {
   useEffect(() => {
     getDiaryInfo();
     getCommentInfo();
+    setLoading(false);
   }, []);
 
   return (
     <MainContainer>
+      {loading ? (
+        <ExpandImgContainer className="modal__container">
+          <div className="modal__box">
+            <Loading loading={loading} />
+          </div>
+        </ExpandImgContainer>
+      ) : (
+        ""
+      )}
       {expandImg ? (
         <ExpandImgContainer className="modal__container">
           <div className="modal__box">

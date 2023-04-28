@@ -34,6 +34,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { startOfDay, endOfDay } from "date-fns";
 import moment from "moment";
+import Loading from "../components/common/Loading";
+import { ExpandImgContainer } from "../styles/EditStyle";
 
 const theme = createTheme({
   palette: {
@@ -59,6 +61,7 @@ const Home = () => {
   const [isExistMonth, setIsExistMonth] = useState<boolean>(true);
   const [markDiary, setMarkDiary] = useState<string[]>([]);
   const [value, onChange] = useState(new Date());
+  const [loading, setLoading] = useState<boolean>(true);
 
   const onWritePageClick = () => {
     navigate("/write/single");
@@ -253,10 +256,20 @@ const Home = () => {
         .getElementById("calendarContainer")
         ?.classList.add("animateDisplay");
     }
+    setLoading(false);
   }, []);
 
   return (
     <MainContainer>
+      {loading ? (
+        <ExpandImgContainer className="modal__container">
+          <div className="modal__box">
+            <Loading loading={loading} />
+          </div>
+        </ExpandImgContainer>
+      ) : (
+        ""
+      )}
       <SubContainer>
         <IntroContainer>
           <img

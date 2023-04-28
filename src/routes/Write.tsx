@@ -16,6 +16,8 @@ import {
 } from "../styles/WriteStyle";
 import { useNavigate, useParams } from "react-router-dom";
 import imageCompression from "browser-image-compression";
+import { ExpandImgContainer } from "../styles/EditStyle";
+import Loading from "../components/common/Loading";
 
 const Write = () => {
   const { type } = useParams();
@@ -30,6 +32,7 @@ const Write = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [date, setDate] = useState<string>("");
   const [emojiValue, setEmojiValue] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -51,6 +54,7 @@ const Write = () => {
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setLoading(true);
     let attachmentUrl = "";
     let blank_pattern = /^\s+|\s+$/g;
     if (title.replace(blank_pattern, "") == "") {
@@ -98,7 +102,7 @@ const Write = () => {
     }
     setDiary("");
     setTitle("");
-
+    setLoading(false);
     onClearAttachment();
     return diaryType == "couple" ? navigate("/couple") : navigate("/");
   };
@@ -117,6 +121,7 @@ const Write = () => {
       maxWidthOrHeight: 1000, // 최대 넓이(혹은 높이)
       useWebWorker: true,
     };
+    setLoading(true);
     try {
       const compressedFile = await imageCompression(file, options);
       console.log(compressedFile);
@@ -129,6 +134,7 @@ const Write = () => {
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -198,6 +204,15 @@ const Write = () => {
 
   return (
     <MainContainer>
+      {loading ? (
+        <ExpandImgContainer className="modal__container">
+          <div className="modal__box">
+            <Loading loading={loading} />
+          </div>
+        </ExpandImgContainer>
+      ) : (
+        ""
+      )}
       <SubContainer>
         <Subtitle>{title ? title : "Title"}</Subtitle>
         <FormContainer onSubmit={onSubmit}>

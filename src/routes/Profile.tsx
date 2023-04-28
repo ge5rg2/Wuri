@@ -39,6 +39,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import { ExpandImgContainer } from "../styles/EditStyle";
 import imageCompression from "browser-image-compression";
+import Loading from "../components/common/Loading";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -59,6 +60,8 @@ const Profile = () => {
   const [expandCoupleImg, setExpandCoupleImg] = useState<boolean>(false);
   const { userUid, userUrl, userName, coupleId, coupleName, coupleUrl } =
     useSelector((state) => state.user);
+
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fileInput = useRef<HTMLInputElement>(null);
   const auth = getAuth();
@@ -133,6 +136,8 @@ const Profile = () => {
         setEditUserName(userName);
       }
     }
+
+    setLoading(false);
   };
 
   const getCoupleCode = async () => {
@@ -291,6 +296,8 @@ const Profile = () => {
       maxWidthOrHeight: 1000, // 최대 넓이(혹은 높이)
       useWebWorker: true,
     };
+
+    setLoading(true);
     try {
       const compressedFile = await imageCompression(file, options);
       console.log(compressedFile);
@@ -303,6 +310,8 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
     }
+
+    setLoading(false);
   };
 
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -333,6 +342,7 @@ const Profile = () => {
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setLoading(true);
     let attachmentUrl = "";
     let blank_pattern = /^\s+|\s+$/g;
     if (editUserName.replace(blank_pattern, "") == "") {
@@ -434,6 +444,7 @@ const Profile = () => {
     } catch (error) {
       console.error("Error adding document: ", error);
     }
+    setLoading(false);
     setEditProfile((props) => !props);
     if (attachmentUrl == defaultURL) {
       setAttachment(defaultURL);
@@ -466,6 +477,15 @@ const Profile = () => {
 
   return (
     <MainContainer>
+      {loading ? (
+        <ExpandImgContainer className="modal__container">
+          <div className="modal__box">
+            <Loading loading={loading} />
+          </div>
+        </ExpandImgContainer>
+      ) : (
+        ""
+      )}
       {expandUserImg ? (
         <ExpandImgContainer className="modal__container">
           <div className="modal__box">

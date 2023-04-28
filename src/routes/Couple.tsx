@@ -26,6 +26,8 @@ import {
 import CoupleDiarys from "../components/CoupleDiarys";
 import Btn from "../components/common/Btn";
 import { Diary } from "../interface/tpyes";
+import Loading from "../components/common/Loading";
+import { ExpandImgContainer } from "../styles/EditStyle";
 
 const Couple = () => {
   const navigate = useNavigate();
@@ -38,6 +40,7 @@ const Couple = () => {
 
   const [coupleCode, setCoupleCode] = useState<string>("");
   const [isCouple, setIsCouple] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   let date = new Date();
 
   const onCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,6 +166,7 @@ const Couple = () => {
           ...doc.data(),
         }));
         setDiarys(diaryObject);
+        setLoading(false);
       });
     } else {
       return;
@@ -180,6 +184,15 @@ const Couple = () => {
   return (
     <>
       <MainContainer style={!isCouple ? { justifyContent: "center" } : {}}>
+        {loading ? (
+          <ExpandImgContainer>
+            <div className="modal__box">
+              <Loading loading={loading} />
+            </div>
+          </ExpandImgContainer>
+        ) : (
+          ""
+        )}
         {!isCouple && (
           <ConnectContainer>
             <h1>Verification🔑</h1>

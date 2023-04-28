@@ -39,8 +39,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "../store";
 import Comments from "../components/Comments";
 import { Comment } from "../interface/tpyes";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { fireEvent } from "@testing-library/react";
+import imageCompression from "browser-image-compression";
 
 const Edit = () => {
   const navigate = useNavigate();
@@ -84,21 +83,6 @@ const Edit = () => {
     if (e.dataTransfer.files) {
       setIsDragging(true);
     }
-  };
-  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const files = e.dataTransfer?.files;
-    if (files?.length) {
-      const theFile = files[0];
-      const reader = new FileReader();
-      reader.onloadend = (finishedEvent) => {
-        const result = (finishedEvent.currentTarget as FileReader).result;
-        setAttachment(result);
-      };
-      reader.readAsDataURL(theFile);
-    }
-    setIsDragging(false);
   };
 
   const onDeleteClick = async () => {
@@ -149,16 +133,42 @@ const Edit = () => {
     }
   };
 
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target?.files;
-    if (files?.length) {
-      const theFile = files[0];
+  const handleImageCompress = async (file: File) => {
+    const options = {
+      maxSizeMB: 0.2, // 이미지 최대 용량
+      maxWidthOrHeight: 1920, // 최대 넓이(혹은 높이)
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(file, options);
+      console.log(compressedFile);
       const reader = new FileReader();
       reader.onloadend = (finishedEvent) => {
         const result = (finishedEvent.currentTarget as FileReader).result;
         setAttachment(result);
       };
-      reader.readAsDataURL(theFile);
+      reader.readAsDataURL(compressedFile);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = e.dataTransfer?.files;
+    if (files?.length) {
+      const theFile = files[0];
+      handleImageCompress(theFile);
+    }
+    setIsDragging(false);
+  };
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target?.files;
+    if (files?.length) {
+      const theFile = files[0];
+      handleImageCompress(theFile);
     }
   };
 

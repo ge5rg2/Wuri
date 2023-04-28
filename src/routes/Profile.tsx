@@ -29,7 +29,12 @@ import { getAuth, updateProfile } from "firebase/auth";
 import Btn from "../components/common/Btn";
 import Input from "../components/common/Input";
 import { userActions } from "../store/userSlice";
-import { ref, uploadString, getDownloadURL } from "@firebase/storage";
+import {
+  ref,
+  uploadString,
+  getDownloadURL,
+  deleteObject,
+} from "@firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import { ExpandImgContainer } from "../styles/EditStyle";
@@ -42,6 +47,7 @@ const Profile = () => {
   const [isCouple, setIsCouple] = useState<boolean>(false);
   const [editProfile, setEditProfile] = useState<boolean>(false);
   const [editUserName, setEditUserName] = useState<string>("");
+  const [firstAttachment, setFirstAttachment] = useState<any>("");
   const [attachment, setAttachment] = useState<any>("");
   const [isDragging, setIsDragging] = useState(false);
   const [diarySize, setDiarySize] = useState(0);
@@ -120,6 +126,7 @@ const Profile = () => {
       getLoginMethod();
       if (userUrl) {
         setAttachment(userUrl);
+        setFirstAttachment(userUrl);
       }
       if (userName) {
         setEditUserName(userName);
@@ -277,6 +284,22 @@ const Profile = () => {
     }
   };
 
+  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = e.dataTransfer?.files;
+    if (files?.length) {
+      const theFile = files[0];
+      const reader = new FileReader();
+      reader.onloadend = (finishedEvent) => {
+        const result = (finishedEvent.currentTarget as FileReader).result;
+        setAttachment(result);
+      };
+      reader.readAsDataURL(theFile);
+    }
+    setIsDragging(false);
+  };
+
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target?.files;
     if (files?.length) {
@@ -300,6 +323,12 @@ const Profile = () => {
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     let attachmentUrl = "";
+    let blank_pattern = /^\s+|\s+$/g;
+    if (editUserName.replace(blank_pattern, "") == "") {
+      document.getElementById("newDiaryTitle")?.focus();
+      setEditUserName("");
+      return alert("Do not allow spaces in names");
+    }
     if (userName == editUserName && userUrl == attachment) {
       alert("Nothing changed!");
       return setEditProfile((props) => !props);
@@ -313,9 +342,48 @@ const Profile = () => {
               attachmentUrl = await getDownloadURL(snapshot.ref);
             }
           );
+          if (firstAttachment !== defaultURL) {
+            const startIndex = firstAttachment.lastIndexOf("%2F") + 3;
+            const endIndex = firstAttachment.indexOf("?", startIndex);
+            const fileName = decodeURIComponent(
+              firstAttachment.substring(startIndex, endIndex)
+            );
+            console.log(fileName);
+            const desertRef = ref(storageService, `${userUid}/${fileName}`);
+            // Delete the file
+            await deleteObject(desertRef)
+              .then(() => {
+                // File deleted successfully
+
+                console.log("DB 이미지를 성공적으로 삭제했습니다.");
+              })
+              .catch((error) => {
+                // Uh-oh, an error occurred!
+                console.log("Delete Img Error!" + " " + error);
+              });
+          }
         }
       } else {
         attachmentUrl = defaultURL;
+        if (firstAttachment !== defaultURL && attachment == "") {
+          const startIndex = firstAttachment.lastIndexOf("%2F") + 3;
+          const endIndex = firstAttachment.indexOf("?", startIndex);
+          const fileName = decodeURIComponent(
+            firstAttachment.substring(startIndex, endIndex)
+          );
+          console.log(fileName);
+          const desertRef = ref(storageService, `${userUid}/${fileName}`);
+          // Delete the file
+          await deleteObject(desertRef)
+            .then(() => {
+              // File deleted successfully
+              console.log("DB 이미지를 성공적으로 삭제했습니다.");
+            })
+            .catch((error) => {
+              // Uh-oh, an error occurred!
+              console.log("Delete Img Error!" + " " + error);
+            });
+        }
       }
       if (user) {
         await updateProfile(user, {
@@ -342,6 +410,7 @@ const Profile = () => {
               userName: editUserName,
               userUrl: attachmentUrl == "" ? attachment : attachmentUrl,
             });
+            setFirstAttachment(attachmentUrl);
             alert("Profile updated!");
           })
           .catch((error) => {
@@ -357,6 +426,7 @@ const Profile = () => {
     setEditProfile((props) => !props);
     if (attachmentUrl == defaultURL) {
       setAttachment(defaultURL);
+      setFirstAttachment(defaultURL);
     }
     // need to change userInfo document
   };
@@ -377,21 +447,6 @@ const Profile = () => {
     if (e.dataTransfer.files) {
       setIsDragging(true);
     }
-  };
-  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const files = e.dataTransfer?.files;
-    if (files?.length) {
-      const theFile = files[0];
-      const reader = new FileReader();
-      reader.onloadend = (finishedEvent) => {
-        const result = (finishedEvent.currentTarget as FileReader).result;
-        setAttachment(result);
-      };
-      reader.readAsDataURL(theFile);
-    }
-    setIsDragging(false);
   };
 
   useEffect(() => {
@@ -477,7 +532,7 @@ const Profile = () => {
       ) : (
         <SubContainer>
           <ImgContainer onClick={() => setExpandUserImg(true)}>
-            <img src={userUrl + ""} style={{ borderRadius: "50%" }} />
+            <img src={userUrl + ""} />
           </ImgContainer>
           <div className="profile__userName">{userName}</div>
           <div className="profile__loginMethod">{loginMethod}</div>
@@ -542,6 +597,7 @@ const Profile = () => {
                   width: "50px",
                   borderRadius: "50%",
                   cursor: "pointer",
+                  objectFit: "cover",
                 }}
                 onClick={() => setExpandCoupleImg(true)}
               />

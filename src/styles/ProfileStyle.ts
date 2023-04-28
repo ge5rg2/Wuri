@@ -213,9 +213,12 @@ export const CoupleContainer = styled.div`
 export const ImgContainer = styled.div`
   display: flex;
   justify-content: center;
+
   img {
+    object-fit: cover;
+    border-radius: 50%;
     cursor: pointer;
-    max-width: 150px;
-    max-height: 150px;
+    width: 150px;
+    height: 150px;
   }
 `;

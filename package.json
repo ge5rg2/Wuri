@@ -19,6 +19,7 @@
     "@types/react-redux": "^7.1.25",
     "@types/react-router-dom": "^5.3.3",
     "@types/uuid": "^9.0.1",
+    "browser-image-compression": "^2.0.2",
     "cors": "^2.8.5",
     "date-fns": "^2.29.3",
     "express": "^4.18.2",

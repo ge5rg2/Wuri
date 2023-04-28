@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/Wuri/static/js/main.151a70f5.js",
+    "main.js": "/Wuri/static/js/main.ecf20c7c.js",
     "static/media/WuriNone.png": "/Wuri/static/media/WuriNone.2d768927e27fbcf72493.png",
     "index.html": "/Wuri/index.html",
-    "main.151a70f5.js.map": "/Wuri/static/js/main.151a70f5.js.map"
+    "main.ecf20c7c.js.map": "/Wuri/static/js/main.ecf20c7c.js.map"
   },
   "entrypoints": [
-    "static/js/main.151a70f5.js"
+    "static/js/main.ecf20c7c.js"
   ]
 }

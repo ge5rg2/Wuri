@@ -205,13 +205,13 @@ const Couple = () => {
           <SubContainer>
             <IntroContainer>
               <img
-                style={{ borderRadius: "50%" }}
+                style={{ borderRadius: "50%", objectFit: "cover" }}
                 src={userUrl + ""}
                 className="OwnerImg"
                 onClick={() => navigate("/profile")}
               />
               <img
-                style={{ borderRadius: "50%" }}
+                style={{ borderRadius: "50%", objectFit: "cover" }}
                 src={coupleUrl + ""}
                 onClick={() => navigate("/profile")}
               />

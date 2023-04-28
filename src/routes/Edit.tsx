@@ -136,7 +136,7 @@ const Edit = () => {
   const handleImageCompress = async (file: File) => {
     const options = {
       maxSizeMB: 0.2, // 이미지 최대 용량
-      maxWidthOrHeight: 1920, // 최대 넓이(혹은 높이)
+      maxWidthOrHeight: 1000, // 최대 넓이(혹은 높이)
       useWebWorker: true,
     };
     try {
@@ -209,6 +209,25 @@ const Edit = () => {
     }
   }; */
 
+  const deleteImgDB = async () => {
+    const startIndex = firstAttachment.lastIndexOf("%2F") + 3;
+    const endIndex = firstAttachment.indexOf("?", startIndex);
+    const fileName = decodeURIComponent(
+      firstAttachment.substring(startIndex, endIndex)
+    );
+    const desertRef = ref(storageService, `${userUid}/${fileName}`);
+    // Delete the file
+    await deleteObject(desertRef)
+      .then(() => {
+        // File deleted successfully
+        console.log("DB 이미지를 성공적으로 삭제했습니다.");
+      })
+      .catch((error) => {
+        // Uh-oh, an error occurred!
+        console.log("Delete Img Error!" + " " + error);
+      });
+  };
+
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     let attachmentUrl = "";
@@ -233,44 +252,13 @@ const Edit = () => {
         );
         if (firstAttachment !== "") {
           // 여기서 기존 사진 데이터 삭제
-          const startIndex = firstAttachment.lastIndexOf("%2F") + 3;
-          const endIndex = firstAttachment.indexOf("?", startIndex);
-          const fileName = decodeURIComponent(
-            firstAttachment.substring(startIndex, endIndex)
-          );
-          const desertRef = ref(storageService, `${userUid}/${fileName}`);
-          // Delete the file
-          await deleteObject(desertRef)
-            .then(() => {
-              // File deleted successfully
-              console.log("DB 이미지를 성공적으로 삭제했습니다.");
-            })
-            .catch((error) => {
-              // Uh-oh, an error occurred!
-              console.log("Delete Img Error!" + " " + error);
-            });
+          deleteImgDB();
         }
       } else if (firstAttachment == attachment) {
         attachmentUrl = firstAttachment;
       } else if (firstAttachment !== "" && attachment == "") {
         // 여기서 기존 사진 데이터 삭제
-        const startIndex = firstAttachment.lastIndexOf("%2F") + 3;
-        const endIndex = firstAttachment.indexOf("?", startIndex);
-        const fileName = decodeURIComponent(
-          firstAttachment.substring(startIndex, endIndex)
-        );
-        // fireName -> 업로드된 파일명을 찾기
-        const desertRef = ref(storageService, `${userUid}/${fileName}`);
-        // Delete the file
-        await deleteObject(desertRef)
-          .then(() => {
-            // File deleted successfully
-            console.log("DB 이미지를 성공적으로 삭제했습니다.");
-          })
-          .catch((error) => {
-            // Uh-oh, an error occurred!
-            console.log("Delete Img Error!" + " " + error);
-          });
+        deleteImgDB();
       }
       await updateDoc(DiaryTextRef, {
         text: newDiary,
@@ -278,6 +266,7 @@ const Edit = () => {
         attachmentUrl,
         isEdit: true,
       });
+      setFirstAttachment(attachmentUrl);
     } catch (error) {
       console.error("Error adding document: ", error);
     }

@@ -84,6 +84,7 @@ export const UploadImgContainer = styled.div`
     width: 150px;
     height: 150px;
     border-radius: 50%;
+    object-fit: cover;
   }
 `;
 

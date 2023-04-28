@@ -24,6 +24,9 @@ const CoupleDiaryContainer = styled.div`
   margin: 0.5rem 0;
   text-align: center;
   img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
     margin-top: 1rem;
   }
 `;
@@ -82,10 +85,12 @@ const CoupleDiarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {
       }).format(dataDate)}`
     );
   }, []);
-
+  // img 파일은 되도록 div 안에서(style 적용 등)
   return (
     <CoupleDiaryContainer>
-      <img src={userImg + ""} height="50px" width="50px" />
+      <div>
+        <img src={userImg + ""} style={{ objectFit: "cover" }} />
+      </div>
       <DiaryContainer>
         <h4>{date}</h4>
         <Btn

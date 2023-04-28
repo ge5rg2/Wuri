@@ -128,7 +128,12 @@ const Comments: React.FC<commentProps> = ({ info }) => {
           <div className="CommemtForm_img">
             <img
               src={createdUser.userUrl}
-              style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+              style={{
+                height: "50px",
+                width: "50px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
             />
           </div>
           <div className="CommemtForm_form">
@@ -184,7 +189,12 @@ const Comments: React.FC<commentProps> = ({ info }) => {
             <div className="CommentData_img">
               <img
                 src={createdUser.userUrl}
-                style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
               />
             </div>
             <div className="CommentData_comment_container">

@@ -260,7 +260,7 @@ const Home = () => {
       <SubContainer>
         <IntroContainer>
           <img
-            style={{ borderRadius: "50%" }}
+            style={{ borderRadius: "50%", objectFit: "cover" }}
             src={userStore.userUrl + ""}
             onClick={() => navigate("/profile")}
           />

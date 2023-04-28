@@ -38,6 +38,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import { ExpandImgContainer } from "../styles/EditStyle";
+import imageCompression from "browser-image-compression";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -284,18 +285,33 @@ const Profile = () => {
     }
   };
 
+  const handleImageCompress = async (file: File) => {
+    const options = {
+      maxSizeMB: 0.2, // 이미지 최대 용량
+      maxWidthOrHeight: 1000, // 최대 넓이(혹은 높이)
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(file, options);
+      console.log(compressedFile);
+      const reader = new FileReader();
+      reader.onloadend = (finishedEvent) => {
+        const result = (finishedEvent.currentTarget as FileReader).result;
+        setAttachment(result);
+      };
+      reader.readAsDataURL(compressedFile);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     const files = e.dataTransfer?.files;
     if (files?.length) {
       const theFile = files[0];
-      const reader = new FileReader();
-      reader.onloadend = (finishedEvent) => {
-        const result = (finishedEvent.currentTarget as FileReader).result;
-        setAttachment(result);
-      };
-      reader.readAsDataURL(theFile);
+      handleImageCompress(theFile);
     }
     setIsDragging(false);
   };
@@ -304,12 +320,7 @@ const Profile = () => {
     const files = e.target?.files;
     if (files?.length) {
       const theFile = files[0];
-      const reader = new FileReader();
-      reader.onloadend = (finishedEvent) => {
-        const result = (finishedEvent.currentTarget as FileReader).result;
-        setAttachment(result);
-      };
-      reader.readAsDataURL(theFile);
+      handleImageCompress(theFile);
     }
   };
 

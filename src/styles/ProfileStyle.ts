@@ -138,7 +138,7 @@ export const FormContainer = styled.form`
     color: ${palette.gray[400]};
   }
   .filePlaceholder::before {
-    content: "Drag & Drop a Img Here";
+    content: "Or drag an image";
     position: absolute;
     top: 10%;
   }
@@ -148,7 +148,7 @@ export const FormContainer = styled.form`
     position: absolute;
     cursor: pointer;
     top: 40%;
-    left: 17%;
+    left: 16%;
     padding: 1rem;
     border-radius: 10px;
     font-weight: 500;

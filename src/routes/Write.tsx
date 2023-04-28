@@ -33,6 +33,7 @@ const Write = () => {
   const [date, setDate] = useState<string>("");
   const [emojiValue, setEmojiValue] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  let [inputCount, setInputCount] = useState(0);
 
   const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -159,6 +160,9 @@ const Write = () => {
 
   const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let { value } = e.target;
+    setInputCount(
+      value.replace(/[\0-\x7f]|([0-\u07ff]|(.))/g, "$&$1$2").length
+    );
     setDiary(value);
   };
 
@@ -271,8 +275,12 @@ const Write = () => {
             onChange={onContentChange}
             onCompositionEnd={handleCompositionEnd}
             onPaste={onPaste}
-            maxLength={500}
+            maxLength={1500}
           />
+          <p>
+            <span>{inputCount}</span>
+            <span>/1500 자</span>
+          </p>
           <Btn
             children="Submit"
             size="large"

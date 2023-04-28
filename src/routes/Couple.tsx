@@ -37,11 +37,36 @@ const Couple = () => {
     useSelector((state) => state.user);
   const user = auth.currentUser;
   const [diarys, setDiarys] = useState<Diary[]>([]);
-
   const [coupleCode, setCoupleCode] = useState<string>("");
   const [isCouple, setIsCouple] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [calendar, setCalendar] = useState(false);
+  const [selectedDiary, setSelectedDiary] = useState<Diary[]>([]);
+  const [isExistDiary, setIsExistDiary] = useState(false);
+  const [isExistMonth, setIsExistMonth] = useState<boolean>(true);
+  const [markDiary, setMarkDiary] = useState<string[]>([]);
+  const [value, onChange] = useState(new Date());
+
   let date = new Date();
+
+  const callMonthlyDiary = async (firstDay: Date, lastDay: Date) => {
+    const q = query(
+      collection(dbService, "couple_diarys"),
+      where("creatorId", "in", [userUid, coupleId]),
+      where("createdAt", ">=", firstDay),
+      where("createdAt", "<=", lastDay),
+      orderBy("createdAt", "desc")
+    );
+    const snapshot = await getDocs(q);
+    if (!snapshot.size) {
+      return;
+    }
+    const diaryObject: any = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return diaryObject;
+  };
 
   const onCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { value } = e.target;
@@ -153,8 +178,8 @@ const Couple = () => {
   });
 
   const callCoupleData = async () => {
+    setIsCouple(true);
     if (coupleId) {
-      setIsCouple(true);
       const q = query(
         collection(dbService, "couple_diarys"),
         where("creatorId", "in", [userUid, coupleId]),
@@ -169,7 +194,7 @@ const Couple = () => {
         setLoading(false);
       });
     } else {
-      return;
+      return setLoading(false);
     }
   };
 
@@ -233,6 +258,7 @@ const Couple = () => {
                 children={"What's on your mind " + userName + "?"}
               />
             </IntroContainer>
+
             {diaryData}
           </SubContainer>
         )}

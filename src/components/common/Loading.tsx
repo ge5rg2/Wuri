@@ -4,7 +4,7 @@ import { DotLoader } from "react-spinners";
 const override: React.CSSProperties = {
   display: "flex",
   margin: "0 auto",
-  borderColor: "rgba(16, 163, 127)",
+  borderColor: "#FD0155",
   textAlign: "center",
 };
 interface LoadingProps {
@@ -15,7 +15,7 @@ const Loading = ({ loading }: LoadingProps) => {
   return (
     <>
       <DotLoader
-        color=" rgba(16, 163, 127)"
+        color="#FD0155"
         loading={loading}
         cssOverride={override}
         size={50}

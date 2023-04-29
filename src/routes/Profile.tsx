@@ -342,11 +342,10 @@ const Profile = () => {
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setLoading(true);
     let attachmentUrl = "";
     let blank_pattern = /^\s+|\s+$/g;
     if (editUserName.replace(blank_pattern, "") == "") {
-      document.getElementById("newDiaryTitle")?.focus();
+      document.getElementById("newName")?.focus();
       setEditUserName("");
       return alert("Do not allow spaces in names");
     }
@@ -355,6 +354,7 @@ const Profile = () => {
       return setEditProfile((props) => !props);
     }
     try {
+      setLoading(true);
       if (attachment !== "") {
         if (attachment !== userUrl) {
           const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
@@ -540,6 +540,7 @@ const Profile = () => {
             <span>User name</span>
             <Input
               type="text"
+              id="newName"
               placeholder="User Name"
               value={editUserName}
               onChange={onChange}

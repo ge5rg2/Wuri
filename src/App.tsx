@@ -21,7 +21,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   // 모바일 스크롤 스와이프 시 새로고침
-  let startY = 0;
+  /*   let startY = 0;
   window.addEventListener("touchstart", (e) => {
     startY = e.touches[0].pageY;
   });
@@ -32,7 +32,7 @@ const App = () => {
     if (diffY > 0 && window.scrollY === 0) {
       window.location.reload();
     }
-  });
+  }); */
 
   useEffect(() => {
     const auth = getAuth(app);

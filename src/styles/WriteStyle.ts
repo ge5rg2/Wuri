@@ -3,7 +3,8 @@ import palette from "./palette";
 
 export const Subtitle = styled.div`
   margin: 1rem 0 0.5rem 0;
-  text-align: start;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const MainContainer = styled.div`

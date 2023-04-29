@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import palette from "./palette";
 
 export const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -34,7 +35,18 @@ footer, header, hgroup, main, menu, nav, section {
 body {  
   line-height: 1;
   position: relative;
-
+  /* 재사용성이 있는 class는 여기에 */
+ .overColor {
+  color: ${palette.red[500]};
+ }
+ textArea {
+  background-color: #30363d;
+        border: 1px solid ${palette.gray[400]};
+        &:focus {
+          outline: none;
+          border: 1px solid ${palette.gray[200]};
+        }
+ }
 }
 menu, ol, ul {
   list-style: none;
@@ -63,4 +75,5 @@ a {
   text-decoration:none;
   color:inherit;
 }
+
 `;

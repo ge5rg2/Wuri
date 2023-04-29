@@ -33,7 +33,8 @@ const Write = () => {
   const [date, setDate] = useState<string>("");
   const [emojiValue, setEmojiValue] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  let [inputCount, setInputCount] = useState(0);
+  const [isLenOver, setLenOver] = useState<boolean>(false);
+  const [inputCount, setInputCount] = useState<number>(0);
 
   const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -55,7 +56,6 @@ const Write = () => {
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setLoading(true);
     let attachmentUrl = "";
     let blank_pattern = /^\s+|\s+$/g;
     if (title.replace(blank_pattern, "") == "") {
@@ -70,6 +70,7 @@ const Write = () => {
     }
     const date = new Date();
     try {
+      setLoading(true);
       if (attachment !== "") {
         const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
         const response = await uploadString(
@@ -160,15 +161,28 @@ const Write = () => {
 
   const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let { value } = e.target;
-    setInputCount(
-      value.replace(/[\0-\x7f]|([0-\u07ff]|(.))/g, "$&$1$2").length
-    );
-    setDiary(value);
+    let { length } = value;
+    if (length > 1500) {
+      return setLenOver(true);
+    } else if (length > 1499) {
+      setLenOver(true);
+      setInputCount(length);
+      setDiary(value);
+    } else {
+      setLenOver(false);
+      setInputCount(length);
+      setDiary(value);
+    }
   };
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { value } = e.target;
-    setTitle(value);
+    let { length } = value;
+    if (length > 40) {
+      return;
+    } else {
+      setTitle(value);
+    }
   };
 
   const onPaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
@@ -225,7 +239,7 @@ const Write = () => {
             value={title}
             onChange={onTitleChange}
             type="text"
-            maxLength={20}
+            maxLength={40}
             placeholder="Summarize your day in one sentence"
           />
           <Subtitle>{attachment ? fileName : "Image"}</Subtitle>
@@ -267,7 +281,13 @@ const Write = () => {
             )}
           </div>
 
-          <Subtitle>{diary ? date : "Diary"}</Subtitle>
+          <Subtitle>
+            <div>{diary ? date : "Diary"}</div>
+            <div className={isLenOver ? "overColor" : ""}>
+              <span>{inputCount}</span>
+              <span>/1500</span>
+            </div>
+          </Subtitle>
           <textarea
             style={{ whiteSpace: "pre-wrap" }}
             value={diary}
@@ -277,10 +297,7 @@ const Write = () => {
             onPaste={onPaste}
             maxLength={1500}
           />
-          <p>
-            <span>{inputCount}</span>
-            <span>/1500 자</span>
-          </p>
+
           <Btn
             children="Submit"
             size="large"

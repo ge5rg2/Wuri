@@ -11,6 +11,7 @@ import {
   UploadBtnContainer,
   FormContainer,
   UploadImgContainer,
+  Subtitle,
 } from "../styles/WriteStyle";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -65,6 +66,8 @@ const Edit = () => {
   const [emojiValue, setEmojiValue] = useState("");
   const [expandImg, setExpandImg] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isLenOver, setLenOver] = useState<boolean>(false);
+  const [inputCount, setInputCount] = useState<number>(0);
 
   const DiaryTextRef = doc(dbService, `${docName}`, `${id}`);
   const urlRef = ref(storageService, diaryInfo.attachmentUrl);
@@ -113,6 +116,7 @@ const Edit = () => {
       setDiaryInfo(data);
       setNewTitle(data.title);
       setNewDiary(data.text);
+      setInputCount(data.text.length);
       setAttachment(data.attachmentUrl);
       setFirstAttachment(data.attachmentUrl);
       setDate(
@@ -194,7 +198,18 @@ const Edit = () => {
 
   const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let { value } = e.target;
-    setNewDiary(value);
+    let { length } = value;
+    if (length > 1500) {
+      return setLenOver(true);
+    } else if (length > 1499) {
+      setLenOver(true);
+      setInputCount(length);
+      setNewDiary(value);
+    } else {
+      setLenOver(false);
+      setInputCount(length);
+      setNewDiary(value);
+    }
   };
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -236,7 +251,6 @@ const Edit = () => {
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setLoading(true);
     let attachmentUrl = "";
     let blank_pattern = /^\s+|\s+$/g;
     if (newTitle.replace(blank_pattern, "") == "") {
@@ -250,6 +264,7 @@ const Edit = () => {
       return alert("Blank text is not allowed!");
     }
     try {
+      setLoading(true);
       if (attachment !== "" && firstAttachment != attachment) {
         const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
         await uploadString(fileRef, attachment, "data_url").then(
@@ -446,19 +461,18 @@ const Edit = () => {
                   </div>
                 )}
               </div>
-              <div
-                className="DiaryContent_date"
-                style={{ textAlign: "center" }}
-              >
-                {diaryInfo.isEdit
-                  ? date + " " + (diaryInfo.isEdit ? "(Edited)" : "")
-                  : date}
-              </div>
+              <Subtitle>
+                <div>{date}</div>
+                <div className={isLenOver ? "overColor" : ""}>
+                  <span>{inputCount}</span>
+                  <span>/1500</span>
+                </div>
+              </Subtitle>
               <Input
                 id="newDiaryTitle"
                 className="title"
                 type="text"
-                maxLength={20}
+                maxLength={40}
                 placeholder="Edit your diary title"
                 value={newTitle}
                 required
@@ -471,7 +485,7 @@ const Edit = () => {
                 onChange={onContentChange}
                 onCompositionEnd={handleCompositionEnd}
                 onPaste={onPaste}
-                maxLength={500}
+                maxLength={1500}
               />
             </FormContainer>
             <EditBtnContainer>

@@ -178,7 +178,7 @@ const Couple = () => {
   });
 
   const callCoupleData = async () => {
-    setIsCouple(true);
+    setLoading(true);
     if (coupleId) {
       const q = query(
         collection(dbService, "couple_diarys"),
@@ -190,6 +190,8 @@ const Couple = () => {
           id: doc.id,
           ...doc.data(),
         }));
+
+        setIsCouple(true);
         setDiarys(diaryObject);
         setLoading(false);
       });

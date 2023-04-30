@@ -84,6 +84,24 @@ const Welcome = () => {
           password: "",
         });
       }
+      if (
+        error.message ==
+        "Firebase: Password should be at least 6 characters (auth/weak-password)."
+      ) {
+        alert("Password must be at least 6 characters long.");
+        return setInputs({
+          email: inputs.email,
+          password: "",
+        });
+      }
+
+      if (error.message == "Firebase: Error (auth/wrong-password).") {
+        alert("The password is invalid.");
+        return setInputs({
+          email: inputs.email,
+          password: "",
+        });
+      }
     }
   };
   const toggleAccount = () => setIsAccount((prev) => !prev);

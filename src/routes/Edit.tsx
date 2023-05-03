@@ -22,6 +22,7 @@ import {
   deleteDoc,
   collection,
   query,
+  getDocs,
   where,
   orderBy,
   onSnapshot,
@@ -141,7 +142,7 @@ const Edit = () => {
 
   const handleImageCompress = async (file: File) => {
     const options = {
-      maxSizeMB: 0.2, // 이미지 최대 용량
+      maxSizeMB: 1, // 이미지 최대 용량
       maxWidthOrHeight: 1000, // 최대 넓이(혹은 높이)
       useWebWorker: true,
     };
@@ -327,13 +328,19 @@ const Edit = () => {
       where("diaryid", "==", id),
       orderBy("createdAt", "desc")
     );
-    onSnapshot(commentQuery, (snapshot) => {
-      const commentObject: any = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setCommentInfo(commentObject);
-    });
+    const commentSnapshot = await getDocs(commentQuery);
+    if (commentSnapshot.size > 0) {
+      onSnapshot(commentQuery, (snapshot) => {
+        const commentObject: any = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCommentInfo(commentObject);
+      });
+      setLoading(false);
+    } else {
+      return setLoading(false);
+    }
   };
 
   const commentData: JSX.Element[] = commentInfo.map((el) => {
@@ -367,7 +374,6 @@ const Edit = () => {
   useEffect(() => {
     getDiaryInfo();
     getCommentInfo();
-    setLoading(false);
   }, []);
 
   return (

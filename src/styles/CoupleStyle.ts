@@ -14,9 +14,53 @@ export const SubContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 5rem;
   width: 350px;
   img {
     border-radius: 50%;
+  }
+  .MuiPaginationItem-text {
+    color: ${(props) => props.theme.textColor};
+  }
+  .Nodata__box {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+  }
+
+  .animateDisplay {
+    display: none;
+  }
+
+  .animateEnd {
+    animation: 0.3s up;
+    animation-fill-mode: forwards;
+    @keyframes up {
+      from {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+      to {
+        transform: translate(0, -20px);
+        opacity: 0;
+      }
+    }
+  }
+  .animateStart {
+    animation: 0.3s ease-in down;
+    @keyframes down {
+      from {
+        transform: translate(0, -20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+    }
   }
 `;
 
@@ -59,4 +103,29 @@ export const ConnectContainer = styled.div`
     font-size: 1.5rem;
     font-weight: 550;
   }
+`;
+
+export const CalendarIcon = styled.div`
+  margin: 0.5rem 0;
+  width: 90%;
+  display: flex;
+  justify-content: flex-end;
+  .calendarIcon__box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+    &:hover {
+      color: ${palette.defaultColor};
+    }
+  }
+`;
+
+export const CoupleDiaryBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 600px;
 `;

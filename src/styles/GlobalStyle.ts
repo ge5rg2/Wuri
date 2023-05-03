@@ -33,6 +33,13 @@ footer, header, hgroup, main, menu, nav, section {
     display: none;
 }
 body {  
+  
+  /* font-size 최소 16px에 맞추면 모바일 focus 자동 zoom-in 방지 */
+  input,
+textarea,
+select {
+    font-size: 16px;
+}
   line-height: 1;
   position: relative;
   /* 재사용성이 있는 class는 여기에 */

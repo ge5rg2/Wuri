@@ -37,7 +37,7 @@ import moment from "moment";
 import Loading from "../components/common/Loading";
 import { ExpandImgContainer } from "../styles/EditStyle";
 
-const theme = createTheme({
+export const theme = createTheme({
   palette: {
     primary: {
       main: "#10a37f",
@@ -250,12 +250,6 @@ const Home = () => {
       .catch((error) => {
         console.log(error);
       });
-    if (!calendar) {
-      document.getElementById("calendarContainer")?.classList.add("animateEnd");
-      document
-        .getElementById("calendarContainer")
-        ?.classList.add("animateDisplay");
-    }
     setLoading(false);
   }, []);
 
@@ -288,7 +282,7 @@ const Home = () => {
             🗓{calendar ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </div>
         </CalendarIcon>
-        <CalendarContainer id="calendarContainer" className="animateEnd">
+        <CalendarContainer id="calendarContainer" className="animateDisplay">
           <Calendar
             onActiveStartDateChange={({
               action,

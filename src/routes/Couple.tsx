@@ -22,12 +22,23 @@ import {
   MainContainer,
   IntroContainer,
   ConnectContainer,
+  CalendarIcon,
+  CoupleDiaryBox,
 } from "../styles/CoupleStyle";
 import CoupleDiarys from "../components/CoupleDiarys";
 import Btn from "../components/common/Btn";
 import { Diary } from "../interface/tpyes";
 import Loading from "../components/common/Loading";
 import { ExpandImgContainer } from "../styles/EditStyle";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { startOfDay, endOfDay } from "date-fns";
+import moment from "moment";
+import Calendar from "react-calendar";
+import { CalendarContainer } from "../styles/CalendarStyle";
+import { Pagination } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "./Home";
 
 const Couple = () => {
   const navigate = useNavigate();
@@ -41,6 +52,7 @@ const Couple = () => {
   const [isCouple, setIsCouple] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [calendar, setCalendar] = useState(false);
+  const [currentDiary, setCurrentDiary] = useState<Diary[]>([]);
   const [selectedDiary, setSelectedDiary] = useState<Diary[]>([]);
   const [isExistDiary, setIsExistDiary] = useState(false);
   const [isExistMonth, setIsExistMonth] = useState<boolean>(true);
@@ -48,25 +60,6 @@ const Couple = () => {
   const [value, onChange] = useState(new Date());
 
   let date = new Date();
-
-  const callMonthlyDiary = async (firstDay: Date, lastDay: Date) => {
-    const q = query(
-      collection(dbService, "couple_diarys"),
-      where("creatorId", "in", [userUid, coupleId]),
-      where("createdAt", ">=", firstDay),
-      where("createdAt", "<=", lastDay),
-      orderBy("createdAt", "desc")
-    );
-    const snapshot = await getDocs(q);
-    if (!snapshot.size) {
-      return;
-    }
-    const diaryObject: any = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    return diaryObject;
-  };
 
   const onCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { value } = e.target;
@@ -171,16 +164,198 @@ const Couple = () => {
     }
   };
 
-  const diaryData: JSX.Element[] = diarys.map((el) => {
+  const onPageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    let pageDiary = diarys[page - 1];
+    if (pageDiary) {
+      setCurrentDiary([pageDiary]);
+    }
+  };
+
+  const selectedDiaryData: JSX.Element[] = selectedDiary.map((el) => {
     return (
       <CoupleDiarys key={el.id} diary={el.text} obj={el} doc="couple_diarys" />
     );
   });
 
+  const diaryData: JSX.Element[] = currentDiary.flat().map((el) => {
+    return (
+      <CoupleDiarys key={el.id} diary={el.text} obj={el} doc="couple_diarys" />
+    );
+  });
+
+  const callMonthlyDiary = async (firstDay: Date, lastDay: Date) => {
+    const q = query(
+      collection(dbService, "couple_diarys"),
+      where("creatorId", "in", [userUid, coupleId]),
+      where("createdAt", ">=", firstDay),
+      where("createdAt", "<=", lastDay),
+      orderBy("createdAt", "desc")
+    );
+    const snapshot = await getDocs(q);
+    if (!snapshot.size) {
+      return;
+    }
+    const diaryObject: any = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return diaryObject;
+  };
+
+  const onCalendarChange = async (value: any, e: any) => {
+    const start = startOfDay(value);
+    const end = endOfDay(value);
+    // Date 숫자형 표현 console.log(value.valueOf());
+    const q = query(
+      collection(dbService, "couple_diarys"),
+      where("creatorId", "in", [userUid, coupleId]),
+      where("createdAt", ">=", start),
+      where("createdAt", "<=", end)
+    );
+    const snapshot = await getDocs(q);
+    if (snapshot) {
+      const selectedDiaryObject: any = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      if (selectedDiaryObject.length > 0) {
+        setSelectedDiary(selectedDiaryObject);
+        setIsExistDiary(true);
+      } else {
+        setIsExistMonth(false);
+        setIsExistDiary(false);
+        setSelectedDiary([]);
+      }
+    }
+  };
+
+  const onCalendarAreaChange = async (activeStartDate: any, view: any) => {
+    // activeStartDate 를 통해 find 후 state 에 저장
+    const firstDayOfMonth = new Date(
+      activeStartDate.getFullYear(),
+      activeStartDate.getMonth(),
+      1
+    );
+    const lastDayOfMonth = new Date(
+      activeStartDate.getFullYear(),
+      activeStartDate.getMonth() + 1,
+      0,
+      23,
+      59,
+      59
+    );
+    setIsExistDiary(false);
+    callMonthlyDiary(firstDayOfMonth, lastDayOfMonth)
+      .then((diaryObject: any) => {
+        if (!diaryObject) {
+          return setIsExistMonth(false);
+        }
+        const weeklyDiarys = [];
+        let startIndex = 0;
+        while (startIndex < diaryObject.length) {
+          const endIndex = startIndex + 7;
+          const weeklyDiary = diaryObject.slice(startIndex, endIndex);
+          weeklyDiarys.push(weeklyDiary);
+          startIndex = endIndex;
+        }
+        const createdAts = weeklyDiarys
+          .flatMap((diaryArray) =>
+            diaryArray.map((diary: any) => diary.createdAt)
+          )
+          .map((createdAt) => {
+            const date = new Date(createdAt.toDate());
+            return `${date.getDate().toString().padStart(2, "0")}-${(
+              date.getMonth() + 1
+            )
+              .toString()
+              .padStart(2, "0")}-${date.getFullYear()}`;
+          });
+
+        setMarkDiary(createdAts);
+        setIsExistMonth(true);
+        setDiarys(weeklyDiarys);
+        setCurrentDiary([weeklyDiarys[0]]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const onCalendarIconClick = () => {
+    if (!calendar) {
+      document
+        .getElementById("calendarContainer")
+        ?.classList.remove("animateEnd");
+      document
+        .getElementById("calendarContainer")
+        ?.classList.remove("animateDisplay");
+      document
+        .getElementById("calendarContainer")
+        ?.classList.add("animateStart");
+    } else {
+      document
+        .getElementById("calendarContainer")
+        ?.classList.remove("animateStart");
+      document.getElementById("calendarContainer")?.classList.add("animateEnd");
+      setTimeout(() => {
+        document
+          .getElementById("calendarContainer")
+          ?.classList.add("animateDisplay");
+      }, 300);
+    }
+    setCalendar((prev) => !prev);
+  };
+
   const callCoupleData = async () => {
     setLoading(true);
     if (coupleId) {
-      const q = query(
+      const now = new Date();
+      const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const lastDayOfMonth = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        0,
+        23,
+        59,
+        59
+      );
+      callMonthlyDiary(firstDayOfMonth, lastDayOfMonth)
+        .then((diaryObject: any) => {
+          if (!diaryObject) {
+            return setIsExistMonth(false);
+          }
+          const weeklyDiarys = [];
+          let startIndex = 0;
+          while (startIndex < diaryObject.length) {
+            const endIndex = startIndex + 7;
+            const weeklyDiary = diaryObject.slice(startIndex, endIndex);
+            weeklyDiarys.push(weeklyDiary);
+            startIndex = endIndex;
+          }
+          const createdAts = weeklyDiarys
+            .flatMap((diaryArray) =>
+              diaryArray.map((diary: any) => diary.createdAt)
+            )
+            .map((createdAt) => {
+              const date = new Date(createdAt.toDate());
+              return `${date.getDate().toString().padStart(2, "0")}-${(
+                date.getMonth() + 1
+              )
+                .toString()
+                .padStart(2, "0")}-${date.getFullYear()}`;
+            });
+          setMarkDiary(createdAts);
+          setIsExistMonth(true);
+          setDiarys(weeklyDiarys);
+          setCurrentDiary([weeklyDiarys[0]]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      setIsCouple(true);
+      setLoading(false);
+      /*       const q = query(
         collection(dbService, "couple_diarys"),
         where("creatorId", "in", [userUid, coupleId]),
         orderBy("createdAt", "desc")
@@ -194,7 +369,7 @@ const Couple = () => {
         setIsCouple(true);
         setDiarys(diaryObject);
         setLoading(false);
-      });
+      }); */
     } else {
       return setLoading(false);
     }
@@ -260,8 +435,64 @@ const Couple = () => {
                 children={"What's on your mind " + userName + "?"}
               />
             </IntroContainer>
+            <CalendarIcon>
+              <div onClick={onCalendarIconClick} className="calendarIcon__box">
+                🗓
+                {calendar ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </div>
+            </CalendarIcon>
+            <CalendarContainer
+              id="calendarContainer"
+              className="animateDisplay"
+            >
+              <Calendar
+                onActiveStartDateChange={({
+                  action,
+                  activeStartDate,
+                  value,
+                  view,
+                }) => onCalendarAreaChange(activeStartDate, view)}
+                minDate={new Date(1672498800000)}
+                minDetail="year"
+                maxDate={new Date()}
+                calendarType="US"
+                locale="en-EN"
+                value={value}
+                onChange={onCalendarChange}
+                tileClassName={({ date, view }) => {
+                  if (
+                    markDiary.find(
+                      (x) => x === moment(date).format("DD-MM-YYYY")
+                    )
+                  ) {
+                    return "highlight_cop";
+                  }
+                }}
+              />
+            </CalendarContainer>
 
-            {diaryData}
+            {isExistDiary ? (
+              <>{selectedDiaryData}</>
+            ) : isExistMonth ? (
+              <>
+                <CoupleDiaryBox>{diaryData}</CoupleDiaryBox>
+                <ThemeProvider theme={theme}>
+                  <Pagination
+                    count={diarys.length}
+                    color="primary"
+                    onChange={onPageChange}
+                  />
+                </ThemeProvider>
+              </>
+            ) : (
+              <div className="Nodata__box">
+                <Btn
+                  children="Oops, you didn't diary on that date! 😵"
+                  ButtonType="Default"
+                  size="large"
+                />
+              </div>
+            )}
           </SubContainer>
         )}
       </MainContainer>

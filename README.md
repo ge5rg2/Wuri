@@ -1,4 +1,33 @@
-# Side project [Wuri.](https://ge5rg2.github.io/Wuri/) 📒
+# **Side project [Wuri.](https://ge5rg2.github.io/Wuri/)** 📒
+
+![](https://img.shields.io/badge/version-1.0.2-green)
+
+### ChangeLog
+
+| Version | Change Date |
+| ------- | ----------- |
+| 1.0.0   | 2023-04-22  |
+| 1.0.1   | 2021-04-28  |
+| 1.0.2   | 2021-05-03  |
+
+### 변경상세 내용
+
+1.0.1
+
+- 이미지 삭제 시 실제 db 삭제
+- 댓글 edit일 때 focus 기능
+- 이미지 업로드 시 용량 축소
+- 프로필 페이지 사진 클릭 시 확대
+- 프로필 사진 정방향으로 보이게 전환
+- title, conetent 글자 수 제한
+- 로딩 스피너 추가
+- 터치 이벤트 적용
+
+<br/>
+
+1.0.2
+
+- 커플 다이어리 달력, 페이지네이션 기능 추가
 
 <br/>
 

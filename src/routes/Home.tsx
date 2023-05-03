@@ -36,6 +36,8 @@ import { startOfDay, endOfDay } from "date-fns";
 import moment from "moment";
 import Loading from "../components/common/Loading";
 import { ExpandImgContainer } from "../styles/EditStyle";
+import { useDispatch } from "../store";
+import { diaryActions } from "../store/diarySlice";
 
 export const theme = createTheme({
   palette: {
@@ -49,9 +51,12 @@ export const theme = createTheme({
 });
 
 const Home = () => {
+  const dispatch = useDispatch();
   const auth = getAuth();
   const navigate = useNavigate();
   const userStore = useSelector((state) => state.user);
+  const diaryStore = useSelector((state) => state.diary);
+  const todaySingle = diaryStore.todaySingle;
   const uid = userStore.userUid;
   const [diarys, setDiarys] = useState<Diary[]>([]);
   const [currentDiary, setCurrentDiary] = useState<Diary[]>([]);
@@ -68,6 +73,20 @@ const Home = () => {
   };
 
   const callMonthlyDiary = async (firstDay: Date, lastDay: Date) => {
+    const start = startOfDay(value);
+    const end = endOfDay(value);
+    const todayQ = query(
+      collection(dbService, "diarys"),
+      where("creatorId", "==", uid),
+      where("createdAt", ">=", start),
+      where("createdAt", "<=", end)
+    );
+    const toDaySnapshot = await getDocs(todayQ);
+    if (toDaySnapshot.size > 0) {
+      dispatch(diaryActions.writenSingle());
+    } else {
+      dispatch(diaryActions.noneSingle());
+    }
     const q = query(
       collection(dbService, "diarys"),
       where("creatorId", "==", uid),
@@ -207,6 +226,7 @@ const Home = () => {
 
   useEffect(() => {
     const now = new Date();
+
     const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const lastDayOfMonth = new Date(
       now.getFullYear(),
@@ -271,11 +291,18 @@ const Home = () => {
             src={userStore.userUrl + ""}
             onClick={() => navigate("/profile")}
           />
-          <Btn
-            onClick={onWritePageClick}
-            children={"What's on your mind " + userStore.userName + "?"}
-            ButtonType="Emphasized"
-          />
+          {todaySingle ? (
+            <Btn
+              children="Write a new story tomorrow 🖐️"
+              ButtonType="Emphasized"
+            />
+          ) : (
+            <Btn
+              onClick={onWritePageClick}
+              children={"What's on your mind " + userStore.userName + "?"}
+              ButtonType="Emphasized"
+            />
+          )}
         </IntroContainer>
         <CalendarIcon>
           <div onClick={onCalendarIconClick} className="calendarIcon__box">

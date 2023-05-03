@@ -168,9 +168,10 @@ export const CommentDataContainer = styled.div`
             right: 0;
           }
         }
-        .CommentData_comment_text {
-          margin: 0.5rem 0;
-        }
+      }
+
+      .CommentData_comment_text {
+        padding-top: 0.5rem;
       }
     }
   }

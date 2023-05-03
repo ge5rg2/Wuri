@@ -44,3 +44,8 @@ export interface menuState {
 export interface commentProps {
   info: any;
 }
+
+export interface diaryState {
+  todayCouple: boolean;
+  todaySingle: boolean;
+}

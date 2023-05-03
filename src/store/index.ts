@@ -7,6 +7,7 @@ import {
 import dummySlice from "./dummySlice";
 import userSlice from "./userSlice";
 import menuSlice from "./menuSlice";
+import diarySlice from "./diarySlice";
 
 //useSelector, useDispatch 등을 react-redux에서 가져온 후 state에 저장해서 사용할 수 있게 index.ts로 저장
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
     dummy: dummySlice.reducer,
     user: userSlice.reducer,
     menu: menuSlice.reducer,
+    diary: diarySlice.reducer,
   },
 });
 

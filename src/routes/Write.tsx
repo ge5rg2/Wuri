@@ -24,6 +24,7 @@ const Write = () => {
   const navigate = useNavigate();
   const fileInput = useRef<HTMLInputElement>(null);
   const { userUid, coupleId, userUrl } = useSelector((state) => state.user);
+  const { todayCouple, todaySingle } = useSelector((state) => state.diary);
   const [title, setTitle] = useState("");
   const [diary, setDiary] = useState("");
   const [diaryType, setDiaryType] = useState<string>("");
@@ -207,16 +208,28 @@ const Write = () => {
 
   useEffect(() => {
     let dataDate = new Date();
-    setDate(
-      `${new Intl.DateTimeFormat("en-EN", {
-        year: "numeric",
-        month: "long",
-        weekday: "long",
-        day: "numeric",
-      }).format(dataDate)}`
-    );
-    if (type) {
-      setDiaryType(type);
+    if (type == "single" && todaySingle) {
+      alert(
+        "Oops, you already wrote it today 😎, please write a new one tomorrow!"
+      );
+      return navigate("/");
+    } else if (type == "couple" && todayCouple) {
+      alert(
+        "Oops, you already wrote it today 😎, please write a new one tomorrow!"
+      );
+      return navigate("/couple");
+    } else {
+      setDate(
+        `${new Intl.DateTimeFormat("en-EN", {
+          year: "numeric",
+          month: "long",
+          weekday: "long",
+          day: "numeric",
+        }).format(dataDate)}`
+      );
+      if (type) {
+        setDiaryType(type);
+      }
     }
   }, []);
 

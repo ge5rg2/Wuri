@@ -39,10 +39,13 @@ import { CalendarContainer } from "../styles/CalendarStyle";
 import { Pagination } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./Home";
+import { diaryActions } from "../store/diarySlice";
 
 const Couple = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const diaryStore = useSelector((state) => state.diary);
+  const todayCouple = diaryStore.todayCouple;
   const auth = getAuth();
   const { userUid, coupleId, userUrl, userName, coupleName, coupleUrl } =
     useSelector((state) => state.user);
@@ -310,6 +313,20 @@ const Couple = () => {
     setLoading(true);
     if (coupleId) {
       const now = new Date();
+      const start = startOfDay(now);
+      const end = endOfDay(now);
+      const todayQ = query(
+        collection(dbService, "couple_diarys"),
+        where("creatorId", "==", userUid),
+        where("createdAt", ">=", start),
+        where("createdAt", "<=", end)
+      );
+      const toDaySnapshot = await getDocs(todayQ);
+      if (toDaySnapshot.size > 0) {
+        dispatch(diaryActions.writenCouple());
+      } else {
+        dispatch(diaryActions.noneCouple());
+      }
       const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       const lastDayOfMonth = new Date(
         now.getFullYear(),
@@ -430,10 +447,14 @@ const Couple = () => {
                 src={coupleUrl + ""}
                 onClick={() => navigate("/profile")}
               />
-              <Btn
-                onClick={onWritePageClick}
-                children={"What's on your mind " + userName + "?"}
-              />
+              {todayCouple ? (
+                <Btn children="Write a new story tomorrow 🖐️" />
+              ) : (
+                <Btn
+                  onClick={onWritePageClick}
+                  children={"How was your date today " + userName + "?"}
+                />
+              )}
             </IntroContainer>
             <CalendarIcon>
               <div onClick={onCalendarIconClick} className="calendarIcon__box">

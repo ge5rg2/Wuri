@@ -1,4 +1,4 @@
-# **Side project [Wuri.](https://ge5rg2.github.io/Wuri/)** 📒
+# **Project [Wuri.](https://ge5rg2.github.io/Wuri/)** 📒
 
 ![](https://img.shields.io/badge/version-1.0.2-green)
 
@@ -9,6 +9,8 @@
 | 1.0.0   | 2023-04-22  |
 | 1.0.1   | 2021-04-28  |
 | 1.0.2   | 2021-05-03  |
+
+<br/>
 
 ### 변경상세 내용
 
@@ -28,10 +30,12 @@
 1.0.2
 
 - 커플 다이어리 달력, 페이지네이션 기능 추가
+- 다이어리 하루에 한 개만 업로드 가능
+- 커플 다이어리일 경우 삭제 시 댓글도 함께 삭제
 
 <br/>
 
-우리들의 다이어리, Wuri
+**우리들의 다이어리, Wuri**
 
 > Wuri는 사용자가 일기, 연인과의 데이트, 육아 활동을 기록할 수 있는 사이드 프로젝트 앱입니다. Firebase를 통한 OAuth 로그인, 연인과의 일기 공유, 일기 작성 및 댓글 등의 기능을 제공할 예정입니다. 기술 스택으로는 React, Styled-Components, Firebase이 사용됩니다. 프로젝트는 환영 페이지, 메인 페이지, 일기 페이지, 새 글 페이지, 로그아웃 페이지, 계정 페이지 및 커플 다이어리 페이지를 포함합니다.
 
@@ -103,4 +107,4 @@ Main page → 일기 미리보기 / 새 글 작성 / Nav var
 
 ### More
 
-![Wuri. Notion URL](https://inquisitive-opera-47e.notion.site/Side-project-Wuri-c4435c8bd7464b6fb7376b7308af8195)
+[Wuri. Notion URL ✍️](https://inquisitive-opera-47e.notion.site/Side-project-Wuri-c4435c8bd7464b6fb7376b7308af8195)

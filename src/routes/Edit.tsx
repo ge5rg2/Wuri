@@ -94,6 +94,18 @@ const Edit = () => {
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this diary?");
     if (ok) {
+      if (docName == "couple_diarys") {
+        const commentQuery = query(
+          collection(dbService, "comments"),
+          where("diaryid", "==", id)
+        );
+        const commentQuerySnapshot = await getDocs(commentQuery);
+        if (commentQuerySnapshot.size > 0) {
+          commentQuerySnapshot.forEach(async (doc) => {
+            await deleteDoc(doc.ref);
+          });
+        }
+      }
       await deleteDoc(DiaryTextRef);
       if (diaryInfo.attachmentUrl) {
         await deleteObject(urlRef);

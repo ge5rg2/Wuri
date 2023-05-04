@@ -58,6 +58,7 @@ const Profile = () => {
   const [matchedDate, setMatchedDate] = useState<string>("");
   const [expandUserImg, setExpandUserImg] = useState<boolean>(false);
   const [expandCoupleImg, setExpandCoupleImg] = useState<boolean>(false);
+  const [isLongTitle, setIsLongTitle] = useState<boolean>(false);
   const { userUid, userUrl, userName, coupleId, coupleName, coupleUrl } =
     useSelector((state) => state.user);
 
@@ -334,10 +335,19 @@ const Profile = () => {
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      target: { value },
-    } = e;
-    setEditUserName(value);
+    let { value } = e.target;
+    let { length } = value;
+    if (length > 6) {
+      document.getElementById("userNameTitle")?.classList.add("longTitleid");
+      document.getElementById("newName")?.classList.add("longTitle");
+      setIsLongTitle(true);
+      return;
+    } else {
+      document.getElementById("userNameTitle")?.classList.remove("longTitleid");
+      document.getElementById("newName")?.classList.remove("longTitle");
+      setIsLongTitle(false);
+      setEditUserName(value);
+    }
   };
 
   const onSubmit = async (e: React.SyntheticEvent) => {
@@ -537,7 +547,9 @@ const Profile = () => {
             </div>
           </FormContainer>
           <div className="edit__input">
-            <span>User name</span>
+            <span id="userNameTitle">
+              {isLongTitle ? "Must not exceed 6 characters" : "User Name"}
+            </span>
             <Input
               type="text"
               id="newName"

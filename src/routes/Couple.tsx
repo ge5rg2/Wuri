@@ -445,18 +445,22 @@ const Couple = () => {
         )}
         {isCouple && (
           <SubContainer>
-            <IntroContainer>
+            <div className="CoupleImg_Box">
               <img
                 style={{ borderRadius: "50%", objectFit: "cover" }}
                 src={userUrl + ""}
                 className="OwnerImg"
                 onClick={() => navigate("/profile")}
               />
+              <div>♥️</div>
               <img
                 style={{ borderRadius: "50%", objectFit: "cover" }}
                 src={coupleUrl + ""}
+                className="CoupleImg"
                 onClick={() => navigate("/profile")}
               />
+            </div>
+            <IntroContainer>
               {todayCouple ? (
                 <Btn
                   children="Write a new story tomorrow 🖐️"
@@ -466,7 +470,13 @@ const Couple = () => {
                 <Btn
                   ButtonType="Couple"
                   onClick={onWritePageClick}
-                  children={"How was your date today " + userName + "?"}
+                  children={
+                    "How was your date today " +
+                    userName +
+                    ", " +
+                    coupleName +
+                    "?"
+                  }
                 />
               )}
             </IntroContainer>

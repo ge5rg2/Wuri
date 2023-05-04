@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import palette from "./palette";
 
 export const CalendarContainer = styled.div`
   display: flex;
@@ -6,10 +7,13 @@ export const CalendarContainer = styled.div`
   align-items: center;
   width: 350px;
   max-width: 90%;
+
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
   .react-calendar {
-    border-radius: 10px;
-    background-color: ${(props) => props.theme.textColor};
-    border: 1px solid ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.bgColor};
+    border: 1px solid
+      ${(props) =>
+        props.theme.mode === "dark" ? palette.gray[700] : palette.gray[200]};
     line-height: 1.125em;
   }
 
@@ -40,7 +44,6 @@ export const CalendarContainer = styled.div`
     margin: 0;
     border: 0;
     outline: none;
-    border-radius: 10px;
   }
 
   .react-calendar button:enabled:hover {
@@ -51,22 +54,22 @@ export const CalendarContainer = styled.div`
     display: flex;
     height: 44px;
     margin-bottom: 1em;
-    border-radius: 10px;
   }
 
   .react-calendar__navigation button {
     min-width: 44px;
-    border-radius: 10px;
     background: none;
   }
 
   .react-calendar__navigation button:disabled {
-    background-color: #f0f0f0;
+    background-color: ${(props) => props.theme.bgColor};
   }
 
   .react-calendar__navigation button:enabled:hover,
   .react-calendar__navigation button:enabled:focus {
-    background-color: #e6e6e6;
+    background-color: ${(props) =>
+      props.theme.mode === "dark" ? palette.gray[600] : "White"};
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
   }
 
   .react-calendar__month-view__weekdays {
@@ -75,9 +78,9 @@ export const CalendarContainer = styled.div`
     font-weight: bold;
     font-size: 0.75em;
   }
-
+  /*요일 */
   .react-calendar__month-view__weekdays__weekday {
-    color: ${(props) => props.theme.bgColor};
+    color: ${(props) => props.theme.textColor};
     padding: 0.5em;
   }
 
@@ -90,11 +93,11 @@ export const CalendarContainer = styled.div`
   }
 
   .react-calendar__month-view__days__day--weekend {
-    color: #d10000;
+    color: ${(props) => props.theme.accentColor} !important;
   }
 
   .react-calendar__month-view__days__day--neighboringMonth {
-    color: #757575;
+    color: #757575 !important;
   }
 
   .react-calendar__year-view .react-calendar__tile,
@@ -112,12 +115,15 @@ export const CalendarContainer = styled.div`
   }
 
   .react-calendar__tile:disabled {
-    background-color: #f0f0f0;
+    background-color: ${(props) =>
+      props.theme.mode === "dark" ? palette.gray[700] : "#f0f0f0"};
   }
 
   .react-calendar__tile:enabled:hover,
   .react-calendar__tile:enabled:focus {
-    background-color: #e6e6e6;
+    background-color: ${(props) =>
+      props.theme.mode === "dark" ? palette.gray[600] : "White"};
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
   }
 
   .react-calendar__tile--now {
@@ -130,22 +136,26 @@ export const CalendarContainer = styled.div`
   }
 
   .react-calendar__tile--hasActive {
-    background: #76baff;
+    background: rgba(16, 163, 127);
+    color: white !important;
   }
 
+  /*캘린더 월별 클릭 색 */
   .react-calendar__tile--hasActive:enabled:hover,
   .react-calendar__tile--hasActive:enabled:focus {
-    background: #a9d4ff;
+    background: #0e8c6d;
   }
 
   .react-calendar__tile--active {
-    background: #006edc;
-    color: white;
+    background: rgba(16, 163, 127);
+    color: white !important;
   }
+
+  /*캘린더 날짜 클릭 색 */
 
   .react-calendar__tile--active:enabled:hover,
   .react-calendar__tile--active:enabled:focus {
-    background: #1087ff;
+    background: #0e8c6d;
   }
 
   .react-calendar--selectRange .react-calendar__tile--hover {
@@ -170,5 +180,17 @@ export const CalendarContainer = styled.div`
       position: absolute;
       content: "💞";
     }
+  }
+  button.react-calendar__tile.react-calendar__month-view__days__day {
+    color: ${(props) => props.theme.textColor};
+  }
+  span.react-calendar__navigation__label__labelText.react-calendar__navigation__label__labelText--from {
+    color: ${(props) => props.theme.textColor};
+  }
+  .react-calendar__navigation__arrow {
+    color: ${(props) => props.theme.textColor};
+  }
+  button.react-calendar__tile.react-calendar__year-view__months__month {
+    color: ${(props) => props.theme.textColor};
   }
 `;

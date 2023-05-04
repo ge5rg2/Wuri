@@ -12,12 +12,19 @@ export const MainContainer = styled.div`
     margin-top: 2rem;
     text-align: center;
     div {
-      border: 1px solid ${(props) => props.theme.textColor};
-      background-color: ${(props) => props.theme.bgColor};
+      margin-top: 0.3rem;
+      background-color: ${(props) =>
+        props.theme.mode === "dark" ? palette.gray[600] : "White"};
+      border: 1px solid
+        ${(props) =>
+          props.theme.mode === "dark" ? palette.gray[700] : palette.gray[200]};
+      color: ${(props) =>
+        props.theme.mode === "dark" ? palette.gray[200] : palette.gray[500]};
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
       border-radius: 10px;
       padding: 0.75rem 1.8rem; // 12px 28.8px
       font-size: 1rem; // 16px
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
   }
 `;
@@ -52,11 +59,16 @@ export const ProfileEditContainer = styled.div`
   width: 350px;
   flex-direction: column;
   align-items: center;
-
   .edit__input {
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
+    .longTitleid {
+      color: red;
+    }
+    .longTitle {
+      border: 1px solid red;
+    }
     input {
       padding: 1rem;
     }

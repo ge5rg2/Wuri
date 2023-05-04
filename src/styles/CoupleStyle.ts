@@ -62,25 +62,42 @@ export const SubContainer = styled.div`
       }
     }
   }
+  .CoupleImg_Box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      height: 60px;
+      width: 60px;
+      cursor: pointer;
+    }
+    @media all and (min-width: 320px) {
+      width: 300px;
+    }
+    @media all and (min-width: 1024px) {
+      width: 350px;
+    }
+    div {
+      margin: 0 0.5rem;
+      font-size: 1.3rem;
+    }
+    padding: 1rem 0;
+  }
 `;
 
 export const IntroContainer = styled.div`
   display: flex;
-  position: relative;
-  img {
-    height: 60px;
-    width: 60px;
-    cursor: pointer;
+  justify-content: center;
+  height: 60px;
+  width: 60px;
+  @media all and (min-width: 320px) {
+    width: 300px;
+  }
+  @media all and (min-width: 1024px) {
+    width: 350px;
   }
   Button {
-    margin-left: 0.5rem;
     padding: 0 2rem;
-  }
-
-  .OwnerImg {
-    z-index: 2;
-    position: absolute;
-    left: -1.5rem;
   }
 `;
 

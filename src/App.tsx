@@ -48,7 +48,7 @@ const App = () => {
             userActions.setLoggedIn({
               isLoggedIn: true,
               userUid: uid,
-              userName: user.email.split("@")[0],
+              userName: "user",
               userUrl:
                 "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg",
               coupleId: "",

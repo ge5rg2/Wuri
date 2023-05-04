@@ -227,7 +227,12 @@ const Edit = () => {
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { value } = e.target;
-    setNewTitle(value);
+    let { length } = value;
+    if (length > 40) {
+      return;
+    } else {
+      setNewTitle(value);
+    }
   };
 
   /* 

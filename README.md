@@ -98,14 +98,6 @@ Main page → 일기 미리보기 / 새 글 작성 / Nav var
 
 <br/>
 
-## ERD diagram
-
-<br/>
-
-![다이어그램](/public/img/diagram.png)
-
-<br/>
-
 ### More
 
 [Wuri. Notion URL ✍️](https://inquisitive-opera-47e.notion.site/Side-project-Wuri-c4435c8bd7464b6fb7376b7308af8195)

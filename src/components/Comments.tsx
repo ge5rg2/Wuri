@@ -169,11 +169,11 @@ const Comments: React.FC<commentProps> = ({ info }) => {
             <EditModal id="editModal" className="animateStart">
               <div className="editIcon" onClick={onEditClick}>
                 <EditIcon />
-                <span>Edit comment</span>
+                <span>Edit</span>
               </div>
               <div className="deleteIcon" onClick={onDeleteClick}>
                 <DeleteForeverIcon />
-                <span>Delete comment</span>
+                <span>Delete</span>
               </div>
             </EditModal>
           ) : (

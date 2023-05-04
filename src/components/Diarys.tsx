@@ -10,6 +10,9 @@ const DiaryContainer = styled.div`
   width: 90%;
   margin: 0.5rem 0;
   text-align: center;
+  .DateBox {
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const Diarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {

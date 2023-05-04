@@ -8,13 +8,16 @@ export const Wraper = styled.div`
   top: 0;
   z-index: 5;
   background-color: ${(props) => props.theme.bgColor};
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
 `;
 
 export const SubContainer = styled.div`
   position: absolute;
   top: 2.8rem;
+  right: 0.5rem;
   width: 100%;
   background-color: ${(props) => props.theme.bgColor};
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   .subNavDiv {
     cursor: pointer;
     margin: 0.7rem 0;
@@ -89,4 +92,7 @@ export const MainContainer = styled.div`
 export const IconContainer = styled.div`
   display: flex;
   align-items: center;
+  .icon > * {
+    color: ${(props) => props.theme.textColor};
+  }
 `;

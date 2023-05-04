@@ -113,7 +113,9 @@ export const FormContainer = styled.form`
   .dropzone {
     border-radius: 10px;
     transition: all ease-in-out 0.3s;
-    border: 2px dashed ${palette.gray[400]};
+    border: 2px dashed
+      ${(props) =>
+        props.theme.mode === "dark" ? palette.gray[500] : palette.gray[400]};
   }
   .dropzone_dragging {
     border-radius: 10px;
@@ -121,8 +123,10 @@ export const FormContainer = styled.form`
     border: 2px dashed ${palette.defaultColor};
     .upload {
       text-align: center;
+      border-radius: 10px;
       position: relative;
-      background-color: ${palette.gray[600]};
+      background-color: ${(props) =>
+        props.theme.mode === "dark" ? palette.gray[700] : palette.gray[300]};
       cursor: pointer;
     }
     .fileBtn {
@@ -135,7 +139,7 @@ export const FormContainer = styled.form`
     display: flex;
     justify-content: center;
     padding: 4rem;
-    color: ${palette.gray[400]};
+    color: ${(props) => props.theme.textColor};
   }
   .filePlaceholder::before {
     content: "Or drag an image";
@@ -152,7 +156,9 @@ export const FormContainer = styled.form`
     padding: 1rem;
     border-radius: 10px;
     font-weight: 500;
-    border: 1px solid ${(props) => props.theme.textColor};
+    border: 1px solid
+      ${(props) =>
+        props.theme.mode === "dark" ? palette.gray[700] : palette.gray[300]};
     background-color: ${(props) => props.theme.textColor};
     color: ${(props) => props.theme.bgColor};
     transition: all ease-in-out 0.3s;
@@ -170,8 +176,12 @@ export const FormContainer = styled.form`
 
 export const SumContainer = styled.div`
   width: 300px;
-  border: 1px solid ${(props) => props.theme.textColor};
-  background-color: ${(props) => props.theme.bgColor};
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+  background-color: ${(props) =>
+    props.theme.mode === "dark" ? palette.gray[600] : "White"};
+  border: 1px solid
+    ${(props) =>
+      props.theme.mode === "dark" ? palette.gray[700] : palette.gray[200]};
   border-radius: 10px;
   padding: 1rem;
   .sum__box {
@@ -182,13 +192,18 @@ export const SumContainer = styled.div`
 
 export const CoupleContainer = styled.div`
   margin-top: 1rem;
+  padding-bottom: 4rem;
   .couple__title {
     text-align: center;
   }
   .couple__box {
     width: 300px;
-    border: 1px solid ${(props) => props.theme.textColor};
-    background-color: ${(props) => props.theme.bgColor};
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+    background-color: ${(props) =>
+      props.theme.mode === "dark" ? palette.gray[600] : "White"};
+    border: 1px solid
+      ${(props) =>
+        props.theme.mode === "dark" ? palette.gray[700] : palette.gray[200]};
     border-radius: 10px;
     padding: 1rem;
     display: flex;

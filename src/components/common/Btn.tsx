@@ -7,7 +7,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 interface BaseProps {
   variant?: "text" | "contained" | "outlined";
   size?: "small" | "medium" | "large";
-  ButtonType?: "Critical" | "Default" | "Emphasized" | "Couple";
+  ButtonType: "Critical" | "Default" | "Emphasized" | "Couple";
   disabled?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
@@ -19,15 +19,26 @@ const getButtonType = (
   switch (ButtonType) {
     case "Default":
       return css`
-        background-color: #30363d;
-        border: 1px solid ${palette.gray[400]};
+        color: ${(props) =>
+          props.theme.mode === "dark" ? palette.gray[200] : palette.gray[500]};
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+        background-color: ${(props) =>
+          props.theme.mode === "dark" ? palette.gray[600] : "White"};
+        border: 1px solid
+          ${(props) =>
+            props.theme.mode === "dark"
+              ? palette.gray[700]
+              : palette.gray[200]};
         &:hover {
-          border: 1px solid ${palette.gray[200]};
+          background-color: ${(props) =>
+            props.theme.mode === "dark" ? palette.gray[700] : "White"};
+          box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
         }
       `;
     case "Emphasized":
       return css`
         background-color: rgba(16, 163, 127);
+        color: ${palette.gray[200]};
         &:hover {
           background-color: #0e8c6d;
         }
@@ -35,6 +46,7 @@ const getButtonType = (
     case "Critical":
       return css`
         background-color: ${palette.red[600]};
+        color: ${palette.gray[200]};
         &:hover {
           background-color: ${palette.red[800]};
         }
@@ -42,14 +54,11 @@ const getButtonType = (
 
     case "Couple":
       return css`
-        background-color: ${(props) => props.theme.accentColor};
+        background-color: #7256ff;
+        color: ${palette.gray[200]};
         &:hover {
-          background-color: #7256ff;
+          background-color: #5c3cfa;
         }
-      `;
-    default:
-      return css`
-        background-color: ${(props) => props.theme.accentColor};
       `;
   }
 };
@@ -82,8 +91,6 @@ const Base = styled.button<BaseProps>`
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-
-  color: ${(props) => props.theme.textColor};
   font-weight: 500;
   border-radius: 10px;
   background: none;
@@ -99,7 +106,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   size?: "small" | "medium" | "large";
   variant?: "text" | "contained" | "outlined";
-  ButtonType?: "Critical" | "Default" | "Emphasized" | "Couple";
+  ButtonType: "Critical" | "Default" | "Emphasized" | "Couple";
   disabled?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;

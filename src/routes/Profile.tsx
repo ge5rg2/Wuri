@@ -193,11 +193,11 @@ const Profile = () => {
   const getLoginMethod = () => {
     if (user !== null) {
       if (provider == "password") {
-        setLoginMethod("이메일 계정으로 로그인 됨");
+        setLoginMethod("✉️ 이메일 계정으로 로그인 됨");
       } else if (provider == "google.com") {
-        setLoginMethod("구글 계정으로 로그인 됨");
+        setLoginMethod("🌐 구글 계정으로 로그인 됨");
       } else if (provider == "github.com") {
-        setLoginMethod("깃허브 계정으로 로그인 됨");
+        setLoginMethod("😺 깃허브 계정으로 로그인 됨");
       }
     }
   };
@@ -576,7 +576,7 @@ const Profile = () => {
           />
         </SubContainer>
       )}
-      <div>Summarize</div>
+      <div style={{ marginBottom: "0.5rem" }}>Summarize</div>
       <SumContainer>
         {diarySize != 0 || coupleDiarySize != 0 || commentsSize != 0 ? (
           <span style={{ fontSize: "0.7rem" }}>Posted</span>
@@ -619,7 +619,9 @@ const Profile = () => {
           ) : (
             ""
           )}
-          <div className="couple__title">Couple Info</div>
+          <div className="couple__title" style={{ marginBottom: "0.5rem" }}>
+            Couple Info
+          </div>
           <div className="couple__box">
             <div className="couple__box_info">
               <img

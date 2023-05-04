@@ -40,6 +40,10 @@ const DiaryContainer = styled.div`
     font-weight: 500;
     color: ${(props) => props.theme.accentColor};
   }
+  .date_box {
+    margin-bottom: 0.5rem;
+    color: #7c63fa;
+  }
 `;
 
 const CoupleDiarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {
@@ -92,7 +96,7 @@ const CoupleDiarys: React.FC<diaryProps> = ({ diary, obj, doc }) => {
         <img src={userImg + ""} style={{ objectFit: "cover" }} />
       </div>
       <DiaryContainer>
-        <h4>{date}</h4>
+        <h4 className="date_box">{date}</h4>
         <Btn
           size="large"
           children={obj.title}

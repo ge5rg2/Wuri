@@ -37,9 +37,19 @@ import moment from "moment";
 import Calendar from "react-calendar";
 import { CalendarContainer } from "../styles/CalendarStyle";
 import { Pagination } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "./Home";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { diaryActions } from "../store/diarySlice";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#7256ff",
+    },
+    secondary: {
+      main: "#2B2B2B",
+    },
+  },
+});
 
 const Couple = () => {
   const navigate = useNavigate();
@@ -448,9 +458,13 @@ const Couple = () => {
                 onClick={() => navigate("/profile")}
               />
               {todayCouple ? (
-                <Btn children="Write a new story tomorrow 🖐️" />
+                <Btn
+                  children="Write a new story tomorrow 🖐️"
+                  ButtonType="Couple"
+                />
               ) : (
                 <Btn
+                  ButtonType="Couple"
                   onClick={onWritePageClick}
                   children={"How was your date today " + userName + "?"}
                 />

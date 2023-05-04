@@ -80,13 +80,15 @@ const Nav = () => {
           {menuState.isMenu ? (
             <KeyboardDoubleArrowRightIcon
               id="DoubleArrowIcon"
-              style={{ color: "#ffff", cursor: "pointer" }}
+              className="icon"
+              style={{ cursor: "pointer" }}
               fontSize="large"
             />
           ) : (
             <MenuIcon
               id="MenuIcon"
-              style={{ color: "#ffff", cursor: "pointer" }}
+              className="icon"
+              style={{ cursor: "pointer" }}
               fontSize="large"
             />
           )}

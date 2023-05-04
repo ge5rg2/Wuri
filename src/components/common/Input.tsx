@@ -33,11 +33,15 @@ const Base = styled.input<BaseProps>`
   background-color: ${(props) => props.theme.bgColor} !important;
   color: ${(props) => props.theme.textColor};
   border-radius: 10px;
-  border: 1px solid ${palette.gray[400]};
+  border: 1px solid
+    ${(props) =>
+      props.theme.mode === "dark" ? palette.gray[700] : palette.gray[200]};
   outline: none;
 
   &:focus {
-    border: 1px solid ${palette.gray[200]};
+    border: 1px solid
+      ${(props) =>
+        props.theme.mode === "dark" ? palette.gray[600] : palette.gray[400]};
   }
 
   ${({ size }) => getInputSize(size)};

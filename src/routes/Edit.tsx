@@ -155,7 +155,7 @@ const Edit = () => {
   const handleImageCompress = async (file: File) => {
     const options = {
       maxSizeMB: 1, // 이미지 최대 용량
-      maxWidthOrHeight: 1000, // 최대 넓이(혹은 높이)
+      maxWidthOrHeight: 700, // 최대 넓이(혹은 높이)
       useWebWorker: true,
     };
 

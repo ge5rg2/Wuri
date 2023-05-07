@@ -127,7 +127,7 @@ const App = () => {
           <ImgContainer>
             <img src={myImage} />
           </ImgContainer>
-          <div>Initializing...</div>
+          <div>우리들의 다이어리, Wuri.</div>
         </AppContainer>
       )}
     </>

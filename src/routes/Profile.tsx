@@ -578,7 +578,9 @@ const Profile = () => {
           <ImgContainer onClick={() => setExpandUserImg(true)}>
             <img src={userUrl + ""} />
           </ImgContainer>
-          <div className="profile__userName">{userName}</div>
+          <div className="profile__userName" style={{ marginBottom: "0.5rem" }}>
+            {userName}
+          </div>
           <div className="profile__loginMethod">{loginMethod}</div>
           <Btn
             children="Edit profile"

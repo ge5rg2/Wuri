@@ -38,7 +38,8 @@ export const DiaryContainer = styled.div`
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
     .DiaryContent_text {
       padding: 1rem;
-      height: 50vh;
+      line-height: 1.3rem;
+      min-height: 50vh;
     }
 
     .DiaryContent_title {
@@ -76,14 +77,15 @@ export const ExpandImgContainer = styled.div`
     height: 100vh;
     align-items: center;
     img {
-      @media (max-width: 800px) {
-        cursor: pointer;
-        max-width: 350px;
-        max-height: 500px;
+      @media all and (min-width: 320px) {
+        max-width: 300px;
+        max-height: 450px;
+      }
+      @media all and (min-width: 1024px) {
+        max-width: 500px;
+        max-height: 650px;
       }
       cursor: pointer;
-      max-width: 600px;
-      max-height: 850px;
     }
   }
 `;

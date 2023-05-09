@@ -126,12 +126,13 @@ const Edit = () => {
           setEditAble(false);
         }
       }
+      console.log(data.attachmentUrls);
       setDiaryInfo(data);
       setNewTitle(data.title);
       setNewDiary(data.text);
       setInputCount(data.text.length);
-      setAttachment(data.attachmentUrl);
-      setFirstAttachment(data.attachmentUrl);
+      setAttachment(data.attachmentUrls[0]);
+      setFirstAttachment(data.attachmentUrls[0]);
       setDate(
         `${new Intl.DateTimeFormat("en-EN", {
           year: "numeric",

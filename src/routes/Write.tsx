@@ -28,7 +28,7 @@ const Write = () => {
   const [title, setTitle] = useState("");
   const [diary, setDiary] = useState("");
   const [diaryType, setDiaryType] = useState<string>("");
-  const [attachment, setAttachment] = useState<any>("");
+  //const [attachment, setAttachment] = useState<any>("");
   const [attachmentArr, setAttachmentArr] = useState<any>([]);
   const [fileName, setFileName] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
@@ -61,8 +61,68 @@ const Write = () => {
     }
   };
 
-  /** 제출 시 동작하는 함수 */
   const onSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    let attachmentUrls: any = [];
+    let blank_pattern = /^\s+|\s+$/g;
+    if (title.replace(blank_pattern, "") == "") {
+      document.getElementById("diaryTitle")?.focus();
+      setTitle("");
+      return alert("Blank titles are not allowed!");
+    }
+    if (diary.replace(blank_pattern, "") == "") {
+      document.getElementById("diaryText")?.focus();
+      setDiary("");
+      return alert("Blank text is not allowed!");
+    }
+
+    const date = new Date();
+    try {
+      setLoading(true);
+      if (attachmentArr.length > 0) {
+        await Promise.all(
+          attachmentArr.map(async (attachment: any) => {
+            const fileRef = ref(storageService, `${userUid}/${uuidv4()}`);
+            const response = await uploadString(
+              fileRef,
+              attachment,
+              "data_url"
+            );
+            const attachmentUrl = await getDownloadURL(response.ref);
+            attachmentUrls.push(attachmentUrl);
+          })
+        );
+      }
+      if (diaryType == "single") {
+        await addDoc(collection(dbService, "diarys"), {
+          title: title,
+          text: diary,
+          createdAt: date,
+          creatorId: userUid,
+          attachmentUrls,
+        });
+      } else {
+        await addDoc(collection(dbService, "couple_diarys"), {
+          title: title,
+          text: diary,
+          createdAt: date,
+          creatorId: userUid,
+          coupleId: coupleId,
+          attachmentUrls,
+        });
+      }
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+    setDiary("");
+    setTitle("");
+    setLoading(false);
+    onClearAttachment();
+    return diaryType == "couple" ? navigate("/couple") : navigate("/");
+  };
+
+  /** 제출 시 동작하는 함수 */
+  /*   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     let attachmentUrl = "";
     let blank_pattern = /^\s+|\s+$/g;
@@ -115,12 +175,13 @@ const Write = () => {
     setLoading(false);
     onClearAttachment();
     return diaryType == "couple" ? navigate("/couple") : navigate("/");
-  };
+  }; */
 
   /** 이미지 init 기능 함수 */
   const onClearAttachment = () => {
-    setAttachment("");
+    //setAttachment("");
     setFileName("");
+    // for Arr
     setAttachmentArr([]);
     if (fileInput.current) {
       fileInput.current.value = "";
@@ -141,7 +202,8 @@ const Write = () => {
       const reader = new FileReader();
       reader.onloadend = (finishedEvent) => {
         const result = (finishedEvent.currentTarget as FileReader).result;
-        setAttachment(result);
+        // setAttachment(result);
+        //Arr
         setAttachmentArr([result, ...attachmentArr]);
       };
       reader.readAsDataURL(compressedFile);
@@ -272,7 +334,7 @@ const Write = () => {
             maxLength={40}
             placeholder="Summarize your day in one sentence"
           />
-          <Subtitle>{attachment ? fileName : "Image"}</Subtitle>
+          <Subtitle>Image</Subtitle>
           <div className={isDragging ? "dropzone_dragging" : "dropzone"}>
             {attachmentArr.length > 0 ? (
               <UploadImgContainer>

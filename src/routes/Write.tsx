@@ -29,6 +29,7 @@ const Write = () => {
   const [diary, setDiary] = useState("");
   const [diaryType, setDiaryType] = useState<string>("");
   const [attachment, setAttachment] = useState<any>("");
+  const [attachmentArr, setAttachmentArr] = useState<any>([]);
   const [fileName, setFileName] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
   const [date, setDate] = useState<string>("");
@@ -37,16 +38,21 @@ const Write = () => {
   const [isLenOver, setLenOver] = useState<boolean>(false);
   const [inputCount, setInputCount] = useState<number>(0);
 
+  /** 드래그 상태로 이미지 박스로 들어올 때 함수 */
   const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
   };
+
+  /** 드래그 상태로 이미지 박스 떠날 때의 함수 */
   const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
   };
+
+  /** 드래그 상태로 이미지 박스 위에서의 함수 */
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -55,6 +61,7 @@ const Write = () => {
     }
   };
 
+  /** 제출 시 동작하는 함수 */
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     let attachmentUrl = "";
@@ -110,14 +117,17 @@ const Write = () => {
     return diaryType == "couple" ? navigate("/couple") : navigate("/");
   };
 
+  /** 이미지 init 기능 함수 */
   const onClearAttachment = () => {
     setAttachment("");
     setFileName("");
+    setAttachmentArr([]);
     if (fileInput.current) {
       fileInput.current.value = "";
     }
   };
 
+  /** 이미지 용량 줄이고 img state에 저장하는 함수 */
   const handleImageCompress = async (file: File) => {
     const options = {
       maxSizeMB: 1, // 이미지 최대 용량
@@ -132,6 +142,7 @@ const Write = () => {
       reader.onloadend = (finishedEvent) => {
         const result = (finishedEvent.currentTarget as FileReader).result;
         setAttachment(result);
+        setAttachmentArr([result, ...attachmentArr]);
       };
       reader.readAsDataURL(compressedFile);
     } catch (error) {
@@ -140,6 +151,7 @@ const Write = () => {
     setLoading(false);
   };
 
+  /** 파일 드래그 후 드랍 시 동작하는 함수 */
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -151,6 +163,7 @@ const Write = () => {
     setIsDragging(false);
   };
 
+  /** 파일 변화 감지 함수 */
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target?.files;
     if (files?.length) {
@@ -160,6 +173,7 @@ const Write = () => {
     }
   };
 
+  /** 본문 내용 변화 감지 함수 */
   const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let { value } = e.target;
     let { length } = value;
@@ -176,6 +190,7 @@ const Write = () => {
     }
   };
 
+  /** title 변화 감지 함수 */
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { value } = e.target;
     let { length } = value;
@@ -186,6 +201,7 @@ const Write = () => {
     }
   };
 
+  /** emoji 입력 가능하게 만드는 함수 */
   const onPaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     const clipboardData = e.clipboardData;
     const pastedData = clipboardData.getData("text");
@@ -197,6 +213,7 @@ const Write = () => {
     setEmojiValue(newValue);
   };
 
+  /** emoji 입력 가능하게 만드는 함수 */
   const handleCompositionEnd = (e: any) => {
     const textarea = e.target as HTMLTextAreaElement;
     const newValue =
@@ -257,7 +274,46 @@ const Write = () => {
           />
           <Subtitle>{attachment ? fileName : "Image"}</Subtitle>
           <div className={isDragging ? "dropzone_dragging" : "dropzone"}>
-            {attachment && typeof attachment === "string" && (
+            {attachmentArr.length > 0 ? (
+              <UploadImgContainer>
+                {attachmentArr.map((el: any, inx: number) => (
+                  <img src={el} key={inx} />
+                ))}
+              </UploadImgContainer>
+            ) : (
+              ""
+            )}
+            {attachmentArr.length >= 4 ? (
+              <UploadBtnContainer>
+                <Btn
+                  onClick={onClearAttachment}
+                  children="Clear"
+                  size="medium"
+                  ButtonType="Default"
+                />
+              </UploadBtnContainer>
+            ) : (
+              <div
+                className="upload"
+                onDragEnter={onDragEnter}
+                onDragLeave={onDragLeave}
+                onDragOver={onDragOver}
+                onDrop={onDrop}
+              >
+                <label className="filePlaceholder" htmlFor="file"></label>
+                <label className="fileBtn" htmlFor="file">
+                  Click to upload
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={onFileChange}
+                  ref={fileInput}
+                  id="file"
+                />
+              </div>
+            )}
+            {/*  {attachment && typeof attachment === "string" && (
               <UploadImgContainer>
                 <img src={attachment} />
               </UploadImgContainer>
@@ -291,7 +347,7 @@ const Write = () => {
                   id="file"
                 />
               </div>
-            )}
+            )} */}
           </div>
 
           <Subtitle>

@@ -189,6 +189,7 @@ export const CommentDataContainer = styled.div`
   transition: all ease-in-out 0.3s;
   flex-direction: column;
   margin: 0.5rem 0 1rem 0;
+
   width: 100%;
   position: relative;
   transition: all ease-in-out 0.3s;

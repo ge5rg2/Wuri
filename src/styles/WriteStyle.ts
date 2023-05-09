@@ -59,15 +59,19 @@ export const UploadImgContainer = styled.div`
   display: flex;
   justify-content: center;
   padding: 1rem;
+  flex-wrap: wrap;
   img {
-    @media all and (min-width: 320px) {
-      max-width: 250px;
-      max-height: 450px;
+    /*     @media all and (min-width: 320px) {
+      width: 250px;
+      height: 450px;
     }
     @media all and (min-width: 1024px) {
-      max-width: 300px;
-      max-height: 500px;
-    }
+      width: 300px;
+      height: 500px;
+    } */
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
   }
 `;
 

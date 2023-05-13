@@ -53,12 +53,17 @@ export const DiaryContainer = styled.div`
 `;
 
 export const ImgContainer = styled.div`
-  display: flex;
-  justify-content: center;
+  /*   display: flex;
+  justify-content: center; */
+  text-align: center;
   img {
     cursor: pointer;
     max-width: 200px;
     max-height: 350px;
+  }
+  .react-slideshow-container .nav {
+    // img 화살표 indx 가리기
+    z-index: 2;
   }
 `;
 

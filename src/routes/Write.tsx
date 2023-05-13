@@ -29,7 +29,7 @@ const Write = () => {
   const [diary, setDiary] = useState("");
   const [diaryType, setDiaryType] = useState<string>("");
   //const [attachment, setAttachment] = useState<any>("");
-  const [attachmentArr, setAttachmentArr] = useState<any>([]);
+  const [attachmentArr, setAttachmentArr] = useState<any[]>([]);
   const [fileName, setFileName] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
   const [date, setDate] = useState<string>("");
@@ -235,6 +235,14 @@ const Write = () => {
     }
   };
 
+  /** 이미지 클릭 시 삭제 함수 */
+  const onEachImgClick = (inx: number) => {
+    let removedArr = attachmentArr.filter((arr: any) => {
+      return arr !== attachmentArr[inx];
+    });
+    setAttachmentArr(removedArr);
+  };
+
   /** 본문 내용 변화 감지 함수 */
   const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let { value } = e.target;
@@ -339,7 +347,7 @@ const Write = () => {
             {attachmentArr.length > 0 ? (
               <UploadImgContainer>
                 {attachmentArr.map((el: any, inx: number) => (
-                  <img src={el} key={inx} />
+                  <img src={el} key={inx} onClick={() => onEachImgClick(inx)} />
                 ))}
               </UploadImgContainer>
             ) : (

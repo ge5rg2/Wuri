@@ -26,6 +26,7 @@ import {
   where,
   orderBy,
   onSnapshot,
+  deleteField,
 } from "firebase/firestore";
 import {
   deleteObject,
@@ -110,7 +111,13 @@ const Edit = () => {
           setEditAble(false);
         }
       }
-      console.log(data.attachmentUrls);
+      if (data.attachmentUrl == "" || data.attachmentUrl) {
+        await updateDoc(DiaryTextRef, {
+          attachmentUrls: [data.attachmentUrl],
+          attachmentUrl: deleteField(),
+        });
+        return window.location.reload();
+      }
       setDiaryInfo(data);
       setNewTitle(data.title);
       setNewDiary(data.text);
@@ -489,8 +496,8 @@ const Edit = () => {
     setEmojiValue(newValue);
   };
 
-  /** 이미지 클릭 시 확대 적용 함수 */
-  const onImgClick = (index: number) => {
+  /** 이미지 클릭 시 확대 적용 함수  추후 배경 블러 처리*/
+  const onImgClick = (index: number = 0) => {
     setCurrentImgIdx(index);
     setExpandImg(true);
   };
@@ -548,6 +555,10 @@ const Edit = () => {
           <>
             {attachmentArr.length == 0 ? (
               ""
+            ) : attachmentArr.length == 1 ? (
+              <ImgContainer className="slide-container">
+                <img src={attachmentArr[0]} onClick={() => onImgClick()} />
+              </ImgContainer>
             ) : (
               <ImgContainer className="slide-container">
                 <Zoom {...zoomOutProperties}>

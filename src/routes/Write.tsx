@@ -63,7 +63,7 @@ const Write = () => {
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    let attachmentUrls: any = [];
+    let attachmentUrls: string[] = [];
     let blank_pattern = /^\s+|\s+$/g;
     if (title.replace(blank_pattern, "") == "") {
       document.getElementById("diaryTitle")?.focus();

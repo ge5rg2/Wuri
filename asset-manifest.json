@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/Wuri/static/css/main.013f3cbc.css",
-    "main.js": "/Wuri/static/js/main.ea82a882.js",
+    "main.js": "/Wuri/static/js/main.9e099227.js",
     "static/media/WuriNone.png": "/Wuri/static/media/WuriNone.2d768927e27fbcf72493.png",
     "index.html": "/Wuri/index.html",
     "main.013f3cbc.css.map": "/Wuri/static/css/main.013f3cbc.css.map",
-    "main.ea82a882.js.map": "/Wuri/static/js/main.ea82a882.js.map"
+    "main.9e099227.js.map": "/Wuri/static/js/main.9e099227.js.map"
   },
   "entrypoints": [
     "static/css/main.013f3cbc.css",
-    "static/js/main.ea82a882.js"
+    "static/js/main.9e099227.js"
   ]
 }

@@ -194,7 +194,12 @@ export const CommentDataContainer = styled.div`
   transition: all ease-in-out 0.3s;
   flex-direction: column;
   margin: 0.5rem 0 1rem 0;
-
+  border-radius: 10px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+  border: 1px solid
+    ${(props) =>
+      props.theme.mode === "dark" ? palette.gray[700] : palette.gray[200]};
+  padding: 0.6rem 0.4rem;
   width: 100%;
   position: relative;
   transition: all ease-in-out 0.3s;
@@ -220,7 +225,7 @@ export const CommentDataContainer = styled.div`
           .CommentData_comment_more {
             position: absolute;
             cursor: pointer;
-            right: 0;
+            right: 0.4rem;
           }
         }
       }
@@ -276,13 +281,13 @@ export const CommentDataContainer = styled.div`
         opacity: 1;
       }
       to {
-        transform: translate(-9rem, 0);
+        transform: translate(-6rem, 0);
         opacity: 0;
       }
     }
     @keyframes Comentdown {
       from {
-        transform: translate(-9rem, 0);
+        transform: translate(-6rem, 0);
         opacity: 0;
       }
 
@@ -297,14 +302,8 @@ export const CommentDataContainer = styled.div`
 export const EditModal = styled.div`
   position: absolute;
   z-index: 5;
-  @media all and (min-width: 320px) {
-    right: 2rem;
-    top: -0.1rem;
-  }
-  @media all and (min-width: 1024px) {
-    right: 2rem;
-    top: -0.2rem;
-  }
+  right: 3rem;
+  top: 0.5rem;
   opacity: 1 !important;
   background-color: ${(props) =>
     props.theme.mode === "dark" ? palette.gray[700] : palette.gray[200]};
